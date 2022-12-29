@@ -5,6 +5,7 @@ import { makeHttpPostClient } from "../mocks/mock-http-post-client";
 import { faker } from "@faker-js/faker";
 import { InvalidCredentialsError } from "../../../src/domain/errors/invalid-credentials-error";
 import { HttpStatusCode } from "../../../src/data/protocols/http/http-response";
+import { UnexpectedError } from "../../../src/domain/errors/unexpected-error";
 
 interface SutTypes {
   sut: RemoteAuthentication;
@@ -44,6 +45,22 @@ describe("Remote Authentication", () => {
     const authParams = mockAuthenticationParams();
     const promise = sut.auth(authParams);
 
-    expect(promise).rejects.toThrow();
+    await expect(promise).rejects.toThrow(new InvalidCredentialsError());
+  });
+
+  it("should throw UnexpectedError if HttpPostClient returns 400", async () => {
+    const url = faker.internet.url();
+    const { sut, httpPostClientStub } = makeSut(url);
+
+    jest.spyOn(httpPostClientStub, "post").mockReturnValueOnce(
+      Promise.resolve({
+        statusCode: HttpStatusCode.badRequest,
+      })
+    );
+
+    const authParams = mockAuthenticationParams();
+    const promise = sut.auth(authParams);
+
+    await expect(promise).rejects.toThrow(new UnexpectedError());
   });
 });
