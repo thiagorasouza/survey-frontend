@@ -3,6 +3,8 @@ import { RemoteAuthentication } from "../../../src/data/usecases/remote-authenti
 import { mockAuthenticationParams } from "../mocks/mock-authentication-params";
 import { makeHttpPostClient } from "../mocks/mock-http-post-client";
 import { faker } from "@faker-js/faker";
+import { InvalidCredentialsError } from "../../../src/domain/errors/invalid-credentials-error";
+import { HttpStatusCode } from "../../../src/data/protocols/http/http-response";
 
 interface SutTypes {
   sut: RemoteAuthentication;
@@ -27,5 +29,21 @@ describe("Remote Authentication", () => {
 
     expect(postSpy).toHaveBeenCalledTimes(1);
     expect(postSpy).toHaveBeenCalledWith({ url, body: authParams });
+  });
+
+  it("should throw InvalidCredentialsError if HttpPostClient returns 401", async () => {
+    const url = faker.internet.url();
+    const { sut, httpPostClientStub } = makeSut(url);
+
+    jest.spyOn(httpPostClientStub, "post").mockReturnValueOnce(
+      Promise.resolve({
+        statusCode: HttpStatusCode.unauthorized,
+      })
+    );
+
+    const authParams = mockAuthenticationParams();
+    const promise = sut.auth(authParams);
+
+    expect(promise).rejects.toThrow();
   });
 });
