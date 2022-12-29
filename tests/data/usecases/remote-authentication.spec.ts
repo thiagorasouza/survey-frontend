@@ -2,6 +2,7 @@ import { HttpPostClient } from "../../../src/data/protocols/http/http-post-clien
 import { RemoteAuthentication } from "../../../src/data/usecases/remote-authentication";
 import { mockAuthenticationParams } from "../mocks/mock-authentication-params";
 import { makeHttpPostClient } from "../mocks/mock-http-post-client";
+import { faker } from "@faker-js/faker";
 
 interface SutTypes {
   sut: RemoteAuthentication;
@@ -16,7 +17,7 @@ const makeSut = (url: string): SutTypes => {
 
 describe("Remote Authentication", () => {
   it("should call HttpPostClient with the correct URL", async () => {
-    const url = "any_url";
+    const url = faker.internet.url();
     const { sut, httpPostClientStub } = makeSut(url);
 
     const postSpy = jest.spyOn(httpPostClientStub, "post");
