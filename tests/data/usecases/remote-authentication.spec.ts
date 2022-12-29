@@ -25,6 +25,6 @@ describe("Remote Authentication", () => {
     await sut.auth(mockAuthenticationParams());
 
     expect(postSpy).toHaveBeenCalledTimes(1);
-    expect(postSpy).toHaveBeenCalledWith(url);
+    expect(postSpy).toHaveBeenCalledWith({ url });
   });
 });
