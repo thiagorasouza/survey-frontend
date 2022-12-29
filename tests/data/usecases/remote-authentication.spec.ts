@@ -9,22 +9,23 @@ interface SutTypes {
   httpPostClientStub: HttpPostClient;
 }
 
-const makeSut = (url: string): SutTypes => {
+const makeSut = (url: string = faker.internet.url()): SutTypes => {
   const httpPostClientStub = makeHttpPostClient();
   const sut = new RemoteAuthentication(url, httpPostClientStub);
   return { sut, httpPostClientStub };
 };
 
 describe("Remote Authentication", () => {
-  it("should call HttpPostClient with the correct URL", async () => {
+  it("should call HttpPostClient with the correct values", async () => {
     const url = faker.internet.url();
     const { sut, httpPostClientStub } = makeSut(url);
 
     const postSpy = jest.spyOn(httpPostClientStub, "post");
 
-    await sut.auth(mockAuthenticationParams());
+    const authParams = mockAuthenticationParams();
+    await sut.auth(authParams);
 
     expect(postSpy).toHaveBeenCalledTimes(1);
-    expect(postSpy).toHaveBeenCalledWith({ url });
+    expect(postSpy).toHaveBeenCalledWith({ url, body: authParams });
   });
 });
