@@ -8,6 +8,7 @@ import { HttpStatusCode } from "../../../src/data/protocols/http/http-response";
 import { UnexpectedError } from "../../../src/domain/errors/unexpected-error";
 import { AuthenticationParams } from "../../../src/domain/usecases/authentication";
 import { AccountModel } from "../../../src/domain/models/account-model";
+import { mockAccountModel } from "../mocks/mock-account-model";
 
 interface SutTypes {
   sut: RemoteAuthentication;
@@ -96,5 +97,24 @@ describe("Remote Authentication", () => {
     const promise = sut.auth(authParams);
 
     await expect(promise).rejects.toThrow(new UnexpectedError());
+  });
+
+  it("should return an AccountModel if HttpPostClient returns 200", async () => {
+    const url = faker.internet.url();
+    const { sut, httpPostClientStub } = makeSut(url);
+
+    const accountModel = mockAccountModel();
+
+    jest.spyOn(httpPostClientStub, "post").mockReturnValueOnce(
+      Promise.resolve({
+        statusCode: HttpStatusCode.ok,
+        body: accountModel,
+      })
+    );
+
+    const authParams = mockAuthenticationParams();
+    const result = await sut.auth(authParams);
+
+    expect(result).toEqual(accountModel);
   });
 });
