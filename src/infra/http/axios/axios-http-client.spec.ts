@@ -2,14 +2,8 @@ import { AxiosHttpClient } from "./axios-http-client";
 import axios from "axios";
 import { faker } from "@faker-js/faker";
 import { HttpPostParams } from "../../../data/protocols/http/http-post-client";
+import { mockAxiosResponse } from "../../mocks/mock-axios-response";
 
-// jest.mock("axios", () => ({
-//   __esModule: true,
-//   ...jest.requireActual("axios"),
-//   async post() {
-//     return mockAxiosResponse();
-//   },
-// }));
 jest.mock("axios");
 
 interface SutTypes {
@@ -20,11 +14,6 @@ const makeSut = (): SutTypes => {
   const sut = new AxiosHttpClient();
   return { sut };
 };
-
-const mockAxiosResponse = () => ({
-  status: faker.datatype.number(),
-  data: { any_key: "any_value" },
-});
 
 describe("Axios HTTP Client", () => {
   it("should call axios with correct values", async () => {
