@@ -5,6 +5,8 @@ import { HttpPostParams } from "../../../data/protocols/http/http-post-client";
 import { mockAxiosResponse } from "../../mocks/mock-axios-response";
 
 jest.mock("axios");
+const axiosResponse = mockAxiosResponse();
+jest.spyOn(axios, "post").mockImplementation(async () => axiosResponse);
 
 interface SutTypes {
   sut: AxiosHttpClient;
@@ -37,9 +39,6 @@ describe("Axios HTTP Client", () => {
       url: faker.internet.url(),
       body: { any_key: "any_value" },
     };
-
-    const axiosResponse = mockAxiosResponse();
-    jest.spyOn(axios, "post").mockImplementationOnce(async () => axiosResponse);
 
     const result = await sut.post(postParams);
 
