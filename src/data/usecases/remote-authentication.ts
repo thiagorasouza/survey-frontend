@@ -23,6 +23,9 @@ export class RemoteAuthentication implements Authentication {
       case HttpStatusCode.unauthorized:
         throw new InvalidCredentialsError();
       case HttpStatusCode.badRequest:
+      case HttpStatusCode.notFound:
+        // case HttpStatusCode.serverError:
+        // default:
         throw new UnexpectedError();
     }
   }
