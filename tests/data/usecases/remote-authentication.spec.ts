@@ -80,19 +80,19 @@ describe("Remote Authentication", () => {
     await expect(promise).rejects.toThrow(new UnexpectedError());
   });
 
-  // it("should throw UnexpectedError if HttpPostClient returns 500", async () => {
-  //   const url = faker.internet.url();
-  //   const { sut, httpPostClientStub } = makeSut(url);
+  it("should throw UnexpectedError if HttpPostClient returns 500", async () => {
+    const url = faker.internet.url();
+    const { sut, httpPostClientStub } = makeSut(url);
 
-  //   jest.spyOn(httpPostClientStub, "post").mockReturnValueOnce(
-  //     Promise.resolve({
-  //       statusCode: HttpStatusCode.serverError,
-  //     })
-  //   );
+    jest.spyOn(httpPostClientStub, "post").mockReturnValueOnce(
+      Promise.resolve({
+        statusCode: HttpStatusCode.serverError,
+      })
+    );
 
-  //   const authParams = mockAuthenticationParams();
-  //   const promise = sut.auth(authParams);
+    const authParams = mockAuthenticationParams();
+    const promise = sut.auth(authParams);
 
-  //   await expect(promise).rejects.toThrow(new UnexpectedError());
-  // });
+    await expect(promise).rejects.toThrow(new UnexpectedError());
+  });
 });
