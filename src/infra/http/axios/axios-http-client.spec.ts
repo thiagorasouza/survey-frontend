@@ -1,5 +1,5 @@
 import { AxiosHttpClient } from "./axios-http-client";
-import * as axios from "axios";
+import axios from "axios";
 import { faker } from "@faker-js/faker";
 
 jest.mock("axios");
@@ -21,6 +21,6 @@ describe("Axios HTTP Client", () => {
 
     await sut.post({ url });
 
-    expect(axios).toHaveBeenCalledWith(url);
+    expect(axios.post).toHaveBeenCalledWith(url);
   });
 });
