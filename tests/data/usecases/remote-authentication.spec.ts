@@ -6,10 +6,12 @@ import { faker } from "@faker-js/faker";
 import { InvalidCredentialsError } from "../../../src/domain/errors/invalid-credentials-error";
 import { HttpStatusCode } from "../../../src/data/protocols/http/http-response";
 import { UnexpectedError } from "../../../src/domain/errors/unexpected-error";
+import { AuthenticationParams } from "../../../src/domain/usecases/authentication";
+import { AccountModel } from "../../../src/domain/models/account-model";
 
 interface SutTypes {
   sut: RemoteAuthentication;
-  httpPostClientStub: HttpPostClient;
+  httpPostClientStub: HttpPostClient<AuthenticationParams, AccountModel>;
 }
 
 const makeSut = (url: string = faker.internet.url()): SutTypes => {

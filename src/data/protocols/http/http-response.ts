@@ -6,7 +6,7 @@ export enum HttpStatusCode {
   serverError = 500,
 }
 
-export interface HttpResponse {
+export interface HttpResponse<ResponseBody> {
   statusCode: number;
-  body?: any;
+  body?: ResponseBody;
 }
