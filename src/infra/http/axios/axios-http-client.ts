@@ -7,7 +7,7 @@ import { HttpResponse } from "../../../data/protocols/http/http-response";
 
 export class AxiosHttpClient implements HttpPostClient<any, any> {
   async post(params: HttpPostParams<any>): Promise<HttpResponse<any>> {
-    await axios.post(params.url);
+    await axios.post(params.url, params.body);
     return;
   }
 }
