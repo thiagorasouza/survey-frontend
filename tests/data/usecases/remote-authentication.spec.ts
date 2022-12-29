@@ -1,16 +1,7 @@
-import { HttpPostClient } from "data/protocols/http/http-post-client";
-import { AuthenticationParams } from "domain/usecases/authentication";
-import { RemoteAuthentication } from "./remote-authentication";
-
-const makeHttpPostClient = (): HttpPostClient => {
-  class HttpPostClientStub implements HttpPostClient {
-    async post(): Promise<void> {
-      return;
-    }
-  }
-
-  return new HttpPostClientStub();
-};
+import { HttpPostClient } from "../../../src/data/protocols/http/http-post-client";
+import { RemoteAuthentication } from "../../../src/data/usecases/remote-authentication";
+import { mockAuthenticationParams } from "../mocks/mock-authentication-params";
+import { makeHttpPostClient } from "../mocks/mock-http-post-client";
 
 interface SutTypes {
   sut: RemoteAuthentication;
@@ -22,11 +13,6 @@ const makeSut = (url: string): SutTypes => {
   const sut = new RemoteAuthentication(url, httpPostClientStub);
   return { sut, httpPostClientStub };
 };
-
-const mockAuthenticationParams = (): AuthenticationParams => ({
-  email: "any_email@email.com",
-  password: "any_password",
-});
 
 describe("Remote Authentication", () => {
   it("should call HttpPostClient with the correct URL", async () => {

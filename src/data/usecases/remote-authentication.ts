@@ -1,9 +1,9 @@
-import { HttpPostClient } from "data/protocols/http/http-post-client";
-import { AccountModel } from "domain/models/account-model";
+import { AccountModel } from "../../domain/models/account-model";
 import {
   Authentication,
   AuthenticationParams,
-} from "domain/usecases/authentication";
+} from "../../domain/usecases/authentication";
+import { HttpPostClient } from "../protocols/http/http-post-client";
 
 export class RemoteAuthentication implements Authentication {
   constructor(
