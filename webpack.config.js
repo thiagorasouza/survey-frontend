@@ -1,7 +1,7 @@
-import { CleanWebpackPlugin } from "clean-webpack-plugin";
-import path from "node:path";
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const path = require("node:path");
 
-export default {
+module.exports = {
   mode: "development",
   cache: false,
   entry: "./src/main/index.tsx",
@@ -17,17 +17,33 @@ export default {
         use: "ts-loader",
         exclude: /node_modules/,
       },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+            },
+          },
+          "sass-loader",
+        ],
+      },
     ],
   },
   resolve: {
-    extensions: ["tsx", "ts", "js"],
+    extensions: [".tsx", ".ts", ".js", "scss", "sass", "css"],
   },
   externals: {
     react: "React",
-    "react-dom": "ReactDOM",
+    "react-dom/client": "ReactDOM",
   },
   devServer: {
     historyApiFallback: true,
+    devMiddleware: {
+      writeToDisk: true,
+    },
   },
   plugins: [new CleanWebpackPlugin()],
 };
