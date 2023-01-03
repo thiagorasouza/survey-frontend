@@ -17,4 +17,14 @@ describe("Login Page Test Suite", () => {
     render(<Login />);
     expect(screen.getByPlaceholderText(/password/i)).not.toBeDisabled();
   });
+
+  it("should have an enabled login button", () => {
+    render(<Login />);
+    expect(screen.getByText(/login/i)).not.toBeDisabled();
+  });
+
+  it("should have an enabled signup button", () => {
+    render(<Login />);
+    expect(screen.getByText(/sign ?up/i)).not.toBeDisabled();
+  });
 });
