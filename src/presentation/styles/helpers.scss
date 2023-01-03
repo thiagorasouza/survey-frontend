@@ -1,0 +1,17 @@
+@mixin light-box-shadow($color) {
+  box-shadow: 0 3px 8px $color;
+}
+
+@mixin vertical-centering-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+@mixin centering-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}

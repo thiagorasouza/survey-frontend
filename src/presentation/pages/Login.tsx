@@ -1,39 +1,35 @@
 import React from "react";
+import Brand from "../components/Brand";
 import styles from "./Login.scss";
 
 function Login() {
   return (
     <div className={styles.page}>
       <section className={styles.wrapper}>
-        <div className={styles.brand}>
-          <img src="../img/logo.png" className={styles.logo} />
-          The Survey App
-        </div>
+        <Brand />
 
-        {/* <header>
-          <h1 className={styles.title}>Login</h1>
-          <p className={styles.caption}>Please login to start using the app.</p>
-        </header> */}
-
-        <form className={styles.form} action="#">
+        <form className={styles.form}>
           <div className={styles.inputs}>
             <input
-              type="text"
+              required
+              type="email"
               name="email"
-              className={styles.email}
-              placeholder="johndoe@email.com"
+              className={styles.inputEmail}
+              placeholder="email"
             />
             <input
+              required
               type="password"
               name="password"
-              className={styles.password}
-              placeholder="······"
+              className={styles.inputPassword}
+              placeholder="password"
+              minLength={6}
             />
           </div>
-          <button type="button" className={styles.login}>
+          <button type="submit" className={styles.btnLogin}>
             Login
           </button>
-          <button type="button" className={styles.signup}>
+          <button type="button" className={styles.btnSignup}>
             Sign Up
           </button>
         </form>

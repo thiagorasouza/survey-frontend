@@ -1,0 +1,58 @@
+@use "sass:color";
+@use "../styles/variables.scss" as *;
+@use "../styles/helpers.scss" as *;
+
+@mixin boilerplate-block {
+  display: block;
+  width: 100%;
+  border: none;
+  background: none;
+  padding: 0.9em 1.4em;
+  border-radius: 0.75rem;
+}
+
+@mixin text-input {
+  @include boilerplate-block();
+  @include light-box-shadow(rgba(0, 0, 0, 0.08));
+  color: $darkGray;
+  font-size: $mediumFontSize;
+  font-weight: $semiboldWeight;
+  background-color: $white;
+
+  transition: all 0.3s ease-in-out;
+
+  &:hover,
+  &:focus {
+    @include light-box-shadow(rgba(0, 0, 0, 0.16));
+    transform: scale(1.02);
+  }
+
+  &::placeholder {
+    color: $mediumGray;
+  }
+
+  &:invalid {
+    outline-color: $red;
+  }
+
+  &:valid {
+    outline-color: $green;
+  }
+}
+
+@mixin block-button($backgroundColor, $fontColor) {
+  @include boilerplate-block();
+  color: $fontColor;
+  background-color: $backgroundColor;
+  font-size: $mediumFontSize;
+  font-weight: $semiboldWeight;
+  cursor: pointer;
+
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: color.scale($backgroundColor, $lightness: -15%);
+    transform: scale(1.02);
+    cursor: pointer;
+  }
+}

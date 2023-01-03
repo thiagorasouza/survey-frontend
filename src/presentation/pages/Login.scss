@@ -1,146 +1,8 @@
-@use "sass:color";
-@import url("https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600;700&display=swap");
-
-@mixin for-phone-only {
-  @media (max-width: 599px) {
-    @content;
-  }
-}
-
-@mixin for-tablet-portrait-up {
-  @media (min-width: 600px) {
-    @content;
-  }
-}
-
-@mixin for-tablet-landscape-up {
-  @media (min-width: 900px) {
-    @content;
-  }
-}
-
-@mixin for-desktop-up {
-  @media (min-width: 1200px) {
-    @content;
-  }
-}
-
-@mixin for-big-desktop-up {
-  @media (min-width: 1800px) {
-    @content;
-  }
-}
-
-$white: #fff;
-$washedWhite: #fafafa;
-$orange: #ffb55c;
-$purple: #6146c6;
-$lightPurple: #816bd1;
-$green: #61c877;
-$red: #ff6157;
-$lightGray: #e2e8f0;
-$mediumGray: #a0aec0;
-$darkGray: #2d3748;
-$black: #000;
-
-$fontFamily: "Poppins", sans-serif;
-$regularWeight: 400;
-$mediumWeight: 500;
-$semiboldWeight: 600;
-$boldWeight: 700;
-$mediumFontSize: 1.4rem;
-$fontColor: $darkGray;
-
-$backgroundColor: $washedWhite;
-
-html {
-  font-size: 62.5%; /* 10px */
-
-  @include for-tablet-portrait-up {
-    font-size: 100%;
-  }
-
-  @include for-tablet-landscape-up {
-    font-size: 75%;
-  }
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  color: $darkGray;
-  font-size: $mediumFontSize;
-  font-weight: $regularWeight;
-  font-family: $fontFamily;
-  background-color: $backgroundColor;
-}
-
-@mixin boilerplate-block {
-  display: block;
-  width: 100%;
-  border: none;
-  background: none;
-  padding: 0.9em 1.4em;
-  border-radius: 0.75rem;
-}
-
-@mixin text-input {
-  @include boilerplate-block();
-  @include light-box-shadow(rgba(0, 0, 0, 0.08));
-  color: $darkGray;
-  font-size: $mediumFontSize;
-  font-weight: $semiboldWeight;
-  background-color: $white;
-
-  transition: all 0.3s ease-in-out;
-
-  &:hover,
-  &:focus {
-    @include light-box-shadow(rgba(0, 0, 0, 0.16));
-
-    transform: scale(1.02);
-    cursor: pointer;
-  }
-}
-
-@mixin block-button($backgroundColor, $fontColor) {
-  @include boilerplate-block();
-  color: $fontColor;
-  background-color: $backgroundColor;
-  font-size: $mediumFontSize;
-  font-weight: $semiboldWeight;
-  cursor: pointer;
-
-  transition: all 0.3s ease-in-out;
-
-  &:hover {
-    background-color: color.scale($backgroundColor, $lightness: -15%);
-    transform: scale(1.02);
-    cursor: pointer;
-  }
-}
-
-@mixin light-box-shadow($color) {
-  box-shadow: 0 3px 8px $color;
-}
-
-@mixin vertical-centering-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 100vh;
-}
-
-@mixin centering-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
+@use "../styles/variables.scss" as *;
+@use "../styles/base.scss" as *;
+@use "../styles/media.scss" as *;
+@use "../styles/helpers.scss" as *;
+@use "../styles/components.scss" as *;
 
 .page {
   @include centering-container;
@@ -152,7 +14,6 @@ body {
 .sider {
   display: none;
   min-height: 100vh;
-  // margin: 5vh 0;
   background-color: $white;
   background-image: url("../../../public/img/sider-6.svg");
   background-size: contain;
@@ -184,22 +45,6 @@ body {
   }
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  font-weight: $boldWeight;
-  margin-bottom: 4rem;
-
-  img {
-    width: 3.2rem;
-    height: 3.2rem;
-    vertical-align: baseline;
-    margin-right: 0.5rem;
-  }
-}
-
 .title {
   font-size: 2rem;
   margin-bottom: 1rem;
@@ -215,22 +60,22 @@ body {
   padding: 5rem 0 6rem;
 }
 
-.email {
+.inputEmail {
   @include text-input;
   margin-bottom: 1.25rem;
 }
 
-.password {
+.inputPassword {
   @include text-input;
 }
 
-.login {
+.btnLogin {
   @include block-button($orange, $white);
   @include light-box-shadow(rgba($orange, 0.5));
   margin-bottom: 2rem;
 }
 
-.signup {
+.btnSignup {
   @include block-button($lightPurple, $white);
   @include light-box-shadow(rgba($black, 0.2));
 }

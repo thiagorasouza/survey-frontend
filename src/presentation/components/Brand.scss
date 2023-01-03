@@ -1,0 +1,17 @@
+@use "../styles/variables.scss" as *;
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: $boldWeight;
+  margin-bottom: 4rem;
+
+  img {
+    width: 3.2rem;
+    height: 3.2rem;
+    vertical-align: baseline;
+    margin-right: 0.5rem;
+  }
+}
