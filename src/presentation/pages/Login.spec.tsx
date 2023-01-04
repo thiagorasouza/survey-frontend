@@ -2,31 +2,102 @@
  * @jest-environment jsdom
  */
 
-import React from "react";
+import React, { ReactElement } from "react";
+import { RouterProvider, createMemoryRouter } from "react-router-dom";
+
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import userEvent from "@testing-library/user-event";
+import { UserEvent } from "@testing-library/user-event/dist/types/setup/setup";
+
 import Login from "./Login";
+import { faker } from "@faker-js/faker";
+
+import { enableFetchMocks } from "jest-fetch-mock";
+enableFetchMocks();
+
+const getEmailInput = (): HTMLInputElement =>
+  screen.getByPlaceholderText(/email/i);
+
+const getPasswordInput = (): HTMLInputElement =>
+  screen.getByPlaceholderText(/password/i);
+
+const getLoginButton = (): HTMLButtonElement => screen.getByText(/login/i);
+
+const getSignupButton = (): HTMLButtonElement => screen.getByText(/sign ?up/i);
+
+interface SutTypes {
+  sut: ReactElement;
+  user: UserEvent;
+}
+
+const mockRouter = (element: ReactElement): ReactElement => {
+  const router = createMemoryRouter(
+    [
+      {
+        path: "/",
+        element,
+      },
+    ],
+    {
+      initialEntries: ["/"],
+      initialIndex: 0,
+    }
+  );
+  return <RouterProvider router={router} />;
+};
+
+const makeSut = (): SutTypes => {
+  const sut = mockRouter(<Login />);
+  const user = userEvent.setup();
+  return { sut, user };
+};
 
 describe("Login Page Test Suite", () => {
   describe("Initial state", () => {
     it("should have an enabled email input", () => {
-      render(<Login />);
-      expect(screen.getByPlaceholderText(/email/i)).not.toBeDisabled();
+      const { sut } = makeSut();
+      render(sut);
+      expect(getEmailInput()).not.toBeDisabled();
     });
 
     it("should have an enabled password input", () => {
-      render(<Login />);
-      expect(screen.getByPlaceholderText(/password/i)).not.toBeDisabled();
+      const { sut } = makeSut();
+      render(sut);
+      expect(getPasswordInput()).not.toBeDisabled();
     });
 
     it("should have an enabled login button", () => {
-      render(<Login />);
-      expect(screen.getByText(/login/i)).not.toBeDisabled();
+      const { sut } = makeSut();
+      render(sut);
+      expect(getLoginButton()).not.toBeDisabled();
     });
 
     it("should have an enabled signup button", () => {
-      render(<Login />);
-      expect(screen.getByText(/sign ?up/i)).not.toBeDisabled();
+      const { sut } = makeSut();
+      render(sut);
+      expect(getSignupButton()).not.toBeDisabled();
+    });
+  });
+
+  describe("Submitting state", () => {
+    it("should disable email input", async () => {
+      const { sut, user } = makeSut();
+
+      render(sut);
+
+      const emailInput = getEmailInput();
+      const fakeEmail = faker.internet.email();
+      await user.type(emailInput, fakeEmail);
+
+      const passwordInput = getPasswordInput();
+      const fakePassword = faker.internet.password();
+      await user.type(passwordInput, fakePassword);
+
+      const loginButton = getLoginButton();
+      await user.click(loginButton);
+
+      expect(emailInput).toBeDisabled();
     });
   });
 });
