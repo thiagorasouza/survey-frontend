@@ -1,11 +1,19 @@
 import React from "react";
-import { Form, useNavigation } from "react-router-dom";
+import { Form, useActionData, useNavigation } from "react-router-dom";
 import Brand from "../components/Brand";
 import styles from "./Login.scss";
+
+interface LoginResult {
+  success: boolean;
+}
 
 function Login() {
   const navigation = useNavigation();
   const submitting = navigation.state === "submitting";
+
+  const loginResult = useActionData() as LoginResult;
+  const success = loginResult?.success === true;
+  // console.log("🚀 ~ success", success);
 
   return (
     <div className={styles.page}>
@@ -40,10 +48,21 @@ function Login() {
               aria-label="login"
               className={`${styles.btnLogin} ${
                 submitting ? styles.btnLoginSubmitting : ""
-              }`}
-              disabled={submitting}
+              } ${success ? styles.btnLoginSuccess : ""}`}
+              disabled={submitting || success}
             >
-              {submitting ? (
+              {success ? (
+                <svg
+                  viewBox="0 0 100 100"
+                  aria-label="checkmark"
+                  className={styles.checkmarkViewbox}
+                >
+                  <path
+                    d="M 27.11 52.30 l 13.65 13.84 l 32.12 -32.31"
+                    className={styles.checkmarkPath}
+                  ></path>
+                </svg>
+              ) : submitting ? (
                 <>
                   <span aria-label="spinner" className={styles.spinner}></span>
                   {`Logging in...`}
@@ -55,7 +74,7 @@ function Login() {
             <button
               type="button"
               className={`${styles.btnSignup} ${
-                submitting ? styles.btnSignupSubmitting : ""
+                submitting || success ? styles.btnSignupHide : ""
               }`}
               hidden={submitting}
             >

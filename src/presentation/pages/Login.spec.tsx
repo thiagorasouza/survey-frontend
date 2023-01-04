@@ -27,6 +27,8 @@ const getLoginButton = (): HTMLButtonElement =>
 
 const getSpinner = (): HTMLButtonElement => screen.getByLabelText("spinner");
 
+const getCheckmark = (): HTMLOrSVGElement => screen.getByLabelText("checkmark");
+
 const getSignupButton = (): HTMLButtonElement => screen.getByText(/sign ?up/i);
 
 interface SutTypes {
@@ -41,7 +43,7 @@ const mockRouter = (element: ReactElement): ReactElement => {
         path: "/",
         element,
         action: () => {
-          return null;
+          return { success: true };
         },
       },
     ],
@@ -51,6 +53,23 @@ const mockRouter = (element: ReactElement): ReactElement => {
     }
   );
   return <RouterProvider router={router} />;
+};
+
+const fillLoginForm = async (user): Promise<void> => {
+  const emailInput = getEmailInput();
+  const fakeEmail = faker.internet.email();
+  await user.clear(emailInput);
+  await user.type(emailInput, fakeEmail);
+
+  const passwordInput = getPasswordInput();
+  const fakePassword = faker.internet.password();
+  await user.clear(passwordInput);
+  await user.type(passwordInput, fakePassword);
+};
+
+const clickLoginButton = async (user): Promise<void> => {
+  const loginButton = getLoginButton();
+  user.click(loginButton);
 };
 
 const makeSut = (): SutTypes => {
@@ -87,23 +106,6 @@ describe("Login Page Test Suite", () => {
   });
 
   describe("Submitting state", () => {
-    const fillLoginForm = async (user): Promise<void> => {
-      const emailInput = getEmailInput();
-      const fakeEmail = faker.internet.email();
-      await user.clear(emailInput);
-      await user.type(emailInput, fakeEmail);
-
-      const passwordInput = getPasswordInput();
-      const fakePassword = faker.internet.password();
-      await user.clear(passwordInput);
-      await user.type(passwordInput, fakePassword);
-    };
-
-    const clickLoginButton = async (user): Promise<void> => {
-      const loginButton = getLoginButton();
-      user.click(loginButton);
-    };
-
     it("should disable email input", async () => {
       const { sut, user } = makeSut();
 
@@ -158,5 +160,29 @@ describe("Login Page Test Suite", () => {
 
       await waitFor(() => expect(getSignupButton()).not.toBeVisible());
     });
+  });
+
+  describe.only("Success state", () => {
+    it("should display a checkmark on success", async () => {
+      const { sut, user } = makeSut();
+
+      render(sut);
+
+      await fillLoginForm(user);
+      await clickLoginButton(user);
+
+      await waitFor(() => expect(getCheckmark()).toBeVisible());
+    });
+
+    // it("should keep signup button hidden", async () => {
+    //   const { sut, user } = makeSut();
+
+    //   render(sut);
+
+    //   await fillLoginForm(user);
+    //   await clickLoginButton(user);
+
+    //   await waitFor(() => expect(getSignupButton()).not.toBeVisible());
+    // });
   });
 });

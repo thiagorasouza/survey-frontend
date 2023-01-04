@@ -5,7 +5,7 @@
   "main": "src/main/index.tsx",
   "scripts": {
     "start": "webpack serve --open",
-    "test": "dotenv -v DEBUG_PRINT_LIMIT=0 -- jest --silent --noStackTrace --passWithNoTests --no-cache --runInBand",
+    "test": "dotenv -v DEBUG_PRINT_LIMIT=0 -- jest --noStackTrace --passWithNoTests --no-cache --runInBand",
     "test:watch": "npm t -- --watch",
     "test:staged": "npm t -- --findRelatedTests",
     "test:ci": "npm t -- --coverage",
