@@ -109,5 +109,16 @@ describe("Login Page Test Suite", () => {
 
       await waitFor(() => expect(getEmailInput()).toBeDisabled());
     });
+
+    it("should disable password input", async () => {
+      const { sut, user } = makeSut();
+
+      render(sut);
+
+      await fillLoginForm(user);
+      await clickLoginButton(user);
+
+      await waitFor(() => expect(getPasswordInput()).toBeDisabled());
+    });
   });
 });

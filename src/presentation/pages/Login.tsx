@@ -30,6 +30,7 @@ function Login() {
               className={styles.inputPassword}
               minLength={6}
               placeholder="password"
+              disabled={submitting}
             />
           </div>
           <button type="submit" className={styles.btnLogin}>
