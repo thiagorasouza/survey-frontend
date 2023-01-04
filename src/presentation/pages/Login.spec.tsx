@@ -5,7 +5,7 @@
 import React, { ReactElement } from "react";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { UserEvent } from "@testing-library/user-event/dist/types/setup/setup";
@@ -37,6 +37,9 @@ const mockRouter = (element: ReactElement): ReactElement => {
       {
         path: "/",
         element,
+        action: () => {
+          return null;
+        },
       },
     ],
     {
@@ -81,11 +84,7 @@ describe("Login Page Test Suite", () => {
   });
 
   describe("Submitting state", () => {
-    it("should disable email input", async () => {
-      const { sut, user } = makeSut();
-
-      render(sut);
-
+    const fillLoginForm = async (user): Promise<void> => {
       const emailInput = getEmailInput();
       const fakeEmail = faker.internet.email();
       await user.type(emailInput, fakeEmail);
@@ -93,11 +92,22 @@ describe("Login Page Test Suite", () => {
       const passwordInput = getPasswordInput();
       const fakePassword = faker.internet.password();
       await user.type(passwordInput, fakePassword);
+    };
 
+    const clickLoginButton = async (user): Promise<void> => {
       const loginButton = getLoginButton();
-      await user.click(loginButton);
+      user.click(loginButton);
+    };
 
-      expect(emailInput).toBeDisabled();
+    it("should disable email input", async () => {
+      const { sut, user } = makeSut();
+
+      render(sut);
+
+      await fillLoginForm(user);
+      await clickLoginButton(user);
+
+      await waitFor(() => expect(getEmailInput()).toBeDisabled());
     });
   });
 });

@@ -6,6 +6,7 @@ import styles from "./Login.scss";
 function Login() {
   const navigation = useNavigation();
   const submitting = navigation.state === "submitting";
+  // console.log("🚀 ~ submitting", submitting);
 
   return (
     <div className={styles.page}>
