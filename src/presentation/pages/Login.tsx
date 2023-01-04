@@ -76,7 +76,7 @@ function Login() {
               className={`${styles.btnSignup} ${
                 submitting || success ? styles.btnSignupHide : ""
               }`}
-              hidden={submitting}
+              hidden={submitting || success}
             >
               Sign Up
             </button>

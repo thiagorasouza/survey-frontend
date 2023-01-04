@@ -55,7 +55,7 @@ const mockRouter = (element: ReactElement): ReactElement => {
   return <RouterProvider router={router} />;
 };
 
-const fillLoginForm = async (user): Promise<void> => {
+const fillLoginForm = async (user: UserEvent): Promise<void> => {
   const emailInput = getEmailInput();
   const fakeEmail = faker.internet.email();
   await user.clear(emailInput);
@@ -67,9 +67,18 @@ const fillLoginForm = async (user): Promise<void> => {
   await user.type(passwordInput, fakePassword);
 };
 
-const clickLoginButton = async (user): Promise<void> => {
+const clickLoginButton = async (user: UserEvent): Promise<void> => {
   const loginButton = getLoginButton();
   user.click(loginButton);
+};
+
+const goToSubmittingState = async (user: UserEvent): Promise<void> => {
+  await fillLoginForm(user);
+  await clickLoginButton(user);
+};
+
+const waitForSuccessState = async (): Promise<void> => {
+  await waitFor(() => expect(getCheckmark()).toBeVisible());
 };
 
 const makeSut = (): SutTypes => {
@@ -80,109 +89,81 @@ const makeSut = (): SutTypes => {
 
 describe("Login Page Test Suite", () => {
   describe("Initial state", () => {
-    it("should have an enabled email input", () => {
+    beforeEach(() => {
       const { sut } = makeSut();
       render(sut);
+    });
+
+    it("should have an enabled email input", () => {
       expect(getEmailInput()).not.toBeDisabled();
     });
 
     it("should have an enabled password input", () => {
-      const { sut } = makeSut();
-      render(sut);
       expect(getPasswordInput()).not.toBeDisabled();
     });
 
     it("should have an enabled login button", () => {
-      const { sut } = makeSut();
-      render(sut);
       expect(getLoginButton()).not.toBeDisabled();
     });
 
     it("should have an enabled signup button", () => {
-      const { sut } = makeSut();
-      render(sut);
       expect(getSignupButton()).not.toBeDisabled();
     });
   });
 
   describe("Submitting state", () => {
-    it("should disable email input", async () => {
+    beforeEach(async () => {
       const { sut, user } = makeSut();
-
       render(sut);
+      await goToSubmittingState(user);
+    });
 
-      await fillLoginForm(user);
-      await clickLoginButton(user);
-
+    it("should disable email input", async () => {
       await waitFor(() => expect(getEmailInput()).toBeDisabled());
     });
 
     it("should disable password input", async () => {
-      const { sut, user } = makeSut();
-
-      render(sut);
-
-      await fillLoginForm(user);
-      await clickLoginButton(user);
-
       await waitFor(() => expect(getPasswordInput()).toBeDisabled());
     });
 
     it("should disable login button", async () => {
-      const { sut, user } = makeSut();
-
-      render(sut);
-
-      await fillLoginForm(user);
-      await clickLoginButton(user);
-
       await waitFor(() => expect(getLoginButton()).toBeDisabled());
     });
 
     it("should display a loading spinner", async () => {
-      const { sut, user } = makeSut();
-
-      render(sut);
-
-      await fillLoginForm(user);
-      await clickLoginButton(user);
-
       await waitFor(() => expect(getSpinner()));
     });
 
     it("should hide signup button", async () => {
-      const { sut, user } = makeSut();
-
-      render(sut);
-
-      await fillLoginForm(user);
-      await clickLoginButton(user);
-
       await waitFor(() => expect(getSignupButton()).not.toBeVisible());
     });
   });
 
-  describe.only("Success state", () => {
-    it("should display a checkmark on success", async () => {
+  describe("Success state", () => {
+    beforeEach(async () => {
       const { sut, user } = makeSut();
-
       render(sut);
+      await goToSubmittingState(user);
+    });
 
-      await fillLoginForm(user);
-      await clickLoginButton(user);
-
+    it("should display a checkmark on success", async () => {
       await waitFor(() => expect(getCheckmark()).toBeVisible());
     });
 
     it("should keep signup button hidden", async () => {
-      const { sut, user } = makeSut();
-
-      render(sut);
-
-      await fillLoginForm(user);
-      await clickLoginButton(user);
-
-      await waitFor(() => expect(getSignupButton()).not.toBeVisible());
+      await waitForSuccessState();
+      expect(getSignupButton()).not.toBeVisible();
     });
+
+    // it("should keep email input disabled", async () => {
+    //   const { sut, user } = makeSut();
+
+    //   render(sut);
+
+    //   await goToSubmittingState(user);
+
+    //   await waitFor(() => expect(getCheckmark()).toBeVisible());
+    //   expect(getSignupButton()).not.toBeVisible();
+    // });
   });
 });
