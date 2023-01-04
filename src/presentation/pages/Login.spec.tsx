@@ -174,15 +174,15 @@ describe("Login Page Test Suite", () => {
       await waitFor(() => expect(getCheckmark()).toBeVisible());
     });
 
-    // it("should keep signup button hidden", async () => {
-    //   const { sut, user } = makeSut();
+    it("should keep signup button hidden", async () => {
+      const { sut, user } = makeSut();
 
-    //   render(sut);
+      render(sut);
 
-    //   await fillLoginForm(user);
-    //   await clickLoginButton(user);
+      await fillLoginForm(user);
+      await clickLoginButton(user);
 
-    //   await waitFor(() => expect(getSignupButton()).not.toBeVisible());
-    // });
+      await waitFor(() => expect(getSignupButton()).not.toBeVisible());
+    });
   });
 });
