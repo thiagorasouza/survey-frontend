@@ -33,7 +33,11 @@ function Login() {
               disabled={submitting}
             />
           </div>
-          <button type="submit" className={styles.btnLogin}>
+          <button
+            type="submit"
+            className={styles.btnLogin}
+            disabled={submitting}
+          >
             Login
           </button>
           <button type="button" className={styles.btnSignup}>
