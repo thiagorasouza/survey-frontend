@@ -147,5 +147,16 @@ describe("Login Page Test Suite", () => {
 
       await waitFor(() => expect(getSpinner()));
     });
+
+    it("should hide signup button", async () => {
+      const { sut, user } = makeSut();
+
+      render(sut);
+
+      await fillLoginForm(user);
+      await clickLoginButton(user);
+
+      await waitFor(() => expect(getSignupButton()).not.toBeVisible());
+    });
   });
 });

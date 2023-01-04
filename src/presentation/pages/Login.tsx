@@ -52,7 +52,13 @@ function Login() {
                 `Login`
               )}
             </button>
-            <button type="button" className={styles.btnSignup}>
+            <button
+              type="button"
+              className={`${styles.btnSignup} ${
+                submitting ? styles.btnSignupSubmitting : ""
+              }`}
+              hidden={submitting}
+            >
               Sign Up
             </button>
           </div>

@@ -93,6 +93,11 @@
   @include light-box-shadow(rgba($black, 0.2));
 }
 
+.btnSignupSubmitting {
+  width: 30%;
+  opacity: 0;
+}
+
 .spinner {
   width: 1.7rem;
   height: 1.7rem;

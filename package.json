@@ -5,7 +5,7 @@
   "main": "src/main/index.tsx",
   "scripts": {
     "start": "webpack serve --open",
-    "test": "jest --passWithNoTests --no-cache --runInBand",
+    "test": "dotenv -v DEBUG_PRINT_LIMIT=0 -- jest --silent --noStackTrace --passWithNoTests --no-cache --runInBand",
     "test:watch": "npm t -- --watch",
     "test:staged": "npm t -- --findRelatedTests",
     "test:ci": "npm t -- --coverage",
@@ -35,6 +35,7 @@
     "@typescript-eslint/parser": "^5.47.1",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.7.3",
+    "dotenv-cli": "^6.0.0",
     "eslint": "^8.30.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react": "^7.31.11",
