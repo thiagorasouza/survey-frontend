@@ -69,13 +69,47 @@
   @include text-input;
 }
 
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .btnLogin {
   @include block-button($orange, $white);
   @include light-box-shadow(rgba($orange, 0.5));
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 2rem;
+}
+
+.btnLoginSubmitting {
+  width: 50%;
 }
 
 .btnSignup {
   @include block-button($lightPurple, $white);
   @include light-box-shadow(rgba($black, 0.2));
+}
+
+.spinner {
+  width: 1.7rem;
+  height: 1.7rem;
+  margin-right: 1rem;
+  border: 0.3rem solid $white;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

@@ -6,7 +6,6 @@ import styles from "./Login.scss";
 function Login() {
   const navigation = useNavigation();
   const submitting = navigation.state === "submitting";
-  // console.log("🚀 ~ submitting", submitting);
 
   return (
     <div className={styles.page}>
@@ -22,6 +21,7 @@ function Login() {
               className={styles.inputEmail}
               placeholder="email"
               disabled={submitting}
+              defaultValue="johndoe@email.com"
             />
             <input
               required
@@ -31,18 +31,31 @@ function Login() {
               minLength={6}
               placeholder="password"
               disabled={submitting}
+              defaultValue="123456"
             />
           </div>
-          <button
-            type="submit"
-            className={styles.btnLogin}
-            disabled={submitting}
-          >
-            Login
-          </button>
-          <button type="button" className={styles.btnSignup}>
-            Sign Up
-          </button>
+          <div className={styles.buttons}>
+            <button
+              type="submit"
+              aria-label="login"
+              className={`${styles.btnLogin} ${
+                submitting ? styles.btnLoginSubmitting : ""
+              }`}
+              disabled={submitting}
+            >
+              {submitting ? (
+                <>
+                  <span aria-label="spinner" className={styles.spinner}></span>
+                  {`Logging in...`}
+                </>
+              ) : (
+                `Login`
+              )}
+            </button>
+            <button type="button" className={styles.btnSignup}>
+              Sign Up
+            </button>
+          </div>
         </Form>
       </section>
       <section className={styles.sider}></section>

@@ -21,7 +21,7 @@
 
   transition: all 0.3s ease-in-out;
 
-  &:hover,
+  &:enabled:hover,
   &:focus {
     @include light-box-shadow(rgba(0, 0, 0, 0.16));
     transform: scale(1.02);
@@ -38,6 +38,10 @@
   &:valid {
     outline-color: $green;
   }
+
+  &:disabled {
+    cursor: default;
+  }
 }
 
 @mixin block-button($backgroundColor, $fontColor) {
@@ -50,9 +54,13 @@
 
   transition: all 0.3s ease-in-out;
 
-  &:hover {
+  &:enabled:hover {
     background-color: color.scale($backgroundColor, $lightness: -15%);
     transform: scale(1.02);
     cursor: pointer;
+  }
+
+  &:disabled {
+    cursor: default;
   }
 }

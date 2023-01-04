@@ -22,7 +22,10 @@ const getEmailInput = (): HTMLInputElement =>
 const getPasswordInput = (): HTMLInputElement =>
   screen.getByPlaceholderText(/password/i);
 
-const getLoginButton = (): HTMLButtonElement => screen.getByText(/login/i);
+const getLoginButton = (): HTMLButtonElement =>
+  screen.getByRole("button", { name: /login/i });
+
+const getSpinner = (): HTMLButtonElement => screen.getByLabelText("spinner");
 
 const getSignupButton = (): HTMLButtonElement => screen.getByText(/sign ?up/i);
 
@@ -87,10 +90,12 @@ describe("Login Page Test Suite", () => {
     const fillLoginForm = async (user): Promise<void> => {
       const emailInput = getEmailInput();
       const fakeEmail = faker.internet.email();
+      await user.clear(emailInput);
       await user.type(emailInput, fakeEmail);
 
       const passwordInput = getPasswordInput();
       const fakePassword = faker.internet.password();
+      await user.clear(passwordInput);
       await user.type(passwordInput, fakePassword);
     };
 
@@ -130,6 +135,17 @@ describe("Login Page Test Suite", () => {
       await clickLoginButton(user);
 
       await waitFor(() => expect(getLoginButton()).toBeDisabled());
+    });
+
+    it("should display a loading spinner", async () => {
+      const { sut, user } = makeSut();
+
+      render(sut);
+
+      await fillLoginForm(user);
+      await clickLoginButton(user);
+
+      await waitFor(() => expect(getSpinner()));
     });
   });
 });
