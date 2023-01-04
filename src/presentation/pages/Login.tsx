@@ -1,5 +1,10 @@
 import React from "react";
-import { Form, useActionData, useNavigation } from "react-router-dom";
+import {
+  Form,
+  useActionData,
+  useNavigate,
+  useNavigation,
+} from "react-router-dom";
 import Brand from "../components/Brand";
 import styles from "./Login.scss";
 
@@ -8,13 +13,19 @@ interface LoginResult {
 }
 
 function Login() {
+  const navigate = useNavigate();
   const navigation = useNavigation();
   const submitting = navigation.state === "submitting";
 
   const loginResult = useActionData() as LoginResult;
   const success = !submitting && loginResult?.success === true;
   const failure = !submitting && loginResult?.success === false;
-  // console.log("🚀 ~ success", success);
+
+  if (success) {
+    setTimeout(() => {
+      navigate("/surveys");
+    }, 1000);
+  }
 
   return (
     <div className={styles.page}>

@@ -3,6 +3,7 @@
  */
 
 import React, { ReactElement } from "react";
+
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
 
 import { render, screen, waitFor } from "@testing-library/react";
@@ -48,12 +49,17 @@ const mockRouter = (element: ReactElement): ReactElement => {
         element,
         action: mockAction,
       },
+      {
+        path: "/surveys",
+        element: <div>Surveys Route</div>,
+      },
     ],
     {
       initialEntries: ["/"],
       initialIndex: 0,
     }
   );
+
   return <RouterProvider router={router} />;
 };
 
@@ -156,7 +162,7 @@ describe("Login Page Test Suite", () => {
       await goToSubmittingState(user);
     });
 
-    it("should display a checkmark on success", async () => {
+    it("should display a checkmark", async () => {
       await waitFor(() => expect(getCheckmark()).toBeVisible());
     });
 
@@ -176,7 +182,13 @@ describe("Login Page Test Suite", () => {
     });
 
     it("should not display an error message", async () => {
-      await waitFor(() => expect(getFailureMessage()).toHaveClass("hidden"));
+      await waitForSuccessState();
+      expect(getFailureMessage()).toHaveClass("hidden");
+    });
+
+    it("should redirect to /surveys", async () => {
+      await waitForSuccessState();
+      await waitFor(() => expect(screen.getByText(/surveys route/i)));
     });
   });
 
