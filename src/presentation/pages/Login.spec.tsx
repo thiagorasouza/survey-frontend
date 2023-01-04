@@ -155,15 +155,9 @@ describe("Login Page Test Suite", () => {
       expect(getSignupButton()).not.toBeVisible();
     });
 
-    // it("should keep email input disabled", async () => {
-    //   const { sut, user } = makeSut();
-
-    //   render(sut);
-
-    //   await goToSubmittingState(user);
-
-    //   await waitFor(() => expect(getCheckmark()).toBeVisible());
-    //   expect(getSignupButton()).not.toBeVisible();
-    // });
+    it("should keep email input disabled", async () => {
+      await waitForSuccessState();
+      expect(getEmailInput()).toBeDisabled();
+    });
   });
 });

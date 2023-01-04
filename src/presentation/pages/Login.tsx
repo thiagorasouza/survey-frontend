@@ -28,7 +28,7 @@ function Login() {
               name="email"
               className={styles.inputEmail}
               placeholder="email"
-              disabled={submitting}
+              disabled={submitting || success}
               defaultValue="johndoe@email.com"
             />
             <input
