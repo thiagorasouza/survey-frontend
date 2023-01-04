@@ -12,14 +12,20 @@ function Login() {
   const submitting = navigation.state === "submitting";
 
   const loginResult = useActionData() as LoginResult;
-  const success = loginResult?.success === true;
+  const success = !submitting && loginResult?.success === true;
+  const failure = !submitting && loginResult?.success === false;
   // console.log("🚀 ~ success", success);
 
   return (
     <div className={styles.page}>
       <section className={styles.wrapper}>
         <Brand />
-
+        <div
+          role="alert"
+          className={`${styles.error} ${!failure ? styles.hidden : ""}`}
+        >
+          Please <strong>review</strong> your email and password.
+        </div>
         <Form method="post" className={styles.form}>
           <div className={styles.inputs}>
             <input
@@ -38,7 +44,7 @@ function Login() {
               className={styles.inputPassword}
               minLength={6}
               placeholder="password"
-              disabled={submitting}
+              disabled={submitting || success}
               defaultValue="123456"
             />
           </div>

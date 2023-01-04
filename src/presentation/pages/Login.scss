@@ -45,19 +45,20 @@
   }
 }
 
-.title {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+.error {
+  padding: 0.6rem 1.2rem;
+  font-size: 1.2rem;
+  border-radius: 0.5rem;
+  background-color: rgba($orange, 0.25);
+  margin-bottom: 2rem;
 }
 
-.caption {
-  font-size: 1.3rem;
-  letter-spacing: -0.5;
-  margin-bottom: 1rem;
+.hidden {
+  visibility: hidden;
 }
 
 .inputs {
-  padding: 5rem 0 6rem;
+  margin-bottom: 6rem;
 }
 
 .inputEmail {

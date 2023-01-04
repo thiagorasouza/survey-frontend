@@ -31,10 +31,14 @@ const getCheckmark = (): HTMLOrSVGElement => screen.getByLabelText("checkmark");
 
 const getSignupButton = (): HTMLButtonElement => screen.getByText(/sign ?up/i);
 
+const getFailureMessage = (): HTMLDivElement => screen.getByRole("alert");
+
 interface SutTypes {
   sut: ReactElement;
   user: UserEvent;
 }
+
+const mockAction = jest.fn(() => ({ success: true }));
 
 const mockRouter = (element: ReactElement): ReactElement => {
   const router = createMemoryRouter(
@@ -42,9 +46,7 @@ const mockRouter = (element: ReactElement): ReactElement => {
       {
         path: "/",
         element,
-        action: () => {
-          return { success: true };
-        },
+        action: mockAction,
       },
     ],
     {
@@ -109,6 +111,10 @@ describe("Login Page Test Suite", () => {
     it("should have an enabled signup button", () => {
       expect(getSignupButton()).not.toBeDisabled();
     });
+
+    it("should not display an error message", async () => {
+      await waitFor(() => expect(getFailureMessage()).toHaveClass("hidden"));
+    });
   });
 
   describe("Submitting state", () => {
@@ -137,6 +143,10 @@ describe("Login Page Test Suite", () => {
     it("should hide signup button", async () => {
       await waitFor(() => expect(getSignupButton()).not.toBeVisible());
     });
+
+    it("should not display an error message", async () => {
+      await waitFor(() => expect(getFailureMessage()).toHaveClass("hidden"));
+    });
   });
 
   describe("Success state", () => {
@@ -158,6 +168,44 @@ describe("Login Page Test Suite", () => {
     it("should keep email input disabled", async () => {
       await waitForSuccessState();
       expect(getEmailInput()).toBeDisabled();
+    });
+
+    it("should keep password input disabled", async () => {
+      await waitForSuccessState();
+      expect(getPasswordInput()).toBeDisabled();
+    });
+
+    it("should not display an error message", async () => {
+      await waitFor(() => expect(getFailureMessage()).toHaveClass("hidden"));
+    });
+  });
+
+  describe("Failure state", () => {
+    beforeEach(async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      mockAction.mockReturnValue({ success: false });
+      await goToSubmittingState(user);
+    });
+
+    it("should display an error message", async () => {
+      await waitFor(() => expect(getFailureMessage()).toBeVisible());
+    });
+
+    it("should have an enabled email input", () => {
+      expect(getEmailInput()).not.toBeDisabled();
+    });
+
+    it("should have an enabled password input", () => {
+      expect(getPasswordInput()).not.toBeDisabled();
+    });
+
+    it("should have an enabled login button", () => {
+      expect(getLoginButton()).not.toBeDisabled();
+    });
+
+    it("should have an enabled signup button", () => {
+      expect(getSignupButton()).not.toBeDisabled();
     });
   });
 });
