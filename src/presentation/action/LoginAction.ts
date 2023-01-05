@@ -1,11 +1,7 @@
 import { InvalidCredentialsError } from "../../domain/errors/invalid-credentials-error";
 import { UnexpectedError } from "../../domain/errors/unexpected-error";
 import { Authentication } from "../../domain/usecases/authentication";
-
-export interface LoginResult {
-  success: boolean;
-  error: boolean;
-}
+import { LoginResult } from "./LoginResult";
 
 export class LoginAction {
   constructor(private readonly authentication: Authentication) {}

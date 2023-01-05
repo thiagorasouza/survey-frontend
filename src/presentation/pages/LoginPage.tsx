@@ -5,7 +5,7 @@ import {
   useNavigate,
   useNavigation,
 } from "react-router-dom";
-import { LoginResult } from "../action/LoginAction";
+import { LoginResult } from "../action/LoginResult";
 import Brand from "../components/Brand";
 import styles from "./LoginPage.scss";
 
