@@ -16,6 +16,7 @@ function Login() {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const submitting = navigation.state === "submitting";
+  // console.log("🚀 ~ submitting", submitting);
 
   const loginResult = useActionData() as LoginResult;
   const success = !submitting && loginResult?.success === true;
@@ -46,7 +47,6 @@ function Login() {
               className={styles.inputEmail}
               placeholder="email"
               disabled={submitting || success}
-              defaultValue="johndoe@email.com"
             />
             <input
               required
@@ -56,7 +56,6 @@ function Login() {
               minLength={6}
               placeholder="password"
               disabled={submitting || success}
-              defaultValue="123456"
             />
           </div>
           <div className={styles.buttons}>

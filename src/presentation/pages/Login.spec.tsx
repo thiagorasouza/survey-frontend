@@ -26,7 +26,7 @@ const getPasswordInput = (): HTMLInputElement =>
 const getLoginButton = (): HTMLButtonElement =>
   screen.getByRole("button", { name: /login/i });
 
-const getSpinner = (): HTMLButtonElement => screen.getByLabelText("spinner");
+const getSpinner = (): HTMLSpanElement => screen.getByLabelText("spinner");
 
 const getCheckmark = (): HTMLOrSVGElement => screen.getByLabelText("checkmark");
 
@@ -131,6 +131,7 @@ describe("Login Page Test Suite", () => {
     });
 
     it("should disable email input", async () => {
+      // expect(getEmailInput()).toBeDisabled();
       await waitFor(() => expect(getEmailInput()).toBeDisabled());
     });
 
@@ -218,6 +219,22 @@ describe("Login Page Test Suite", () => {
 
     it("should have an enabled signup button", () => {
       expect(getSignupButton()).not.toBeDisabled();
+    });
+  });
+
+  describe("Validation", () => {
+    it("should indicate that email is invalid if empty", async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      await clickLoginButton(user);
+      expect(getEmailInput()).toBeInvalid();
+    });
+
+    it("should indicate that password is invalid if empty", async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      await clickLoginButton(user);
+      expect(getPasswordInput()).toBeInvalid();
     });
   });
 });

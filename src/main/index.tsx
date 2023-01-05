@@ -9,7 +9,7 @@ const router = createBrowserRouter([
     element: <Login />,
     action: () => {
       return new Promise((resolve) =>
-        setTimeout(() => resolve({ success: false }), 1000)
+        setTimeout(() => resolve({ success: true }), 1000)
       );
     },
   },
