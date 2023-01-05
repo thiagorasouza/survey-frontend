@@ -85,4 +85,12 @@ describe("LoginAction Test Suite", () => {
 
     expect(result).toEqual({ success: false, error: true });
   });
+
+  it("should return success true on success", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.handle(mockRequest());
+
+    expect(result).toEqual({ success: true, error: false });
+  });
 });

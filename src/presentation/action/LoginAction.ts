@@ -17,11 +17,13 @@ export class LoginAction {
 
     try {
       await this.authentication.auth({ email, password });
+      return { success: true, error: false };
     } catch (error) {
       switch (error.constructor) {
         case InvalidCredentialsError:
           return { success: false, error: false };
         case UnexpectedError:
+        default:
           return { success: false, error: true };
       }
     }
