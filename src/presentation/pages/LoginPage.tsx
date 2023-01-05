@@ -6,13 +6,13 @@ import {
   useNavigation,
 } from "react-router-dom";
 import Brand from "../components/Brand";
-import styles from "./Login.scss";
+import styles from "./LoginPage.scss";
 
 interface LoginResult {
   success: boolean;
 }
 
-function Login() {
+function LoginPage() {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const submitting = navigation.state === "submitting";
@@ -104,4 +104,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;

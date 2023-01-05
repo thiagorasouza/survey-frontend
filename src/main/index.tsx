@@ -1,12 +1,12 @@
 import React from "react";
 import * as ReactDOM from "react-dom/client";
-import Login from "../presentation/pages/Login";
+import LoginPage from "../presentation/pages/LoginPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />,
+    element: <LoginPage />,
     action: () => {
       return new Promise((resolve) =>
         setTimeout(() => resolve({ success: true }), 1000)

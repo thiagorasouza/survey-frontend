@@ -11,7 +11,7 @@ import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { UserEvent } from "@testing-library/user-event/dist/types/setup/setup";
 
-import Login from "./Login";
+import LoginPage from "./LoginPage";
 import { faker } from "@faker-js/faker";
 
 import { enableFetchMocks } from "jest-fetch-mock";
@@ -90,7 +90,7 @@ const waitForSuccessState = async (): Promise<void> => {
 };
 
 const makeSut = (): SutTypes => {
-  const sut = mockRouter(<Login />);
+  const sut = mockRouter(<LoginPage />);
   const user = userEvent.setup();
   return { sut, user };
 };
@@ -120,6 +120,22 @@ describe("Login Page Test Suite", () => {
 
     it("should not display an error message", async () => {
       await waitFor(() => expect(getFailureMessage()).toHaveClass("hidden"));
+    });
+  });
+
+  describe("Validation", () => {
+    it("should indicate that email is invalid if empty", async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      await clickLoginButton(user);
+      expect(getEmailInput()).toBeInvalid();
+    });
+
+    it("should indicate that password is invalid if empty", async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      await clickLoginButton(user);
+      expect(getPasswordInput()).toBeInvalid();
     });
   });
 
@@ -219,22 +235,6 @@ describe("Login Page Test Suite", () => {
 
     it("should have an enabled signup button", () => {
       expect(getSignupButton()).not.toBeDisabled();
-    });
-  });
-
-  describe("Validation", () => {
-    it("should indicate that email is invalid if empty", async () => {
-      const { sut, user } = makeSut();
-      render(sut);
-      await clickLoginButton(user);
-      expect(getEmailInput()).toBeInvalid();
-    });
-
-    it("should indicate that password is invalid if empty", async () => {
-      const { sut, user } = makeSut();
-      render(sut);
-      await clickLoginButton(user);
-      expect(getPasswordInput()).toBeInvalid();
     });
   });
 });
