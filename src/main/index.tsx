@@ -7,7 +7,8 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <LoginPage />,
-    action: () => {
+    action: ({ request }) => {
+      console.log("🚀 ~ request", request);
       return new Promise((resolve) =>
         setTimeout(() => resolve({ success: true }), 1000)
       );
