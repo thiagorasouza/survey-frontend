@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import { mockAccountModel } from "../../../tests/data/mocks/mock-account-model";
 import { mockAuthenticationParams } from "../../../tests/data/mocks/mock-authentication-params";
 import { InvalidCredentialsError } from "../../domain/errors/invalid-credentials-error";
+import { UnexpectedError } from "../../domain/errors/unexpected-error";
 import { AccountModel } from "../../domain/models/account-model";
 import { Authentication } from "../../domain/usecases/authentication";
 import { LoginAction } from "./LoginAction";
@@ -62,13 +63,26 @@ describe("LoginAction Test Suite", () => {
   it("should return success false on invalid credentials", async () => {
     const { sut, authenticationStub } = makeSut();
 
-    const invalidCredentials = new InvalidCredentialsError();
+    const error = new InvalidCredentialsError();
     jest
       .spyOn(authenticationStub, "auth")
-      .mockReturnValueOnce(Promise.reject(invalidCredentials));
+      .mockReturnValueOnce(Promise.reject(error));
 
     const result = await sut.handle(mockRequest());
 
-    expect(result).toEqual({ success: false });
+    expect(result).toEqual({ success: false, error: false });
+  });
+
+  it("should return error true on UnexpectedError", async () => {
+    const { sut, authenticationStub } = makeSut();
+
+    const error = new UnexpectedError();
+    jest
+      .spyOn(authenticationStub, "auth")
+      .mockReturnValueOnce(Promise.reject(error));
+
+    const result = await sut.handle(mockRequest());
+
+    expect(result).toEqual({ success: false, error: true });
   });
 });

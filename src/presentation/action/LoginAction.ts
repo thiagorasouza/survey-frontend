@@ -1,8 +1,10 @@
 import { InvalidCredentialsError } from "../../domain/errors/invalid-credentials-error";
+import { UnexpectedError } from "../../domain/errors/unexpected-error";
 import { Authentication } from "../../domain/usecases/authentication";
 
 export interface LoginResult {
   success: boolean;
+  error: boolean;
 }
 
 export class LoginAction {
@@ -18,7 +20,9 @@ export class LoginAction {
     } catch (error) {
       switch (error.constructor) {
         case InvalidCredentialsError:
-          return { success: false };
+          return { success: false, error: false };
+        case UnexpectedError:
+          return { success: false, error: true };
       }
     }
   }
