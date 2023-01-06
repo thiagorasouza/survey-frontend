@@ -15,12 +15,6 @@ function LoginPage() {
   const navigation = useNavigation();
   const loginResult = useActionData() as LoginResult;
 
-  /* 
-  INITIAL,
-  PROCESSING,
-  SUCCESS,
-  FAILURE - INVALID CREDENTIALS / UNEXPECTED ERROR
-  */
   const state =
     navigation.state === "submitting"
       ? "processing"
@@ -45,10 +39,12 @@ function LoginPage() {
         <div
           role="alert"
           className={`${styles.error} ${
-            !invalidCredentials ? styles.hidden : ""
+            !invalidCredentials && !unexpectedError ? styles.hidden : ""
           }`}
         >
-          Please <strong>review</strong> your email and password.
+          {invalidCredentials
+            ? "Please review your email and password."
+            : "Unexpected server error."}
         </div>
         <Form method="post" className={styles.form}>
           <div className={styles.inputs}>

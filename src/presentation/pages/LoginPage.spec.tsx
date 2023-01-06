@@ -210,7 +210,7 @@ describe("Login Page Test Suite", () => {
     });
   });
 
-  describe("Failure state", () => {
+  describe("Invalid credentials failure", () => {
     beforeEach(async () => {
       const { sut, user } = makeSut();
       render(sut);
@@ -219,7 +219,40 @@ describe("Login Page Test Suite", () => {
     });
 
     it("should display an error message", async () => {
-      await waitFor(() => expect(getFailureMessage()).toBeVisible());
+      await waitFor(() =>
+        expect(getFailureMessage()).not.toHaveClass("hidden")
+      );
+    });
+
+    it("should have an enabled email input", () => {
+      expect(getEmailInput()).not.toBeDisabled();
+    });
+
+    it("should have an enabled password input", () => {
+      expect(getPasswordInput()).not.toBeDisabled();
+    });
+
+    it("should have an enabled login button", () => {
+      expect(getLoginButton()).not.toBeDisabled();
+    });
+
+    it("should have an enabled signup button", () => {
+      expect(getSignupButton()).not.toBeDisabled();
+    });
+  });
+
+  describe("Unexpected server error failure", () => {
+    beforeEach(async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      mockAction.mockReturnValue({ type: LoginResultType.UnexpectedError });
+      await goToSubmittingState(user);
+    });
+
+    it("should display an error message", async () => {
+      await waitFor(() =>
+        expect(getFailureMessage()).not.toHaveClass("hidden")
+      );
     });
 
     it("should have an enabled email input", () => {
