@@ -1,5 +1,6 @@
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const path = require("node:path");
+const { DefinePlugin } = require("webpack");
 
 module.exports = {
   mode: "development",
@@ -45,5 +46,10 @@ module.exports = {
       writeToDisk: true,
     },
   },
-  plugins: [new CleanWebpackPlugin()],
+  plugins: [
+    new CleanWebpackPlugin(),
+    new DefinePlugin({
+      "process.env.API_URL": '"http://localhost:5000/api"',
+    }),
+  ],
 };

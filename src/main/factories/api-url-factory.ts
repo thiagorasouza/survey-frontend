@@ -1,3 +1,5 @@
+import { env } from "../config/env";
+
 export const makeApiUrl = (path: string) => {
-  return `http://localhost:5000/api${path}`;
+  return `${env.API_URL}${path}`;
 };
