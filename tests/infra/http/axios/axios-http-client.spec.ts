@@ -2,11 +2,15 @@ import { AxiosHttpClient } from "../../../../src/infra/http/axios/axios-http-cli
 import axios from "axios";
 import { faker } from "@faker-js/faker";
 import { HttpPostParams } from "../../../../src/data/protocols/http/http-post-client";
-import { mockAxiosResponse } from "../../mocks/mock-axios-response";
 
 jest.mock("axios");
-const axiosResponse = mockAxiosResponse();
-jest.spyOn(axios, "post").mockImplementation(async () => axiosResponse);
+
+const successResponse = {
+  status: faker.datatype.number(),
+  data: { any_key: "any_value" },
+};
+
+jest.spyOn(axios, "post").mockImplementation(async () => successResponse);
 
 interface SutTypes {
   sut: AxiosHttpClient;
@@ -32,7 +36,7 @@ describe("Axios HTTP Client", () => {
     expect(axios.post).toHaveBeenCalledWith(postParams.url, postParams.body);
   });
 
-  it("should return statusCode and body", async () => {
+  it("should return statusCode and body on success 2XX responses", async () => {
     const { sut } = makeSut();
 
     const postParams: HttpPostParams<any> = {
@@ -42,7 +46,7 @@ describe("Axios HTTP Client", () => {
 
     const result = await sut.post(postParams);
 
-    expect(result?.statusCode).toBe(axiosResponse.status);
-    expect(result?.body).toEqual(axiosResponse.data);
+    expect(result?.statusCode).toBe(successResponse.status);
+    expect(result?.body).toEqual(successResponse.data);
   });
 });
