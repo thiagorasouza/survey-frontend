@@ -8,7 +8,7 @@
     "test": "dotenv -v DEBUG_PRINT_LIMIT=0 -- jest --noStackTrace --passWithNoTests --no-cache --runInBand",
     "test:watch": "npm t -- --watch",
     "test:staged": "npm t -- --findRelatedTests",
-    "test:ci": "npm t -- --coverage",
+    "test:ci": "npm t -- --coverage && chrome file://wsl$/Ubuntu-22.04/home/thiago/survey-frontend/coverage/lcov-report/index.html",
     "build": "webpack"
   },
   "repository": {

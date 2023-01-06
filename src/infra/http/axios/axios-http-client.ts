@@ -15,8 +15,8 @@ export class AxiosHttpClient implements HttpPostClient<any, any> {
     }
 
     return {
-      statusCode: response?.status,
-      body: response?.data,
+      statusCode: response.status,
+      body: response.data,
     };
   }
 }
