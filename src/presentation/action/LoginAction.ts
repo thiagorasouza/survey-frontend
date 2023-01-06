@@ -2,7 +2,7 @@ import { ActionFunctionArgs } from "react-router-dom";
 import { InvalidCredentialsError } from "../../domain/errors/invalid-credentials-error";
 import { UnexpectedError } from "../../domain/errors/unexpected-error";
 import { Authentication } from "../../domain/usecases/authentication";
-import { LoginResult } from "./LoginResult";
+import { LoginResult, LoginResultType } from "./LoginResult";
 
 export class LoginAction {
   constructor(private readonly authentication: Authentication) {}
@@ -15,15 +15,22 @@ export class LoginAction {
     const password = formData.get("password") as any;
 
     try {
-      await this.authentication.auth({ email, password });
-      return { success: true, error: false };
+      const accountModel = await this.authentication.auth({ email, password });
+      return {
+        type: LoginResultType.Success,
+        data: accountModel,
+      };
     } catch (error) {
       switch (error.constructor) {
         case InvalidCredentialsError:
-          return { success: false, error: false };
+          return {
+            type: LoginResultType.InvalidCredentials,
+          };
         case UnexpectedError:
         default:
-          return { success: false, error: true };
+          return {
+            type: LoginResultType.UnexpectedError,
+          };
       }
     }
   }

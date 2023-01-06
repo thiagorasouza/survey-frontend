@@ -5,19 +5,32 @@ import {
   useNavigate,
   useNavigation,
 } from "react-router-dom";
-import { LoginResult } from "../action/LoginResult";
+import { LoginResult, LoginResultType } from "../action/LoginResult";
 import Brand from "../components/Brand";
 import styles from "./LoginPage.scss";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const navigation = useNavigation();
-  const submitting = navigation.state === "submitting";
-  // console.log("🚀 ~ submitting", submitting);
 
+  const navigation = useNavigation();
   const loginResult = useActionData() as LoginResult;
-  const success = !submitting && loginResult?.success === true;
-  const failure = !submitting && loginResult?.success === false;
+
+  /* 
+  INITIAL,
+  PROCESSING,
+  SUCCESS,
+  FAILURE - INVALID CREDENTIALS / UNEXPECTED ERROR
+  */
+  const state =
+    navigation.state === "submitting"
+      ? "processing"
+      : loginResult
+      ? loginResult.type
+      : "initial";
+  const processing = state === "processing";
+  const invalidCredentials = state === LoginResultType.InvalidCredentials;
+  const unexpectedError = state === LoginResultType.UnexpectedError;
+  const success = state === LoginResultType.Success;
 
   if (success) {
     setTimeout(() => {
@@ -31,7 +44,9 @@ function LoginPage() {
         <Brand />
         <div
           role="alert"
-          className={`${styles.error} ${!failure ? styles.hidden : ""}`}
+          className={`${styles.error} ${
+            !invalidCredentials ? styles.hidden : ""
+          }`}
         >
           Please <strong>review</strong> your email and password.
         </div>
@@ -43,7 +58,7 @@ function LoginPage() {
               name="email"
               className={styles.inputEmail}
               placeholder="email"
-              disabled={submitting || success}
+              disabled={processing || success}
             />
             <input
               required
@@ -52,7 +67,7 @@ function LoginPage() {
               className={styles.inputPassword}
               minLength={6}
               placeholder="password"
-              disabled={submitting || success}
+              disabled={processing || success}
             />
           </div>
           <div className={styles.buttons}>
@@ -60,9 +75,9 @@ function LoginPage() {
               type="submit"
               aria-label="login"
               className={`${styles.btnLogin} ${
-                submitting ? styles.btnLoginSubmitting : ""
+                processing ? styles.btnLoginSubmitting : ""
               } ${success ? styles.btnLoginSuccess : ""}`}
-              disabled={submitting || success}
+              disabled={processing || success}
             >
               {success ? (
                 <svg
@@ -75,7 +90,7 @@ function LoginPage() {
                     className={styles.checkmarkPath}
                   ></path>
                 </svg>
-              ) : submitting ? (
+              ) : processing ? (
                 <>
                   <span aria-label="spinner" className={styles.spinner}></span>
                   {`Logging in...`}
@@ -87,9 +102,9 @@ function LoginPage() {
             <button
               type="button"
               className={`${styles.btnSignup} ${
-                submitting || success ? styles.btnSignupHide : ""
+                processing || success ? styles.btnSignupHide : ""
               }`}
-              hidden={submitting || success}
+              hidden={processing || success}
             >
               Sign Up
             </button>

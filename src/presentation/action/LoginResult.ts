@@ -1,4 +1,10 @@
 export interface LoginResult {
-  success: boolean;
-  error: boolean;
+  type: LoginResultType;
+  data?: any;
+}
+
+export enum LoginResultType {
+  Success = "success",
+  InvalidCredentials = "invalid_credentials",
+  UnexpectedError = "unexpected_error",
 }

@@ -7,11 +7,14 @@ import { UnexpectedError } from "../../domain/errors/unexpected-error";
 import { AccountModel } from "../../domain/models/account-model";
 import { Authentication } from "../../domain/usecases/authentication";
 import { LoginAction } from "./LoginAction";
+import { LoginResultType } from "./LoginResult";
+
+const fakeAccountModel = mockAccountModel();
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
     async auth(): Promise<AccountModel> {
-      return mockAccountModel();
+      return fakeAccountModel;
     }
   }
 
@@ -61,7 +64,7 @@ describe("LoginAction Test Suite", () => {
     expect(authSpy).toHaveBeenCalledWith(authParams);
   });
 
-  it("should return success false on invalid credentials", async () => {
+  it("should return response of type invalid credentials on InvalidCredentials", async () => {
     const { sut, authenticationStub } = makeSut();
 
     const error = new InvalidCredentialsError();
@@ -71,10 +74,10 @@ describe("LoginAction Test Suite", () => {
 
     const result = await sut.handle(mockActionArgs());
 
-    expect(result).toEqual({ success: false, error: false });
+    expect(result).toEqual({ type: LoginResultType.InvalidCredentials });
   });
 
-  it("should return error true on UnexpectedError", async () => {
+  it("should return response of type unexpected error on UnexpectedError", async () => {
     const { sut, authenticationStub } = makeSut();
 
     const error = new UnexpectedError();
@@ -84,14 +87,17 @@ describe("LoginAction Test Suite", () => {
 
     const result = await sut.handle(mockActionArgs());
 
-    expect(result).toEqual({ success: false, error: true });
+    expect(result).toEqual({ type: LoginResultType.UnexpectedError });
   });
 
-  it("should return success true on success", async () => {
+  it("should return response of type success with account model on success", async () => {
     const { sut } = makeSut();
 
     const result = await sut.handle(mockActionArgs());
 
-    expect(result).toEqual({ success: true, error: false });
+    expect(result).toEqual({
+      type: LoginResultType.Success,
+      data: fakeAccountModel,
+    });
   });
 });

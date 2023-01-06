@@ -15,6 +15,7 @@ import LoginPage from "./LoginPage";
 import { faker } from "@faker-js/faker";
 
 import { enableFetchMocks } from "jest-fetch-mock";
+import { LoginResultType } from "../action/LoginResult";
 enableFetchMocks();
 
 const getEmailInput = (): HTMLInputElement =>
@@ -39,7 +40,7 @@ interface SutTypes {
   user: UserEvent;
 }
 
-const mockAction = jest.fn(() => ({ success: true }));
+const mockAction = jest.fn(() => ({ type: LoginResultType.Success }));
 
 const mockRouter = (element: ReactElement): ReactElement => {
   const router = createMemoryRouter(
@@ -213,7 +214,7 @@ describe("Login Page Test Suite", () => {
     beforeEach(async () => {
       const { sut, user } = makeSut();
       render(sut);
-      mockAction.mockReturnValue({ success: false });
+      mockAction.mockReturnValue({ type: LoginResultType.InvalidCredentials });
       await goToSubmittingState(user);
     });
 
