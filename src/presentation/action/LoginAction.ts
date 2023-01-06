@@ -1,3 +1,4 @@
+import { ActionFunctionArgs } from "react-router-dom";
 import { InvalidCredentialsError } from "../../domain/errors/invalid-credentials-error";
 import { UnexpectedError } from "../../domain/errors/unexpected-error";
 import { Authentication } from "../../domain/usecases/authentication";
@@ -6,7 +7,9 @@ import { LoginResult } from "./LoginResult";
 export class LoginAction {
   constructor(private readonly authentication: Authentication) {}
 
-  async handle(request: Request): Promise<LoginResult> {
+  async handle(args: ActionFunctionArgs): Promise<LoginResult> {
+    const { request } = args;
+
     const formData = await request.formData();
     const email = formData.get("email") as any;
     const password = formData.get("password") as any;

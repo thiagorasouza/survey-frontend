@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { ActionFunctionArgs } from "react-router-dom";
 import { mockAccountModel } from "../../../tests/data/mocks/mock-account-model";
 import { mockAuthenticationParams } from "../../../tests/data/mocks/mock-authentication-params";
 import { InvalidCredentialsError } from "../../domain/errors/invalid-credentials-error";
@@ -28,10 +29,10 @@ const makeSut = (): SutTypes => {
   return { sut, authenticationStub };
 };
 
-const mockRequest = (
+const mockActionArgs = (
   email: string = faker.internet.email(),
   password: string = faker.internet.password()
-): Request => {
+): ActionFunctionArgs => {
   const formData = new FormData();
   formData.append("email", email);
   formData.append("password", password);
@@ -43,7 +44,7 @@ const mockRequest = (
     body: formData,
   });
 
-  return request;
+  return { request, params: {} };
 };
 
 describe("LoginAction Test Suite", () => {
@@ -52,12 +53,12 @@ describe("LoginAction Test Suite", () => {
 
     const authSpy = jest.spyOn(authenticationStub, "auth");
 
-    const fakeData = mockAuthenticationParams();
-    const fakeRequest = mockRequest(fakeData.email, fakeData.password);
+    const authParams = mockAuthenticationParams();
+    const actionArgs = mockActionArgs(authParams.email, authParams.password);
 
-    await sut.handle(fakeRequest);
+    await sut.handle(actionArgs);
 
-    expect(authSpy).toHaveBeenCalledWith(fakeData);
+    expect(authSpy).toHaveBeenCalledWith(authParams);
   });
 
   it("should return success false on invalid credentials", async () => {
@@ -68,7 +69,7 @@ describe("LoginAction Test Suite", () => {
       .spyOn(authenticationStub, "auth")
       .mockReturnValueOnce(Promise.reject(error));
 
-    const result = await sut.handle(mockRequest());
+    const result = await sut.handle(mockActionArgs());
 
     expect(result).toEqual({ success: false, error: false });
   });
@@ -81,7 +82,7 @@ describe("LoginAction Test Suite", () => {
       .spyOn(authenticationStub, "auth")
       .mockReturnValueOnce(Promise.reject(error));
 
-    const result = await sut.handle(mockRequest());
+    const result = await sut.handle(mockActionArgs());
 
     expect(result).toEqual({ success: false, error: true });
   });
@@ -89,7 +90,7 @@ describe("LoginAction Test Suite", () => {
   it("should return success true on success", async () => {
     const { sut } = makeSut();
 
-    const result = await sut.handle(mockRequest());
+    const result = await sut.handle(mockActionArgs());
 
     expect(result).toEqual({ success: true, error: false });
   });
