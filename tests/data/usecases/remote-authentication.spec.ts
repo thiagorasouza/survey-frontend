@@ -1,7 +1,7 @@
 import { HttpPostClient } from "../../../src/data/protocols/http/http-post-client";
 import { RemoteAuthentication } from "../../../src/data/usecases/remote-authentication";
 import { mockAuthenticationParams } from "../mocks/mock-authentication-params";
-import { makeHttpPostClient } from "../mocks/mock-http-post-client";
+import { mockHttpPostClient } from "../mocks/mock-http-post-client";
 import { faker } from "@faker-js/faker";
 import { InvalidCredentialsError } from "../../../src/domain/errors/invalid-credentials-error";
 import { HttpStatusCode } from "../../../src/data/protocols/http/http-response";
@@ -16,7 +16,7 @@ interface SutTypes {
 }
 
 const makeSut = (url: string = faker.internet.url()): SutTypes => {
-  const httpPostClientStub = makeHttpPostClient();
+  const httpPostClientStub = mockHttpPostClient();
   const sut = new RemoteAuthentication(url, httpPostClientStub);
   return { sut, httpPostClientStub };
 };

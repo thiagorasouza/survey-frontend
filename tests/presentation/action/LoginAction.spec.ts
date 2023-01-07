@@ -1,13 +1,13 @@
 import { faker } from "@faker-js/faker";
 import { ActionFunctionArgs } from "react-router-dom";
-import { mockAccountModel } from "../../../tests/data/mocks/mock-account-model";
-import { mockAuthenticationParams } from "../../../tests/data/mocks/mock-authentication-params";
-import { InvalidCredentialsError } from "../../domain/errors/invalid-credentials-error";
-import { UnexpectedError } from "../../domain/errors/unexpected-error";
-import { AccountModel } from "../../domain/models/account-model";
-import { Authentication } from "../../domain/usecases/authentication";
-import { LoginAction } from "./LoginAction";
-import { LoginResultType } from "./LoginResult";
+import { mockAccountModel } from "../../data/mocks/mock-account-model";
+import { mockAuthenticationParams } from "../../data/mocks/mock-authentication-params";
+import { InvalidCredentialsError } from "../../../src/domain/errors/invalid-credentials-error";
+import { UnexpectedError } from "../../../src/domain/errors/unexpected-error";
+import { AccountModel } from "../../../src/domain/models/account-model";
+import { Authentication } from "../../../src/domain/usecases/authentication";
+import { LoginAction } from "../../../src/presentation/action/LoginAction";
+import { LoginResultType } from "../../../src/presentation/action/LoginResult";
 
 const fakeAccountModel = mockAccountModel();
 

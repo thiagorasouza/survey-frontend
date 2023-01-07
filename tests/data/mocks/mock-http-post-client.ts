@@ -6,7 +6,7 @@ import {
 import { AccountModel } from "../../../src/domain/models/account-model";
 import { AuthenticationParams } from "../../../src/domain/usecases/authentication";
 
-export const makeHttpPostClient = (): HttpPostClient<
+export const mockHttpPostClient = (): HttpPostClient<
   AuthenticationParams,
   AccountModel
 > => {

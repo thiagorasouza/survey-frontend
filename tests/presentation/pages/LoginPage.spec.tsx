@@ -11,11 +11,11 @@ import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { UserEvent } from "@testing-library/user-event/dist/types/setup/setup";
 
-import LoginPage from "./LoginPage";
+import LoginPage from "../../../src/presentation/pages/LoginPage";
 import { faker } from "@faker-js/faker";
 
 import { enableFetchMocks } from "jest-fetch-mock";
-import { LoginResultType } from "../action/LoginResult";
+import { LoginResultType } from "../../../src/presentation/action/LoginResult";
 enableFetchMocks();
 
 const getEmailInput = (): HTMLInputElement =>
