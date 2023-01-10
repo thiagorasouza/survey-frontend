@@ -2,10 +2,14 @@ import { ActionFunctionArgs } from "react-router-dom";
 import { InvalidCredentialsError } from "../../domain/errors/invalid-credentials-error";
 import { UnexpectedError } from "../../domain/errors/unexpected-error";
 import { Authentication } from "../../domain/usecases/authentication";
+import { SaveAccessToken } from "../../domain/usecases/save-access-token";
 import { LoginResult, LoginResultType } from "./LoginResult";
 
 export class LoginAction {
-  constructor(private readonly authentication: Authentication) {}
+  constructor(
+    private readonly authentication: Authentication,
+    private readonly saveAccessToken: SaveAccessToken
+  ) {}
 
   async handle(args: ActionFunctionArgs): Promise<LoginResult> {
     const { request } = args;
@@ -16,6 +20,7 @@ export class LoginAction {
 
     try {
       const accountModel = await this.authentication.auth({ email, password });
+      await this.saveAccessToken.save(accountModel.accessToken);
       return {
         type: LoginResultType.Success,
         data: accountModel,

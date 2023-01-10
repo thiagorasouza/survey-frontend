@@ -6,19 +6,23 @@ import { Authentication } from "../../../src/domain/usecases/authentication";
 import { LoginAction } from "../../../src/presentation/action/LoginAction";
 import { LoginResultType } from "../../../src/presentation/action/LoginResult";
 import { mockActionArgs } from "../mocks/mock-action-args";
-import { makeAuthentication } from "../../data/mocks/mock-authentication";
+import { mockAuthentication } from "../../data/mocks/mock-authentication";
+import { mockSaveAccessToken } from "../../data/mocks/mock-save-access-token";
+import { SaveAccessToken } from "../../../src/domain/usecases/save-access-token";
 
 interface SutTypes {
   sut: LoginAction;
   authenticationStub: Authentication;
+  saveAccessTokenStub: SaveAccessToken;
 }
 
 const fakeAccountModel = mockAccountModel();
 
 const makeSut = (): SutTypes => {
-  const authenticationStub = makeAuthentication(fakeAccountModel);
-  const sut = new LoginAction(authenticationStub);
-  return { sut, authenticationStub };
+  const saveAccessTokenStub = mockSaveAccessToken();
+  const authenticationStub = mockAuthentication(fakeAccountModel);
+  const sut = new LoginAction(authenticationStub, saveAccessTokenStub);
+  return { sut, authenticationStub, saveAccessTokenStub };
 };
 
 describe("LoginAction Test Suite", () => {
@@ -59,6 +63,18 @@ describe("LoginAction Test Suite", () => {
     const result = await sut.handle(mockActionArgs());
 
     expect(result).toEqual({ type: LoginResultType.UnexpectedError });
+  });
+
+  it("should call SaveAccessToken with correct values on success", async () => {
+    const { sut, saveAccessTokenStub } = makeSut();
+
+    const saveSpy = jest.spyOn(saveAccessTokenStub, "save");
+
+    const authParams = mockAuthenticationParams();
+    const actionArgs = mockActionArgs(authParams.email, authParams.password);
+    await sut.handle(actionArgs);
+
+    expect(saveSpy).toHaveBeenCalledWith(fakeAccountModel.accessToken);
   });
 
   it("should return response of type success with account model on success", async () => {
