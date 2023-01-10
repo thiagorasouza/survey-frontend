@@ -1,34 +1,22 @@
-import { faker } from "@faker-js/faker";
-import { ActionFunctionArgs } from "react-router-dom";
 import { mockAccountModel } from "../../data/mocks/mock-account-model";
 import { mockAuthenticationParams } from "../../data/mocks/mock-authentication-params";
 import { InvalidCredentialsError } from "../../../src/domain/errors/invalid-credentials-error";
 import { UnexpectedError } from "../../../src/domain/errors/unexpected-error";
-import { AccountModel } from "../../../src/domain/models/account-model";
 import { Authentication } from "../../../src/domain/usecases/authentication";
 import { LoginAction } from "../../../src/presentation/action/LoginAction";
 import { LoginResultType } from "../../../src/presentation/action/LoginResult";
 import { mockActionArgs } from "../mocks/mock-action-args";
-
-const fakeAccountModel = mockAccountModel();
-
-const makeAuthentication = (): Authentication => {
-  class AuthenticationStub implements Authentication {
-    async auth(): Promise<AccountModel> {
-      return fakeAccountModel;
-    }
-  }
-
-  return new AuthenticationStub();
-};
+import { makeAuthentication } from "../../data/mocks/mock-authentication";
 
 interface SutTypes {
   sut: LoginAction;
   authenticationStub: Authentication;
 }
 
+const fakeAccountModel = mockAccountModel();
+
 const makeSut = (): SutTypes => {
-  const authenticationStub = makeAuthentication();
+  const authenticationStub = makeAuthentication(fakeAccountModel);
   const sut = new LoginAction(authenticationStub);
   return { sut, authenticationStub };
 };
