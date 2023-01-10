@@ -8,6 +8,7 @@ import { AccountModel } from "../../../src/domain/models/account-model";
 import { Authentication } from "../../../src/domain/usecases/authentication";
 import { LoginAction } from "../../../src/presentation/action/LoginAction";
 import { LoginResultType } from "../../../src/presentation/action/LoginResult";
+import { mockActionArgs } from "../mocks/mock-action-args";
 
 const fakeAccountModel = mockAccountModel();
 
@@ -30,24 +31,6 @@ const makeSut = (): SutTypes => {
   const authenticationStub = makeAuthentication();
   const sut = new LoginAction(authenticationStub);
   return { sut, authenticationStub };
-};
-
-const mockActionArgs = (
-  email: string = faker.internet.email(),
-  password: string = faker.internet.password()
-): ActionFunctionArgs => {
-  const formData = new FormData();
-  formData.append("email", email);
-  formData.append("password", password);
-
-  const url = `${faker.internet.url()}/login`;
-
-  const request = new Request(url, {
-    method: "POST",
-    body: formData,
-  });
-
-  return { request, params: {} };
 };
 
 describe("LoginAction Test Suite", () => {
