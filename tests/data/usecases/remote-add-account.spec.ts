@@ -1,6 +1,8 @@
 import { faker } from "@faker-js/faker";
 import { HttpPostClient } from "../../../src/data/protocols/http/http-post-client";
+import { HttpStatusCode } from "../../../src/data/protocols/http/http-response";
 import { RemoteAddAccount } from "../../../src/data/usecases/remote-add-account";
+import { EmailInUseError } from "../../../src/domain/errors/email-in-use-error";
 import { AccountModel } from "../../../src/domain/models/account-model";
 import { AddAccountParams } from "../../../src/domain/usecases/add-account";
 import { mockAddAccountParams } from "../mocks/mock-add-account-params";
@@ -29,5 +31,21 @@ describe("RemoteAddAccount Test Suite", () => {
 
     expect(postSpy).toHaveBeenCalledTimes(1);
     expect(postSpy).toHaveBeenCalledWith({ url, body: addParams });
+  });
+
+  it("should throw EmailInUseError if HttpPostClient returns 403", async () => {
+    const url = faker.internet.url();
+    const { sut, httpPostClientStub } = makeSut(url);
+
+    jest.spyOn(httpPostClientStub, "post").mockReturnValueOnce(
+      Promise.resolve({
+        statusCode: HttpStatusCode.forbidden,
+      })
+    );
+
+    const addParams = mockAddAccountParams();
+    const promise = sut.add(addParams);
+
+    await expect(promise).rejects.toThrow(new EmailInUseError());
   });
 });
