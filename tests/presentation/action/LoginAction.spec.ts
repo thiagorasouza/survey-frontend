@@ -70,11 +70,22 @@ describe("LoginAction Test Suite", () => {
 
     const saveSpy = jest.spyOn(saveAccessTokenStub, "save");
 
-    const authParams = mockAuthenticationParams();
-    const actionArgs = mockActionArgs(authParams.email, authParams.password);
-    await sut.handle(actionArgs);
+    await sut.handle(mockActionArgs());
 
     expect(saveSpy).toHaveBeenCalledWith(fakeAccountModel.accessToken);
+  });
+
+  it("should return response of type unexpected error if SaveAccessToken throws", async () => {
+    const { sut, saveAccessTokenStub } = makeSut();
+
+    const error = new UnexpectedError();
+    jest
+      .spyOn(saveAccessTokenStub, "save")
+      .mockReturnValueOnce(Promise.reject(error));
+
+    const result = await sut.handle(mockActionArgs());
+
+    expect(result).toEqual({ type: LoginResultType.UnexpectedError });
   });
 
   it("should return response of type success with account model on success", async () => {
