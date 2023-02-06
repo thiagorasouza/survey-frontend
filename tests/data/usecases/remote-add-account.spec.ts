@@ -3,6 +3,7 @@ import { HttpPostClient } from "../../../src/data/protocols/http/http-post-clien
 import { HttpStatusCode } from "../../../src/data/protocols/http/http-response";
 import { RemoteAddAccount } from "../../../src/data/usecases/remote-add-account";
 import { EmailInUseError } from "../../../src/domain/errors/email-in-use-error";
+import { InvalidParamsError } from "../../../src/domain/errors/invalid-params-error";
 import { AccountModel } from "../../../src/domain/models/account-model";
 import { AddAccountParams } from "../../../src/domain/usecases/add-account";
 import { mockAddAccountParams } from "../mocks/mock-add-account-params";
@@ -10,7 +11,7 @@ import { mockHttpPostClient } from "../mocks/mock-http-post-client";
 
 interface SutTypes {
   sut: RemoteAddAccount;
-  httpPostClientStub: HttpPostClient<AddAccountParams, AccountModel>;
+  httpPostClientStub: HttpPostClient<AddAccountParams, AccountModel | string>;
 }
 
 const makeSut = (url: string = faker.internet.url()): SutTypes => {
@@ -47,5 +48,23 @@ describe("RemoteAddAccount Test Suite", () => {
     const promise = sut.add(addParams);
 
     await expect(promise).rejects.toThrow(new EmailInUseError());
+  });
+
+  it("should throw InvalidParamsError with a message if HttpPostClient returns 400", async () => {
+    const { sut, httpPostClientStub } = makeSut();
+
+    jest.spyOn(httpPostClientStub, "post").mockReturnValueOnce(
+      Promise.resolve({
+        statusCode: HttpStatusCode.badRequest,
+        body: "invalid_params_message",
+      })
+    );
+
+    const addParams = mockAddAccountParams();
+    const promise = sut.add(addParams);
+
+    await expect(promise).rejects.toThrow(
+      new InvalidParamsError("invalid_params_message")
+    );
   });
 });

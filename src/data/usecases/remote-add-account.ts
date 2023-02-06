@@ -1,4 +1,5 @@
 import { EmailInUseError } from "../../domain/errors/email-in-use-error";
+import { InvalidParamsError } from "../../domain/errors/invalid-params-error";
 import { AccountModel } from "../../domain/models/account-model";
 import {
   AddAccount,
@@ -24,6 +25,8 @@ export class RemoteAddAccount implements AddAccount {
     switch (httpResponse.statusCode) {
       case HttpStatusCode.forbidden:
         throw new EmailInUseError();
+      case HttpStatusCode.badRequest:
+        throw new InvalidParamsError(httpResponse.body);
       default:
         return;
     }
