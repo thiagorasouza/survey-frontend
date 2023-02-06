@@ -61,12 +61,14 @@
   margin-bottom: 6rem;
 }
 
-.inputEmail {
+.inputName,
+.inputEmail,
+.inputPassword {
   @include text-input;
   margin-bottom: 1.25rem;
 }
 
-.inputPassword {
+.inputPasswordConfirmation {
   @include text-input;
 }
 
