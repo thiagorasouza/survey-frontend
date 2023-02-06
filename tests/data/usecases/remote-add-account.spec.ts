@@ -4,6 +4,7 @@ import { HttpStatusCode } from "../../../src/data/protocols/http/http-response";
 import { RemoteAddAccount } from "../../../src/data/usecases/remote-add-account";
 import { EmailInUseError } from "../../../src/domain/errors/email-in-use-error";
 import { InvalidParamsError } from "../../../src/domain/errors/invalid-params-error";
+import { UnexpectedError } from "../../../src/domain/errors/unexpected-error";
 import { AccountModel } from "../../../src/domain/models/account-model";
 import { AddAccountParams } from "../../../src/domain/usecases/add-account";
 import { mockAddAccountParams } from "../mocks/mock-add-account-params";
@@ -66,5 +67,21 @@ describe("RemoteAddAccount Test Suite", () => {
     await expect(promise).rejects.toThrow(
       new InvalidParamsError("invalid_params_message")
     );
+  });
+
+  it("should throw UnexpectedError if HttpPostClient returns 500", async () => {
+    const url = faker.internet.url();
+    const { sut, httpPostClientStub } = makeSut(url);
+
+    jest.spyOn(httpPostClientStub, "post").mockReturnValueOnce(
+      Promise.resolve({
+        statusCode: HttpStatusCode.serverError,
+      })
+    );
+
+    const addParams = mockAddAccountParams();
+    const promise = sut.add(addParams);
+
+    await expect(promise).rejects.toThrow(new UnexpectedError());
   });
 });

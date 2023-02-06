@@ -1,5 +1,6 @@
 import { EmailInUseError } from "../../domain/errors/email-in-use-error";
 import { InvalidParamsError } from "../../domain/errors/invalid-params-error";
+import { UnexpectedError } from "../../domain/errors/unexpected-error";
 import { AccountModel } from "../../domain/models/account-model";
 import {
   AddAccount,
@@ -27,6 +28,8 @@ export class RemoteAddAccount implements AddAccount {
         throw new EmailInUseError();
       case HttpStatusCode.badRequest:
         throw new InvalidParamsError(httpResponse.body);
+      case HttpStatusCode.serverError:
+        throw new UnexpectedError();
       default:
         return;
     }
