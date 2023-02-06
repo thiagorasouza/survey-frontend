@@ -24,6 +24,8 @@ export class RemoteAddAccount implements AddAccount {
       body: params,
     });
     switch (httpResponse.statusCode) {
+      case HttpStatusCode.ok:
+        return httpResponse.body;
       case HttpStatusCode.forbidden:
         throw new EmailInUseError();
       case HttpStatusCode.badRequest:

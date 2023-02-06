@@ -7,6 +7,7 @@ import { InvalidParamsError } from "../../../src/domain/errors/invalid-params-er
 import { UnexpectedError } from "../../../src/domain/errors/unexpected-error";
 import { AccountModel } from "../../../src/domain/models/account-model";
 import { AddAccountParams } from "../../../src/domain/usecases/add-account";
+import { mockAccountModel } from "../mocks/mock-account-model";
 import { mockAddAccountParams } from "../mocks/mock-add-account-params";
 import { mockHttpPostClient } from "../mocks/mock-http-post-client";
 
@@ -83,5 +84,23 @@ describe("RemoteAddAccount Test Suite", () => {
     const promise = sut.add(addParams);
 
     await expect(promise).rejects.toThrow(new UnexpectedError());
+  });
+
+  it("should return an AccountModel if HttpPostClient returns 200", async () => {
+    const { sut, httpPostClientStub } = makeSut();
+
+    const accountModel = mockAccountModel();
+
+    jest.spyOn(httpPostClientStub, "post").mockReturnValueOnce(
+      Promise.resolve({
+        statusCode: HttpStatusCode.ok,
+        body: accountModel,
+      })
+    );
+
+    const addParams = mockAddAccountParams();
+    const result = await sut.add(addParams);
+
+    expect(result).toEqual(accountModel);
   });
 });
