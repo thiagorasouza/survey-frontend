@@ -4,8 +4,6 @@
 
 import React, { ReactElement } from "react";
 
-import { RouterProvider, createMemoryRouter } from "react-router-dom";
-
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
@@ -16,53 +14,22 @@ import { faker } from "@faker-js/faker";
 
 import { enableFetchMocks } from "jest-fetch-mock";
 import { LoginResultType } from "../../../src/presentation/action/LoginResult";
+import {
+  getCheckmark,
+  getEmailInput,
+  getFailureMessage,
+  getLoginButton,
+  getPasswordInput,
+  getSignupButton,
+  getSpinner,
+} from "../helpers/form-helper";
+import { mockRouter } from "../mocks/mock-router";
 enableFetchMocks();
-
-const getEmailInput = (): HTMLInputElement =>
-  screen.getByPlaceholderText(/email/i);
-
-const getPasswordInput = (): HTMLInputElement =>
-  screen.getByPlaceholderText(/password/i);
-
-const getLoginButton = (): HTMLButtonElement =>
-  screen.getByRole("button", { name: /login/i });
-
-const getSpinner = (): HTMLSpanElement => screen.getByLabelText("spinner");
-
-const getCheckmark = (): HTMLOrSVGElement => screen.getByLabelText("checkmark");
-
-const getSignupButton = (): HTMLButtonElement => screen.getByText(/sign ?up/i);
-
-const getFailureMessage = (): HTMLDivElement => screen.getByRole("alert");
 
 interface SutTypes {
   sut: ReactElement;
   user: UserEvent;
 }
-
-const mockAction = jest.fn(() => ({ type: LoginResultType.Success }));
-
-const mockRouter = (element: ReactElement): ReactElement => {
-  const router = createMemoryRouter(
-    [
-      {
-        path: "/",
-        element,
-        action: mockAction,
-      },
-      {
-        path: "/surveys",
-        element: <div>Surveys Route</div>,
-      },
-    ],
-    {
-      initialEntries: ["/"],
-      initialIndex: 0,
-    }
-  );
-
-  return <RouterProvider router={router} />;
-};
 
 const fillLoginForm = async (user: UserEvent): Promise<void> => {
   const emailInput = getEmailInput();
@@ -90,8 +57,10 @@ const waitForSuccessState = async (): Promise<void> => {
   await waitFor(() => expect(getCheckmark()).toBeVisible());
 };
 
+const loginActionStub = jest.fn(() => ({ type: LoginResultType.Success }));
+
 const makeSut = (): SutTypes => {
-  const sut = mockRouter(<LoginPage />);
+  const sut = mockRouter(<LoginPage />, loginActionStub);
   const user = userEvent.setup();
   return { sut, user };
 };
@@ -148,7 +117,6 @@ describe("Login Page Test Suite", () => {
     });
 
     it("should disable email input", async () => {
-      // expect(getEmailInput()).toBeDisabled();
       await waitFor(() => expect(getEmailInput()).toBeDisabled());
     });
 
@@ -214,7 +182,9 @@ describe("Login Page Test Suite", () => {
     beforeEach(async () => {
       const { sut, user } = makeSut();
       render(sut);
-      mockAction.mockReturnValue({ type: LoginResultType.InvalidCredentials });
+      loginActionStub.mockReturnValue({
+        type: LoginResultType.InvalidCredentials,
+      });
       await goToSubmittingState(user);
     });
 
@@ -245,7 +215,9 @@ describe("Login Page Test Suite", () => {
     beforeEach(async () => {
       const { sut, user } = makeSut();
       render(sut);
-      mockAction.mockReturnValue({ type: LoginResultType.UnexpectedError });
+      loginActionStub.mockReturnValue({
+        type: LoginResultType.UnexpectedError,
+      });
       await goToSubmittingState(user);
     });
 

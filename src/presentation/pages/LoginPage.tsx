@@ -97,6 +97,7 @@ function LoginPage() {
             </button>
             <button
               type="button"
+              aria-label="signup"
               className={`${styles.btnSignup} ${
                 processing || success ? styles.btnSignupHide : ""
               }`}

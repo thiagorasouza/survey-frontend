@@ -12,8 +12,17 @@ export const getPasswordInput = (): HTMLInputElement =>
 export const getPasswordConfirmationInput = (): HTMLInputElement =>
   screen.getByPlaceholderText(/password confirmation/i);
 
-export const getSignupButton = (): HTMLButtonElement =>
-  screen.getByRole("button", { name: /sign ?up/i });
-
 export const getLoginButton = (): HTMLButtonElement =>
-  screen.getByText(/login/i);
+  screen.getByLabelText(/login/i);
+
+export const getSignupButton = (): HTMLButtonElement =>
+  screen.getByLabelText(/sign ?up/i);
+
+export const getSpinner = (): HTMLSpanElement =>
+  screen.getByLabelText("spinner");
+
+export const getCheckmark = (): HTMLOrSVGElement =>
+  screen.getByLabelText("checkmark");
+
+export const getFailureMessage = (): HTMLDivElement =>
+  screen.getByRole("alert");
