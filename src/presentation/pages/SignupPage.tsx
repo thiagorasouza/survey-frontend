@@ -53,7 +53,11 @@ function SignupPage() {
             >
               Signup
             </button>
-            <button type="button" className={styles.btnLogin}>
+            <button
+              type="button"
+              aria-label="login"
+              className={styles.btnLogin}
+            >
               Login
             </button>
           </div>

@@ -3,7 +3,7 @@ import { createMemoryRouter, RouterProvider } from "react-router-dom";
 
 export const mockRouter = (
   element: ReactElement,
-  action: any
+  action: any = undefined
 ): ReactElement => {
   const router = createMemoryRouter(
     [
