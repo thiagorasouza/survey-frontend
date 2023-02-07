@@ -1,4 +1,6 @@
+import { faker } from "@faker-js/faker";
 import { screen } from "@testing-library/react";
+import { UserEvent } from "@testing-library/user-event/dist/types/setup/setup";
 
 export const getNameInput = (): HTMLInputElement =>
   screen.getByPlaceholderText(/name/i);
@@ -26,3 +28,12 @@ export const getCheckmark = (): HTMLOrSVGElement =>
 
 export const getFailureMessage = (): HTMLDivElement =>
   screen.getByRole("alert");
+
+export const fillEmailInput = async (
+  user: UserEvent,
+  value: string = faker.internet.email()
+): Promise<void> => {
+  const emailInput = getEmailInput();
+  await user.clear(emailInput);
+  await user.type(emailInput, value);
+};

@@ -11,6 +11,7 @@ import "@testing-library/jest-dom";
 
 import SignupPage from "../../../src/presentation/pages/SignupPage";
 import {
+  fillEmailInput,
   getEmailInput,
   getLoginButton,
   getNameInput,
@@ -95,6 +96,14 @@ describe("Signup Page Test Suite", () => {
       render(sut);
       await clickSignupButton(user);
       expect(getPasswordConfirmationInput()).toBeInvalid();
+    });
+
+    it("should indicate if email is invalid", async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      await fillEmailInput(user, "invalid_email");
+      await clickSignupButton(user);
+      expect(getEmailInput()).toBeInvalid();
     });
   });
 });
