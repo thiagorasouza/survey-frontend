@@ -12,6 +12,8 @@ import "@testing-library/jest-dom";
 import SignupPage from "../../../src/presentation/pages/SignupPage";
 import {
   fillEmailInput,
+  fillPasswordConfirmationInput,
+  fillPasswordInput,
   getEmailInput,
   getLoginButton,
   getNameInput,
@@ -104,6 +106,16 @@ describe("Signup Page Test Suite", () => {
       await fillEmailInput(user, "invalid_email");
       await clickSignupButton(user);
       expect(getEmailInput()).toBeInvalid();
+    });
+
+    it("should indicate if passwords don't match", async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      await fillPasswordInput(user, "one_password");
+      await fillPasswordConfirmationInput(user, "other_password");
+      await clickSignupButton(user);
+      expect(getPasswordInput()).toBeInvalid();
+      expect(getPasswordConfirmationInput()).toBeInvalid();
     });
   });
 });

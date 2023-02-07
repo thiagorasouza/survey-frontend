@@ -1,10 +1,31 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Form } from "react-router-dom";
 import Brand from "../components/Brand";
 
 import styles from "./SignupPage.scss";
 
 function SignupPage() {
+  const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const passwordRef = useRef(null);
+  const passwordConfirmationRef = useRef(null);
+
+  const isPasswordValid = !!(
+    password &&
+    passwordConfirmation &&
+    password === passwordConfirmation
+  );
+  const errorMessage = !isPasswordValid
+    ? "Please type the same password twice."
+    : "";
+
+  useEffect(() => {
+    if (passwordRef.current && passwordConfirmationRef.current) {
+      passwordRef.current.setCustomValidity(errorMessage);
+      passwordConfirmationRef.current.setCustomValidity(errorMessage);
+    }
+  }, [password, passwordConfirmation]);
+
   return (
     <div className={styles.page}>
       <section className={styles.wrapper}>
@@ -30,19 +51,21 @@ function SignupPage() {
             />
             <input
               required
+              ref={passwordRef}
               type="password"
               name="password"
               className={styles.inputPassword}
-              minLength={6}
               placeholder="password"
+              onChange={(e) => setPassword(e.target.value)}
             />
             <input
               required
+              ref={passwordConfirmationRef}
               type="password"
               name="passwordConfirmation"
               className={styles.inputPasswordConfirmation}
-              minLength={6}
               placeholder="password confirmation"
+              onChange={(e) => setPasswordConfirmation(e.target.value)}
             />
           </div>
           <div className={styles.buttons}>

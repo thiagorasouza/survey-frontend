@@ -29,6 +29,15 @@ export const getCheckmark = (): HTMLOrSVGElement =>
 export const getFailureMessage = (): HTMLDivElement =>
   screen.getByRole("alert");
 
+export const fillNameInput = async (
+  user: UserEvent,
+  value: string = faker.name.fullName()
+): Promise<void> => {
+  const nameInput = getNameInput();
+  await user.clear(nameInput);
+  await user.type(nameInput, value);
+};
+
 export const fillEmailInput = async (
   user: UserEvent,
   value: string = faker.internet.email()
@@ -36,4 +45,22 @@ export const fillEmailInput = async (
   const emailInput = getEmailInput();
   await user.clear(emailInput);
   await user.type(emailInput, value);
+};
+
+export const fillPasswordInput = async (
+  user: UserEvent,
+  value: string = faker.internet.password()
+): Promise<void> => {
+  const passwordInput = getPasswordInput();
+  await user.clear(passwordInput);
+  await user.type(passwordInput, value);
+};
+
+export const fillPasswordConfirmationInput = async (
+  user: UserEvent,
+  value: string = faker.internet.password()
+): Promise<void> => {
+  const passwordConfirmationInput = getPasswordConfirmationInput();
+  await user.clear(passwordConfirmationInput);
+  await user.type(passwordConfirmationInput, value);
 };
