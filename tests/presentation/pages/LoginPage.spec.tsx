@@ -15,6 +15,8 @@ import { faker } from "@faker-js/faker";
 import { enableFetchMocks } from "jest-fetch-mock";
 import { LoginResultType } from "../../../src/presentation/action/LoginResult";
 import {
+  fillEmailInput,
+  fillPasswordInput,
   getCheckmark,
   getEmailInput,
   getFailureMessage,
@@ -32,15 +34,8 @@ interface SutTypes {
 }
 
 const fillLoginForm = async (user: UserEvent): Promise<void> => {
-  const emailInput = getEmailInput();
-  const fakeEmail = faker.internet.email();
-  await user.clear(emailInput);
-  await user.type(emailInput, fakeEmail);
-
-  const passwordInput = getPasswordInput();
-  const fakePassword = faker.internet.password();
-  await user.clear(passwordInput);
-  await user.type(passwordInput, fakePassword);
+  await fillEmailInput(user);
+  await fillPasswordInput(user);
 };
 
 const clickLoginButton = async (user: UserEvent): Promise<void> => {
