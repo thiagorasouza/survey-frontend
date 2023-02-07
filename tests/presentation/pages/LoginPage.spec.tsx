@@ -22,7 +22,7 @@ import {
   getPasswordInput,
   getSignupButton,
   getSpinner,
-} from "../helpers/form-helper";
+} from "../helpers/form-helpers";
 import { mockRouter } from "../mocks/mock-router";
 enableFetchMocks();
 

@@ -17,21 +17,26 @@ import {
   getPasswordConfirmationInput,
   getPasswordInput,
   getSignupButton,
-} from "../helpers/form-helper";
+} from "../helpers/form-helpers";
 import { mockRouter } from "../mocks/mock-router";
 
+const clickSignupButton = async (user: UserEvent): Promise<void> => {
+  const signupButton = getSignupButton();
+  await user.click(signupButton);
+};
+
+interface SutTypes {
+  sut: ReactElement;
+  user: UserEvent;
+}
+
+const makeSut = (): SutTypes => {
+  const sut = mockRouter(<SignupPage />);
+  const user = userEvent.setup();
+  return { sut, user };
+};
+
 describe("Signup Page Test Suite", () => {
-  interface SutTypes {
-    sut: ReactElement;
-    user: UserEvent;
-  }
-
-  const makeSut = (): SutTypes => {
-    const sut = mockRouter(<SignupPage />);
-    const user = userEvent.setup();
-    return { sut, user };
-  };
-
   describe("Initial state", () => {
     beforeEach(() => {
       const { sut } = makeSut();
@@ -60,6 +65,36 @@ describe("Signup Page Test Suite", () => {
 
     it("should have an enabled login button", () => {
       expect(getLoginButton()).not.toBeDisabled();
+    });
+  });
+
+  describe("Validation", () => {
+    it("should indicate that name is invalid if empty", async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      await clickSignupButton(user);
+      expect(getNameInput()).toBeInvalid();
+    });
+
+    it("should indicate that email is invalid if empty", async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      await clickSignupButton(user);
+      expect(getEmailInput()).toBeInvalid();
+    });
+
+    it("should indicate that password is invalid if empty", async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      await clickSignupButton(user);
+      expect(getPasswordInput()).toBeInvalid();
+    });
+
+    it("should indicate that password confirmation is invalid if empty", async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      await clickSignupButton(user);
+      expect(getPasswordConfirmationInput()).toBeInvalid();
     });
   });
 });
