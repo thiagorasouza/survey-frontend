@@ -6,12 +6,14 @@ import React, { ReactElement } from "react";
 
 import userEvent from "@testing-library/user-event";
 import { UserEvent } from "@testing-library/user-event/dist/types/setup/setup";
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
+import { enableFetchMocks } from "jest-fetch-mock";
 import "@testing-library/jest-dom";
 
 import SignupPage from "../../../src/presentation/pages/SignupPage";
 import {
   fillEmailInput,
+  fillNameInput,
   fillPasswordConfirmationInput,
   fillPasswordInput,
   getEmailInput,
@@ -22,10 +24,26 @@ import {
   getSignupButton,
 } from "../helpers/form-helpers";
 import { mockRouter } from "../mocks/mock-router";
+import { faker } from "@faker-js/faker";
+
+enableFetchMocks();
 
 const clickSignupButton = async (user: UserEvent): Promise<void> => {
   const signupButton = getSignupButton();
   await user.click(signupButton);
+};
+
+const fillSignupForm = async (user: UserEvent): Promise<void> => {
+  await fillNameInput(user);
+  await fillEmailInput(user);
+  const fakePassword = faker.internet.password();
+  await fillPasswordInput(user, fakePassword);
+  await fillPasswordConfirmationInput(user, fakePassword);
+};
+
+const goToSubmittingState = async (user: UserEvent): Promise<void> => {
+  await fillSignupForm(user);
+  await clickSignupButton(user);
 };
 
 interface SutTypes {
@@ -33,8 +51,13 @@ interface SutTypes {
   user: UserEvent;
 }
 
+const signupActionStub = jest.fn(async () => {
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  return { type: "success" };
+});
+
 const makeSut = (): SutTypes => {
-  const sut = mockRouter(<SignupPage />);
+  const sut = mockRouter(<SignupPage />, signupActionStub);
   const user = userEvent.setup();
   return { sut, user };
 };
@@ -75,6 +98,7 @@ describe("Signup Page Test Suite", () => {
     it("should indicate that name is invalid if empty", async () => {
       const { sut, user } = makeSut();
       render(sut);
+      await user.clear(getNameInput());
       await clickSignupButton(user);
       expect(getNameInput()).toBeInvalid();
     });
@@ -82,6 +106,7 @@ describe("Signup Page Test Suite", () => {
     it("should indicate that email is invalid if empty", async () => {
       const { sut, user } = makeSut();
       render(sut);
+      await user.clear(getEmailInput());
       await clickSignupButton(user);
       expect(getEmailInput()).toBeInvalid();
     });
@@ -89,6 +114,7 @@ describe("Signup Page Test Suite", () => {
     it("should indicate that password is invalid if empty", async () => {
       const { sut, user } = makeSut();
       render(sut);
+      await user.clear(getPasswordInput());
       await clickSignupButton(user);
       expect(getPasswordInput()).toBeInvalid();
     });
@@ -96,6 +122,7 @@ describe("Signup Page Test Suite", () => {
     it("should indicate that password confirmation is invalid if empty", async () => {
       const { sut, user } = makeSut();
       render(sut);
+      await user.clear(getPasswordConfirmationInput());
       await clickSignupButton(user);
       expect(getPasswordConfirmationInput()).toBeInvalid();
     });
@@ -117,5 +144,47 @@ describe("Signup Page Test Suite", () => {
       expect(getPasswordInput()).toBeInvalid();
       expect(getPasswordConfirmationInput()).toBeInvalid();
     });
+  });
+
+  describe("Submitting state", () => {
+    beforeEach(async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      await goToSubmittingState(user);
+    });
+
+    it("should disable name input", async () => {
+      await waitFor(() => expect(getNameInput()).toBeDisabled());
+    });
+
+    it("should disable email input", async () => {
+      await waitFor(() => expect(getEmailInput()).toBeDisabled());
+    });
+
+    it("should disable password input", async () => {
+      await waitFor(() => expect(getPasswordInput()).toBeDisabled());
+    });
+
+    it("should disable password confirmation input", async () => {
+      await waitFor(() =>
+        expect(getPasswordConfirmationInput()).toBeDisabled()
+      );
+    });
+
+    // it("should disable signup button", async () => {
+    //   await waitFor(() => expect(getSignupButton()).toBeDisabled());
+    // });
+
+    // it("should display a loading spinner", async () => {
+    //   await waitFor(() => expect(getSpinner()));
+    // });
+
+    // it("should hide login button", async () => {
+    //   await waitFor(() => expect(getLoginButton()).not.toBeVisible());
+    // });
+
+    // it("should not display an error message", async () => {
+    //   await waitFor(() => expect(getFailureMessage()).toHaveClass("hidden"));
+    // });
   });
 });

@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Form } from "react-router-dom";
+import { Form, useNavigation } from "react-router-dom";
 import Brand from "../components/Brand";
 
 import styles from "./SignupPage.scss";
 
 function SignupPage() {
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [password, setPassword] = useState("abc123");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("abc123");
   const passwordRef = useRef(null);
   const passwordConfirmationRef = useRef(null);
+  const navigation = useNavigation();
+
+  const submitting = navigation.state === "submitting";
 
   const isPasswordValid = !!(
     password &&
@@ -41,6 +44,8 @@ function SignupPage() {
               name="name"
               className={styles.inputName}
               placeholder="name"
+              disabled={!!submitting}
+              defaultValue="John Doe"
             />
             <input
               required
@@ -48,6 +53,8 @@ function SignupPage() {
               name="email"
               className={styles.inputEmail}
               placeholder="email"
+              disabled={submitting}
+              defaultValue="johndoe@email.com"
             />
             <input
               required
@@ -57,6 +64,8 @@ function SignupPage() {
               className={styles.inputPassword}
               placeholder="password"
               onChange={(e) => setPassword(e.target.value)}
+              disabled={submitting}
+              defaultValue="abc123"
             />
             <input
               required
@@ -66,6 +75,8 @@ function SignupPage() {
               className={styles.inputPasswordConfirmation}
               placeholder="password confirmation"
               onChange={(e) => setPasswordConfirmation(e.target.value)}
+              disabled={submitting}
+              defaultValue="abc123"
             />
           </div>
           <div className={styles.buttons}>
