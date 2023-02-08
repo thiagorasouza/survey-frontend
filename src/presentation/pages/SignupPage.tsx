@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Form, useNavigation } from "react-router-dom";
 import Brand from "../components/Brand";
+import SubmitButton from "../components/SubmitButton";
 
 import styles from "./SignupPage.scss";
 
@@ -80,14 +81,11 @@ function SignupPage() {
             />
           </div>
           <div className={styles.buttons}>
-            <button
-              type="submit"
-              aria-label="signup"
-              className={styles.btnSignup}
-              disabled={submitting}
-            >
-              Signup
-            </button>
+            <SubmitButton
+              caption="Signup"
+              submitting={submitting}
+              success={false}
+            />
             <button
               type="button"
               aria-label="login"

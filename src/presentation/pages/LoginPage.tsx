@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { LoginResult, LoginResultType } from "../action/LoginResult";
 import Brand from "../components/Brand";
+import SubmitButton from "../components/SubmitButton";
 import styles from "./LoginPage.scss";
 
 function LoginPage() {
@@ -67,34 +68,11 @@ function LoginPage() {
             />
           </div>
           <div className={styles.buttons}>
-            <button
-              type="submit"
-              aria-label="login"
-              className={`${styles.btnLogin} ${
-                processing ? styles.btnLoginSubmitting : ""
-              } ${success ? styles.btnLoginSuccess : ""}`}
-              disabled={processing || success}
-            >
-              {success ? (
-                <svg
-                  viewBox="0 0 100 100"
-                  aria-label="checkmark"
-                  className={styles.checkmarkViewbox}
-                >
-                  <path
-                    d="M 27.11 52.30 l 13.65 13.84 l 32.12 -32.31"
-                    className={styles.checkmarkPath}
-                  ></path>
-                </svg>
-              ) : processing ? (
-                <>
-                  <span aria-label="spinner" className={styles.spinner}></span>
-                  {`Logging in...`}
-                </>
-              ) : (
-                `Login`
-              )}
-            </button>
+            <SubmitButton
+              caption="Login"
+              submitting={processing}
+              success={success}
+            />
             <button
               type="button"
               aria-label="signup"
