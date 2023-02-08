@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Form, useNavigation } from "react-router-dom";
 import Brand from "../components/Brand";
+import LinkButton from "../components/LinkButton";
 import SubmitButton from "../components/SubmitButton";
 
 import styles from "./SignupPage.scss";
@@ -82,17 +83,15 @@ function SignupPage() {
           </div>
           <div className={styles.buttons}>
             <SubmitButton
-              caption="Signup"
+              caption="Sign Up"
               submitting={submitting}
               success={false}
             />
-            <button
-              type="button"
-              aria-label="login"
-              className={styles.btnLogin}
-            >
-              Login
-            </button>
+            <LinkButton
+              caption="Login"
+              submitting={submitting}
+              success={false}
+            />
           </div>
         </Form>
       </section>

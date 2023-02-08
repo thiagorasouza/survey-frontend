@@ -22,6 +22,7 @@ import {
   getPasswordConfirmationInput,
   getPasswordInput,
   getSignupButton,
+  getSpinner,
 } from "../helpers/form-helpers";
 import { mockRouter } from "../mocks/mock-router";
 import { faker } from "@faker-js/faker";
@@ -175,9 +176,9 @@ describe("Signup Page Test Suite", () => {
       await waitFor(() => expect(getSignupButton()).toBeDisabled());
     });
 
-    // it("should display a loading spinner", async () => {
-    //   await waitFor(() => expect(getSpinner()));
-    // });
+    it("should display a loading spinner", async () => {
+      await waitFor(() => expect(getSpinner()));
+    });
 
     // it("should hide login button", async () => {
     //   await waitFor(() => expect(getLoginButton()).not.toBeVisible());
