@@ -180,9 +180,9 @@ describe("Signup Page Test Suite", () => {
       await waitFor(() => expect(getSpinner()));
     });
 
-    // it("should hide login button", async () => {
-    //   await waitFor(() => expect(getLoginButton()).not.toBeVisible());
-    // });
+    it("should hide login button", async () => {
+      await waitFor(() => expect(getLoginButton()).not.toBeVisible());
+    });
 
     // it("should not display an error message", async () => {
     //   await waitFor(() => expect(getFailureMessage()).toHaveClass("hidden"));
