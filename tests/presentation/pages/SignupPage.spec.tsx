@@ -17,6 +17,7 @@ import {
   fillPasswordConfirmationInput,
   fillPasswordInput,
   getEmailInput,
+  getFailureMessage,
   getLoginButton,
   getNameInput,
   getPasswordConfirmationInput,
@@ -184,8 +185,8 @@ describe("Signup Page Test Suite", () => {
       await waitFor(() => expect(getLoginButton()).not.toBeVisible());
     });
 
-    // it("should not display an error message", async () => {
-    //   await waitFor(() => expect(getFailureMessage()).toHaveClass("hidden"));
-    // });
+    it("should not display an error message", async () => {
+      await waitFor(() => expect(getFailureMessage()).toHaveClass("hidden"));
+    });
   });
 });

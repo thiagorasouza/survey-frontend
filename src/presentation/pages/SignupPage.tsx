@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import React, { useEffect, useRef, useState } from "react";
 import { Form, useNavigation } from "react-router-dom";
 import Brand from "../components/Brand";
@@ -35,9 +36,15 @@ function SignupPage() {
     <div className={styles.page}>
       <section className={styles.wrapper}>
         <Brand />
-        {/* <div role="alert" className={styles.error}>
+        <div
+          role="alert"
+          className={classNames({
+            [styles.error]: true,
+            [styles.hidden]: true,
+          })}
+        >
           Error
-        </div> */}
+        </div>
         <Form method="post" className={styles.form}>
           <div className={styles.inputs}>
             <input
