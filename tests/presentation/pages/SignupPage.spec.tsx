@@ -171,9 +171,9 @@ describe("Signup Page Test Suite", () => {
       );
     });
 
-    // it("should disable signup button", async () => {
-    //   await waitFor(() => expect(getSignupButton()).toBeDisabled());
-    // });
+    it("should disable signup button", async () => {
+      await waitFor(() => expect(getSignupButton()).toBeDisabled());
+    });
 
     // it("should display a loading spinner", async () => {
     //   await waitFor(() => expect(getSpinner()));

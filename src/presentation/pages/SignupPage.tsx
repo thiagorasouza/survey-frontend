@@ -84,6 +84,7 @@ function SignupPage() {
               type="submit"
               aria-label="signup"
               className={styles.btnSignup}
+              disabled={submitting}
             >
               Signup
             </button>
