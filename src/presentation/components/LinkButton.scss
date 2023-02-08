@@ -1,0 +1,14 @@
+@use "../styles/variables.scss" as *;
+@use "../styles/helpers.scss" as *;
+@use "../styles/components.scss" as *;
+
+.btnLink {
+  @include block-button($lightPurple, $white);
+  @include light-box-shadow(rgba($black, 0.2));
+  margin-bottom: 2rem;
+}
+
+.btnLinkHide {
+  width: 30%;
+  opacity: 0;
+}

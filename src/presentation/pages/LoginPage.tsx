@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { LoginResult, LoginResultType } from "../action/LoginResult";
 import Brand from "../components/Brand";
+import LinkButton from "../components/LinkButton";
 import SubmitButton from "../components/SubmitButton";
 import styles from "./LoginPage.scss";
 
@@ -73,16 +74,11 @@ function LoginPage() {
               submitting={processing}
               success={success}
             />
-            <button
-              type="button"
-              aria-label="signup"
-              className={`${styles.btnSignup} ${
-                processing || success ? styles.btnSignupHide : ""
-              }`}
-              hidden={processing || success}
-            >
-              Sign Up
-            </button>
+            <LinkButton
+              caption="Sign Up"
+              submitting={processing}
+              success={success}
+            />
           </div>
         </Form>
       </section>
