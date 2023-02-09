@@ -266,6 +266,6 @@ describe("Signup Page Test Suite", () => {
       });
     });
 
-    // testIfEverythingIsEnabled();
+    testIfEverythingIsEnabled();
   });
 });
