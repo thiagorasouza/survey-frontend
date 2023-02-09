@@ -42,11 +42,13 @@ export class SignupAction {
         case InvalidParamsError:
           return {
             type: SignupResultType.InvalidParamsError,
+            data: error.message,
           };
         case UnexpectedError:
         default:
           return {
             type: SignupResultType.UnexpectedError,
+            data: error.message,
           };
       }
     }

@@ -70,7 +70,10 @@ describe("Signup Action Test Suite", () => {
 
     const result = await sut.handle(mockSignupActionArgs());
 
-    expect(result).toEqual({ type: SignupResultType.InvalidParamsError });
+    expect(result).toEqual({
+      type: SignupResultType.InvalidParamsError,
+      data: error.message,
+    });
   });
 
   it("should return response of type UnexpectedError on unexpected error", async () => {
@@ -83,7 +86,10 @@ describe("Signup Action Test Suite", () => {
 
     const result = await sut.handle(mockSignupActionArgs());
 
-    expect(result).toEqual({ type: SignupResultType.UnexpectedError });
+    expect(result).toEqual({
+      type: SignupResultType.UnexpectedError,
+      data: error.message,
+    });
   });
 
   it("should call SaveAccessToken with correct values on success", async () => {
@@ -106,7 +112,10 @@ describe("Signup Action Test Suite", () => {
 
     const result = await sut.handle(mockSignupActionArgs());
 
-    expect(result).toEqual({ type: SignupResultType.UnexpectedError });
+    expect(result).toEqual({
+      type: SignupResultType.UnexpectedError,
+      data: error.message,
+    });
   });
 
   it("should return response of type success with account model on success", async () => {

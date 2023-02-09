@@ -245,27 +245,27 @@ describe("Signup Page Test Suite", () => {
     testIfEverythingIsEnabled();
   });
 
-  // describe("Invalid param failure", () => {
-  //   beforeEach(async () => {
-  //     const { sut, user } = makeSut();
-  //     render(sut);
-  //     signupActionStub.mockReturnValue(
-  //       Promise.resolve({
-  //         type: SignupResultType.UnexpectedError,
-  //         data: new UnexpectedError().message,
-  //       })
-  //     );
-  //     await goToSubmittingState(user);
-  //   });
+  describe("Unexpected error failure", () => {
+    beforeEach(async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      signupActionStub.mockReturnValue(
+        Promise.resolve({
+          type: SignupResultType.UnexpectedError,
+          data: new UnexpectedError().message,
+        })
+      );
+      await goToSubmittingState(user);
+    });
 
-  //   it("should display an error message", async () => {
-  //     await waitFor(() => {
-  //       const failureMessage = getFailureMessage();
-  //       expect(failureMessage).not.toHaveClass("hidden");
-  //       expect(failureMessage).toHaveTextContent("Unexpected error");
-  //     });
-  //   });
+    it("should display an error message", async () => {
+      await waitFor(() => {
+        const failureMessage = getFailureMessage();
+        expect(failureMessage).not.toHaveClass("hidden");
+        expect(failureMessage).toHaveTextContent("Unexpected error");
+      });
+    });
 
-  //   testIfEverythingIsEnabled();
-  // });
+    // testIfEverythingIsEnabled();
+  });
 });
