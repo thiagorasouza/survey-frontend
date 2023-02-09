@@ -54,7 +54,10 @@ describe("Signup Action Test Suite", () => {
 
     const result = await sut.handle(mockSignupActionArgs());
 
-    expect(result).toEqual({ type: SignupResultType.EmailInUseError });
+    expect(result).toEqual({
+      type: SignupResultType.EmailInUseError,
+      data: error.message,
+    });
   });
 
   it("should return response of type InvalidParamsError if params are invalid", async () => {

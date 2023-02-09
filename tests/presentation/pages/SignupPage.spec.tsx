@@ -28,6 +28,7 @@ import {
 import { mockRouter } from "../mocks/mock-router";
 import { faker } from "@faker-js/faker";
 import { SignupResultType } from "../../../src/presentation/action/SignupResult";
+import { EmailInUseError } from "../../../src/domain/errors/email-in-use-error";
 
 enableFetchMocks();
 
@@ -198,15 +199,18 @@ describe("Signup Page Test Suite", () => {
       signupActionStub.mockReturnValue(
         Promise.resolve({
           type: SignupResultType.EmailInUseError,
+          data: new EmailInUseError().message,
         })
       );
       await goToSubmittingState(user);
     });
 
     it("should display an error message", async () => {
-      await waitFor(() =>
-        expect(getFailureMessage()).not.toHaveClass("hidden")
-      );
+      await waitFor(() => {
+        const failureMessage = getFailureMessage();
+        // expect(failureMessage).not.toHaveClass("hidden");
+        expect(failureMessage).toHaveTextContent("Email already in use");
+      });
     });
   });
 });

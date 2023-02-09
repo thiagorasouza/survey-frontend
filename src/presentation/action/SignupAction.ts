@@ -37,6 +37,7 @@ export class SignupAction {
         case EmailInUseError:
           return {
             type: SignupResultType.EmailInUseError,
+            data: error.message,
           };
         case InvalidParamsError:
           return {

@@ -15,6 +15,7 @@ function SignupPage() {
   const passwordConfirmationRef = useRef(null);
   const navigation = useNavigation();
   const signupResult = useActionData() as SignupResult;
+  // console.log("🚀 ~ signupResult", signupResult);
 
   const submitting = navigation.state === "submitting";
   // const success =
