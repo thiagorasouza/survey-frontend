@@ -65,7 +65,7 @@ function SignupPage() {
               name="name"
               className={styles.inputName}
               placeholder="name"
-              disabled={!!submitting}
+              disabled={submitting || success}
               defaultValue="John Doe"
             />
             <input
@@ -74,7 +74,7 @@ function SignupPage() {
               name="email"
               className={styles.inputEmail}
               placeholder="email"
-              disabled={submitting}
+              disabled={submitting || success}
               defaultValue="johndoe@email.com"
             />
             <input
@@ -85,7 +85,7 @@ function SignupPage() {
               className={styles.inputPassword}
               placeholder="password"
               onChange={(e) => setPassword(e.target.value)}
-              disabled={submitting}
+              disabled={submitting || success}
               defaultValue="abc123"
             />
             <input
@@ -96,7 +96,7 @@ function SignupPage() {
               className={styles.inputPasswordConfirmation}
               placeholder="password confirmation"
               onChange={(e) => setPasswordConfirmation(e.target.value)}
-              disabled={submitting}
+              disabled={submitting || success}
               defaultValue="abc123"
             />
           </div>

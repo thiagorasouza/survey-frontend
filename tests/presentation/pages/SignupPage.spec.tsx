@@ -294,15 +294,21 @@ describe("Signup Page Test Suite", () => {
       expect(getLoginButton()).not.toBeVisible();
     });
 
-    // it("should keep email input disabled", async () => {
-    //   await waitForSuccessState();
-    //   expect(getEmailInput()).toBeDisabled();
-    // });
+    it("should keep name input disabled", () => {
+      expect(getNameInput()).toBeDisabled();
+    });
 
-    // it("should keep password input disabled", async () => {
-    //   await waitForSuccessState();
-    //   expect(getPasswordInput()).toBeDisabled();
-    // });
+    it("should keep email input disabled", () => {
+      expect(getEmailInput()).toBeDisabled();
+    });
+
+    it("should keep password input disabled", () => {
+      expect(getPasswordInput()).toBeDisabled();
+    });
+
+    it("should keep password confirmation input disabled", () => {
+      expect(getPasswordConfirmationInput()).toBeDisabled();
+    });
 
     // it("should not display an error message", async () => {
     //   await waitForSuccessState();
