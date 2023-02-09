@@ -1,11 +1,11 @@
 import React from "react";
 import SignupPage from "../../presentation/pages/SignupPage";
+import { makeSignupAction } from "../factories/signupActionFactory";
+
+const signupAction = makeSignupAction();
 
 export const signupRoute = {
   path: "/signup",
   element: <SignupPage />,
-  action: async () => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    return null;
-  },
+  action: signupAction.handle.bind(signupAction),
 };

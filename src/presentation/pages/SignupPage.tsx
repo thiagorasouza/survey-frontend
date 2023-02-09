@@ -64,7 +64,8 @@ function SignupPage() {
           className={classNames({
             [styles.error]: true,
             [styles.hidden]:
-              !emailInUserError && !invalidParamsError && !unexpectedError,
+              success ||
+              (!emailInUserError && !invalidParamsError && !unexpectedError),
           })}
         >
           {!success && !submitting && signupResult?.data}

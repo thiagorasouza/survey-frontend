@@ -48,7 +48,7 @@ export class SignupAction {
         default:
           return {
             type: SignupResultType.UnexpectedError,
-            data: error.message,
+            data: "Unexpected error. Please try again later.",
           };
       }
     }

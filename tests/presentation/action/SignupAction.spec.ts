@@ -88,7 +88,7 @@ describe("Signup Action Test Suite", () => {
 
     expect(result).toEqual({
       type: SignupResultType.UnexpectedError,
-      data: error.message,
+      data: "Unexpected error. Please try again later.",
     });
   });
 
@@ -114,7 +114,7 @@ describe("Signup Action Test Suite", () => {
 
     expect(result).toEqual({
       type: SignupResultType.UnexpectedError,
-      data: error.message,
+      data: "Unexpected error. Please try again later.",
     });
   });
 
