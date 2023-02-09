@@ -25,6 +25,7 @@ import {
   getPasswordInput,
   getSignupButton,
   getSpinner,
+  waitForSuccessState,
 } from "../helpers/form-helpers";
 import { mockRouter } from "../mocks/mock-router";
 import { faker } from "@faker-js/faker";
@@ -288,10 +289,10 @@ describe("Signup Page Test Suite", () => {
       await waitFor(() => expect(getCheckmark()).toBeVisible());
     });
 
-    // it("should keep signup button hidden", async () => {
-    //   await waitForSuccessState();
-    //   expect(getSignupButton()).not.toBeVisible();
-    // });
+    it("should keep login button hidden", async () => {
+      await waitForSuccessState();
+      expect(getLoginButton()).not.toBeVisible();
+    });
 
     // it("should keep email input disabled", async () => {
     //   await waitForSuccessState();

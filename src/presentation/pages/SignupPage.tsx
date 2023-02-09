@@ -109,7 +109,7 @@ function SignupPage() {
             <LinkButton
               caption="Login"
               submitting={submitting}
-              success={false}
+              success={success}
             />
           </div>
         </Form>
