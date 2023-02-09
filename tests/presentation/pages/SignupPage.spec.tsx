@@ -6,7 +6,7 @@ import React, { ReactElement } from "react";
 
 import userEvent from "@testing-library/user-event";
 import { UserEvent } from "@testing-library/user-event/dist/types/setup/setup";
-import { render, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { enableFetchMocks } from "jest-fetch-mock";
 import "@testing-library/jest-dom";
 
@@ -310,14 +310,14 @@ describe("Signup Page Test Suite", () => {
       expect(getPasswordConfirmationInput()).toBeDisabled();
     });
 
-    // it("should not display an error message", async () => {
-    //   await waitForSuccessState();
-    //   expect(getFailureMessage()).toHaveClass("hidden");
-    // });
+    it("should not display an error message", async () => {
+      await waitForSuccessState();
+      expect(getFailureMessage()).toHaveClass("hidden");
+    });
 
-    // it("should redirect to /surveys", async () => {
-    //   await waitForSuccessState();
-    //   await waitFor(() => expect(screen.getByText(/surveys route/i)));
-    // });
+    it("should redirect to /surveys", async () => {
+      await waitForSuccessState();
+      await waitFor(() => expect(screen.getByText(/surveys route/i)));
+    });
   });
 });

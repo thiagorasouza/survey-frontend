@@ -1,6 +1,11 @@
 import classNames from "classnames";
 import React, { useEffect, useRef, useState } from "react";
-import { Form, useActionData, useNavigation } from "react-router-dom";
+import {
+  Form,
+  useActionData,
+  useNavigate,
+  useNavigation,
+} from "react-router-dom";
 import { SignupResult, SignupResultType } from "../action/SignupResult";
 import Brand from "../components/Brand";
 import LinkButton from "../components/LinkButton";
@@ -9,6 +14,7 @@ import SubmitButton from "../components/SubmitButton";
 import styles from "./SignupPage.scss";
 
 function SignupPage() {
+  const navigate = useNavigate();
   const [password, setPassword] = useState("abc123");
   const [passwordConfirmation, setPasswordConfirmation] = useState("abc123");
   const passwordRef = useRef(null);
@@ -42,6 +48,12 @@ function SignupPage() {
       passwordConfirmationRef.current.setCustomValidity(errorMessage);
     }
   }, [password, passwordConfirmation]);
+
+  if (success) {
+    setTimeout(() => {
+      navigate("/surveys");
+    }, 1000);
+  }
 
   return (
     <div className={styles.page}>
