@@ -22,6 +22,8 @@ function SignupPage() {
   //   signupResult && signupResult.type === SignupResultType.Success;
   const emailInUserError =
     signupResult && signupResult.type === SignupResultType.EmailInUseError;
+  const invalidParamsError =
+    signupResult && signupResult.type === SignupResultType.InvalidParamsError;
 
   const isPasswordValid = !!(
     password &&
@@ -47,7 +49,7 @@ function SignupPage() {
           role="alert"
           className={classNames({
             [styles.error]: true,
-            [styles.hidden]: !emailInUserError,
+            [styles.hidden]: !emailInUserError && !invalidParamsError,
           })}
         >
           {signupResult?.data}

@@ -66,6 +66,32 @@ const makeSut = (): SutTypes => {
   return { sut, user };
 };
 
+const testIfEverythingIsEnabled = (): void => {
+  it("should have an enabled name input", () => {
+    expect(getNameInput()).not.toBeDisabled();
+  });
+
+  it("should have an enabled email input", () => {
+    expect(getEmailInput()).not.toBeDisabled();
+  });
+
+  it("should have an enabled password input", () => {
+    expect(getPasswordInput()).not.toBeDisabled();
+  });
+
+  it("should have an enabled password confirmation input", () => {
+    expect(getPasswordConfirmationInput()).not.toBeDisabled();
+  });
+
+  it("should have an enabled signup button", () => {
+    expect(getSignupButton()).not.toBeDisabled();
+  });
+
+  it("should have an enabled login button", () => {
+    expect(getLoginButton()).not.toBeDisabled();
+  });
+};
+
 describe("Signup Page Test Suite", () => {
   describe("Initial state", () => {
     beforeEach(() => {
@@ -73,29 +99,7 @@ describe("Signup Page Test Suite", () => {
       render(sut);
     });
 
-    it("should have an enabled name input", () => {
-      expect(getNameInput()).not.toBeDisabled();
-    });
-
-    it("should have an enabled email input", () => {
-      expect(getEmailInput()).not.toBeDisabled();
-    });
-
-    it("should have an enabled password input", () => {
-      expect(getPasswordInput()).not.toBeDisabled();
-    });
-
-    it("should have an enabled password confirmation input", () => {
-      expect(getPasswordConfirmationInput()).not.toBeDisabled();
-    });
-
-    it("should have an enabled signup button", () => {
-      expect(getSignupButton()).not.toBeDisabled();
-    });
-
-    it("should have an enabled login button", () => {
-      expect(getLoginButton()).not.toBeDisabled();
-    });
+    testIfEverythingIsEnabled();
   });
 
   describe("Validation", () => {
@@ -208,33 +212,35 @@ describe("Signup Page Test Suite", () => {
     it("should display an error message", async () => {
       await waitFor(() => {
         const failureMessage = getFailureMessage();
-        // expect(failureMessage).not.toHaveClass("hidden");
+        expect(failureMessage).not.toHaveClass("hidden");
         expect(failureMessage).toHaveTextContent("Email already in use");
       });
     });
 
-    it("should have an enabled name input", () => {
-      expect(getNameInput()).not.toBeDisabled();
+    testIfEverythingIsEnabled();
+  });
+
+  describe("Invalid param failure", () => {
+    beforeEach(async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      signupActionStub.mockReturnValue(
+        Promise.resolve({
+          type: SignupResultType.InvalidParamsError,
+          data: "any_message",
+        })
+      );
+      await goToSubmittingState(user);
     });
 
-    it("should have an enabled email input", () => {
-      expect(getEmailInput()).not.toBeDisabled();
+    it("should display an error message", async () => {
+      await waitFor(() => {
+        const failureMessage = getFailureMessage();
+        expect(failureMessage).not.toHaveClass("hidden");
+        expect(failureMessage).toHaveTextContent("any_message");
+      });
     });
 
-    it("should have an enabled password input", () => {
-      expect(getPasswordInput()).not.toBeDisabled();
-    });
-
-    it("should have an enabled password confirmation input", () => {
-      expect(getPasswordConfirmationInput()).not.toBeDisabled();
-    });
-
-    it("should have an enabled signup button", () => {
-      expect(getSignupButton()).not.toBeDisabled();
-    });
-
-    it("should have an enabled login button", () => {
-      expect(getLoginButton()).not.toBeDisabled();
-    });
+    // testIfEverythingIsEnabled();
   });
 });
