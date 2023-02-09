@@ -28,6 +28,10 @@ export class SignupAction {
         passwordConfirmation,
       });
       await this.saveAccessToken.save(accountModel.accessToken);
+      return {
+        type: SignupResultType.Success,
+        data: accountModel,
+      };
     } catch (error) {
       switch (error.constructor) {
         case EmailInUseError:
@@ -45,7 +49,5 @@ export class SignupAction {
           };
       }
     }
-
-    return;
   }
 }

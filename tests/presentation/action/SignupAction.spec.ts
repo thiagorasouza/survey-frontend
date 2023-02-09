@@ -105,4 +105,15 @@ describe("Signup Action Test Suite", () => {
 
     expect(result).toEqual({ type: SignupResultType.UnexpectedError });
   });
+
+  it("should return response of type success with account model on success", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.handle(mockSignupActionArgs());
+
+    expect(result).toEqual({
+      type: SignupResultType.Success,
+      data: fakeAccountModel,
+    });
+  });
 });
