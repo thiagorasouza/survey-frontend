@@ -212,5 +212,29 @@ describe("Signup Page Test Suite", () => {
         expect(failureMessage).toHaveTextContent("Email already in use");
       });
     });
+
+    it("should have an enabled name input", () => {
+      expect(getNameInput()).not.toBeDisabled();
+    });
+
+    it("should have an enabled email input", () => {
+      expect(getEmailInput()).not.toBeDisabled();
+    });
+
+    it("should have an enabled password input", () => {
+      expect(getPasswordInput()).not.toBeDisabled();
+    });
+
+    it("should have an enabled password confirmation input", () => {
+      expect(getPasswordConfirmationInput()).not.toBeDisabled();
+    });
+
+    it("should have an enabled signup button", () => {
+      expect(getSignupButton()).not.toBeDisabled();
+    });
+
+    it("should have an enabled login button", () => {
+      expect(getLoginButton()).not.toBeDisabled();
+    });
   });
 });
