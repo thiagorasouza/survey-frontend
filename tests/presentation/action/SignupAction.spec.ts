@@ -1,6 +1,8 @@
+import { EmailInUseError } from "../../../src/domain/errors/email-in-use-error";
 import { AddAccount } from "../../../src/domain/usecases/add-account";
 import { SaveAccessToken } from "../../../src/domain/usecases/save-access-token";
 import { SignupAction } from "../../../src/presentation/action/SignupAction";
+import { SignupResultType } from "../../../src/presentation/action/SignupResult";
 import { mockAccountModel } from "../../data/mocks/mock-account-model";
 import { mockAddAccount } from "../../data/mocks/mock-add-account";
 import { mockAddAccountParams } from "../../data/mocks/mock-add-account-params";
@@ -38,5 +40,18 @@ describe("Signup Action Test Suite", () => {
     await sut.handle(actionArgs);
 
     expect(addSpy).toHaveBeenCalledWith(addParams);
+  });
+
+  it("should return response of type EmailInUseError if email is already in use", async () => {
+    const { sut, addAccountStub } = makeSut();
+
+    const error = new EmailInUseError();
+    jest
+      .spyOn(addAccountStub, "add")
+      .mockReturnValueOnce(Promise.reject(error));
+
+    const result = await sut.handle(mockSignupActionArgs());
+
+    expect(result).toEqual({ type: SignupResultType.EmailInUseError });
   });
 });
