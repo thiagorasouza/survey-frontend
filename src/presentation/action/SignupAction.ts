@@ -1,5 +1,6 @@
 import { ActionFunctionArgs } from "react-router-dom";
 import { EmailInUseError } from "../../domain/errors/email-in-use-error";
+import { InvalidParamsError } from "../../domain/errors/invalid-params-error";
 import { AddAccount } from "../../domain/usecases/add-account";
 import { SaveAccessToken } from "../../domain/usecases/save-access-token";
 import { SignupResult, SignupResultType } from "./SignupResult";
@@ -30,6 +31,10 @@ export class SignupAction {
         case EmailInUseError:
           return {
             type: SignupResultType.EmailInUseError,
+          };
+        case InvalidParamsError:
+          return {
+            type: SignupResultType.InvalidParamsError,
           };
       }
     }

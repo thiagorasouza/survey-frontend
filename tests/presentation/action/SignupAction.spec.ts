@@ -1,4 +1,5 @@
 import { EmailInUseError } from "../../../src/domain/errors/email-in-use-error";
+import { InvalidParamsError } from "../../../src/domain/errors/invalid-params-error";
 import { AddAccount } from "../../../src/domain/usecases/add-account";
 import { SaveAccessToken } from "../../../src/domain/usecases/save-access-token";
 import { SignupAction } from "../../../src/presentation/action/SignupAction";
@@ -53,5 +54,18 @@ describe("Signup Action Test Suite", () => {
     const result = await sut.handle(mockSignupActionArgs());
 
     expect(result).toEqual({ type: SignupResultType.EmailInUseError });
+  });
+
+  it("should return response of type InvalidParamsError if params are invalid", async () => {
+    const { sut, addAccountStub } = makeSut();
+
+    const error = new InvalidParamsError("any_message");
+    jest
+      .spyOn(addAccountStub, "add")
+      .mockReturnValueOnce(Promise.reject(error));
+
+    const result = await sut.handle(mockSignupActionArgs());
+
+    expect(result).toEqual({ type: SignupResultType.InvalidParamsError });
   });
 });
