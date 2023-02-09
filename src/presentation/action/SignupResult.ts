@@ -7,4 +7,5 @@ export enum SignupResultType {
   Success = "success",
   EmailInUseError = "email_in_use",
   InvalidParamsError = "invalid_params",
+  UnexpectedError = "unexpected_error",
 }

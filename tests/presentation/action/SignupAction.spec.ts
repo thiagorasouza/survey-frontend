@@ -1,5 +1,6 @@
 import { EmailInUseError } from "../../../src/domain/errors/email-in-use-error";
 import { InvalidParamsError } from "../../../src/domain/errors/invalid-params-error";
+import { UnexpectedError } from "../../../src/domain/errors/unexpected-error";
 import { AddAccount } from "../../../src/domain/usecases/add-account";
 import { SaveAccessToken } from "../../../src/domain/usecases/save-access-token";
 import { SignupAction } from "../../../src/presentation/action/SignupAction";
@@ -67,5 +68,18 @@ describe("Signup Action Test Suite", () => {
     const result = await sut.handle(mockSignupActionArgs());
 
     expect(result).toEqual({ type: SignupResultType.InvalidParamsError });
+  });
+
+  it("should return response of type UnexpectedError on unexpected error", async () => {
+    const { sut, addAccountStub } = makeSut();
+
+    const error = new UnexpectedError();
+    jest
+      .spyOn(addAccountStub, "add")
+      .mockReturnValueOnce(Promise.reject(error));
+
+    const result = await sut.handle(mockSignupActionArgs());
+
+    expect(result).toEqual({ type: SignupResultType.UnexpectedError });
   });
 });
