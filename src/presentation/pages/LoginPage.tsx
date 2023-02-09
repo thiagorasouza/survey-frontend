@@ -13,7 +13,6 @@ import styles from "./LoginPage.scss";
 
 function LoginPage() {
   const navigate = useNavigate();
-
   const navigation = useNavigation();
   const loginResult = useActionData() as LoginResult;
 
@@ -78,6 +77,7 @@ function LoginPage() {
               caption="Sign Up"
               submitting={processing}
               success={success}
+              link="/signup"
             />
           </div>
         </Form>

@@ -123,6 +123,7 @@ function SignupPage() {
               caption="Login"
               submitting={submitting}
               success={success}
+              link="/login"
             />
           </div>
         </Form>
