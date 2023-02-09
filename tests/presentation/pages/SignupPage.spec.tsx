@@ -27,6 +27,7 @@ import {
 } from "../helpers/form-helpers";
 import { mockRouter } from "../mocks/mock-router";
 import { faker } from "@faker-js/faker";
+import { SignupResultType } from "../../../src/presentation/action/SignupResult";
 
 enableFetchMocks();
 
@@ -55,7 +56,7 @@ interface SutTypes {
 
 const signupActionStub = jest.fn(async () => {
   await new Promise((resolve) => setTimeout(resolve, 100));
-  return { type: "success" };
+  return { type: SignupResultType.Success };
 });
 
 const makeSut = (): SutTypes => {
@@ -187,6 +188,25 @@ describe("Signup Page Test Suite", () => {
 
     it("should not display an error message", async () => {
       await waitFor(() => expect(getFailureMessage()).toHaveClass("hidden"));
+    });
+  });
+
+  describe("Email in use failure", () => {
+    beforeEach(async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      signupActionStub.mockReturnValue(
+        Promise.resolve({
+          type: SignupResultType.EmailInUseError,
+        })
+      );
+      await goToSubmittingState(user);
+    });
+
+    it("should display an error message", async () => {
+      await waitFor(() =>
+        expect(getFailureMessage()).not.toHaveClass("hidden")
+      );
     });
   });
 });

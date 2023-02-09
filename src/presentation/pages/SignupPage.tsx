@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import React, { useEffect, useRef, useState } from "react";
-import { Form, useNavigation } from "react-router-dom";
+import { Form, useActionData, useNavigation } from "react-router-dom";
+import { SignupResult, SignupResultType } from "../action/SignupResult";
 import Brand from "../components/Brand";
 import LinkButton from "../components/LinkButton";
 import SubmitButton from "../components/SubmitButton";
@@ -13,8 +14,13 @@ function SignupPage() {
   const passwordRef = useRef(null);
   const passwordConfirmationRef = useRef(null);
   const navigation = useNavigation();
+  const signupResult = useActionData() as SignupResult;
 
   const submitting = navigation.state === "submitting";
+  // const success =
+  //   signupResult && signupResult.type === SignupResultType.Success;
+  const emailInUserError =
+    signupResult && signupResult.type === SignupResultType.EmailInUseError;
 
   const isPasswordValid = !!(
     password &&
@@ -40,10 +46,10 @@ function SignupPage() {
           role="alert"
           className={classNames({
             [styles.error]: true,
-            [styles.hidden]: true,
+            [styles.hidden]: !emailInUserError,
           })}
         >
-          Error
+          {signupResult?.data}
         </div>
         <Form method="post" className={styles.form}>
           <div className={styles.inputs}>
