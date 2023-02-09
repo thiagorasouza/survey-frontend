@@ -82,4 +82,14 @@ describe("Signup Action Test Suite", () => {
 
     expect(result).toEqual({ type: SignupResultType.UnexpectedError });
   });
+
+  it("should call SaveAccessToken with correct values on success", async () => {
+    const { sut, saveAccessTokenStub } = makeSut();
+
+    const saveSpy = jest.spyOn(saveAccessTokenStub, "save");
+
+    await sut.handle(mockSignupActionArgs());
+
+    expect(saveSpy).toHaveBeenCalledWith(fakeAccountModel.accessToken);
+  });
 });

@@ -21,12 +21,13 @@ export class SignupAction {
     const passwordConfirmation = formData.get("passwordConfirmation") as any;
 
     try {
-      await this.addAccount.add({
+      const accountModel = await this.addAccount.add({
         name,
         email,
         password,
         passwordConfirmation,
       });
+      await this.saveAccessToken.save(accountModel.accessToken);
     } catch (error) {
       switch (error.constructor) {
         case EmailInUseError:
