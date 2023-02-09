@@ -29,6 +29,7 @@ import { mockRouter } from "../mocks/mock-router";
 import { faker } from "@faker-js/faker";
 import { SignupResultType } from "../../../src/presentation/action/SignupResult";
 import { EmailInUseError } from "../../../src/domain/errors/email-in-use-error";
+import { UnexpectedError } from "../../../src/domain/errors/unexpected-error";
 
 enableFetchMocks();
 
@@ -241,6 +242,30 @@ describe("Signup Page Test Suite", () => {
       });
     });
 
-    // testIfEverythingIsEnabled();
+    testIfEverythingIsEnabled();
   });
+
+  // describe("Invalid param failure", () => {
+  //   beforeEach(async () => {
+  //     const { sut, user } = makeSut();
+  //     render(sut);
+  //     signupActionStub.mockReturnValue(
+  //       Promise.resolve({
+  //         type: SignupResultType.UnexpectedError,
+  //         data: new UnexpectedError().message,
+  //       })
+  //     );
+  //     await goToSubmittingState(user);
+  //   });
+
+  //   it("should display an error message", async () => {
+  //     await waitFor(() => {
+  //       const failureMessage = getFailureMessage();
+  //       expect(failureMessage).not.toHaveClass("hidden");
+  //       expect(failureMessage).toHaveTextContent("Unexpected error");
+  //     });
+  //   });
+
+  //   testIfEverythingIsEnabled();
+  // });
 });

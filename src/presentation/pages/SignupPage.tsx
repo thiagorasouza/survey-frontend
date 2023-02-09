@@ -15,15 +15,15 @@ function SignupPage() {
   const passwordConfirmationRef = useRef(null);
   const navigation = useNavigation();
   const signupResult = useActionData() as SignupResult;
-  // console.log("🚀 ~ signupResult", signupResult);
 
   const submitting = navigation.state === "submitting";
-  // const success =
-  //   signupResult && signupResult.type === SignupResultType.Success;
+
   const emailInUserError =
     signupResult && signupResult.type === SignupResultType.EmailInUseError;
   const invalidParamsError =
     signupResult && signupResult.type === SignupResultType.InvalidParamsError;
+  const unexpectedError =
+    signupResult && signupResult.type === SignupResultType.UnexpectedError;
 
   const isPasswordValid = !!(
     password &&
@@ -49,7 +49,8 @@ function SignupPage() {
           role="alert"
           className={classNames({
             [styles.error]: true,
-            [styles.hidden]: !emailInUserError && !invalidParamsError,
+            [styles.hidden]:
+              !emailInUserError && !invalidParamsError && !unexpectedError,
           })}
         >
           {signupResult?.data}
