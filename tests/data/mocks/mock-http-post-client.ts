@@ -1,19 +1,18 @@
+import { ErrorResponseBody } from "../../../src/data/protocols/error/error-response-body";
 import { HttpPostClient } from "../../../src/data/protocols/http/http-post-client";
 import {
   HttpResponse,
   HttpStatusCode,
 } from "../../../src/data/protocols/http/http-response";
-import { AccountModel } from "../../../src/domain/models/account-model";
-import { AuthenticationParams } from "../../../src/domain/usecases/authentication";
 
-export const mockHttpPostClient = (): HttpPostClient<
-  AuthenticationParams,
-  AccountModel
+export const mockHttpPostClient = <RequestBody, ResponseBody>(): HttpPostClient<
+  RequestBody,
+  ResponseBody
 > => {
   class HttpPostClientStub
-    implements HttpPostClient<AuthenticationParams, AccountModel>
+    implements HttpPostClient<RequestBody, ResponseBody>
   {
-    async post(): Promise<HttpResponse<AccountModel>> {
+    async post(): Promise<HttpResponse<ResponseBody>> {
       return {
         statusCode: HttpStatusCode.noContent,
       };

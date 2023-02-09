@@ -16,7 +16,10 @@ interface SutTypes {
 }
 
 const makeSut = (url: string = faker.internet.url()): SutTypes => {
-  const httpPostClientStub = mockHttpPostClient();
+  const httpPostClientStub = mockHttpPostClient<
+    AuthenticationParams,
+    AccountModel
+  >();
   const sut = new RemoteAuthentication(url, httpPostClientStub);
   return { sut, httpPostClientStub };
 };

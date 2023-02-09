@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { ErrorResponseBody } from "../../../src/data/protocols/error/error-response-body";
 import { HttpPostClient } from "../../../src/data/protocols/http/http-post-client";
 import { HttpStatusCode } from "../../../src/data/protocols/http/http-response";
 import { RemoteAddAccount } from "../../../src/data/usecases/remote-add-account";
@@ -13,11 +14,17 @@ import { mockHttpPostClient } from "../mocks/mock-http-post-client";
 
 interface SutTypes {
   sut: RemoteAddAccount;
-  httpPostClientStub: HttpPostClient<AddAccountParams, AccountModel | string>;
+  httpPostClientStub: HttpPostClient<
+    AddAccountParams,
+    AccountModel | ErrorResponseBody
+  >;
 }
 
 const makeSut = (url: string = faker.internet.url()): SutTypes => {
-  const httpPostClientStub = mockHttpPostClient();
+  const httpPostClientStub = mockHttpPostClient<
+    AddAccountParams,
+    AccountModel | ErrorResponseBody
+  >();
   const sut = new RemoteAddAccount(url, httpPostClientStub);
   return { sut, httpPostClientStub };
 };
@@ -58,7 +65,9 @@ describe("RemoteAddAccount Test Suite", () => {
     jest.spyOn(httpPostClientStub, "post").mockReturnValueOnce(
       Promise.resolve({
         statusCode: HttpStatusCode.badRequest,
-        body: "invalid_params_message",
+        body: {
+          error: "invalid_params_message",
+        },
       })
     );
 
