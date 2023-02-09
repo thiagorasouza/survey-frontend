@@ -24,6 +24,8 @@ function SignupPage() {
     signupResult && signupResult.type === SignupResultType.InvalidParamsError;
   const unexpectedError =
     signupResult && signupResult.type === SignupResultType.UnexpectedError;
+  const success =
+    signupResult && signupResult.type === SignupResultType.Success;
 
   const isPasswordValid = !!(
     password &&
@@ -53,7 +55,7 @@ function SignupPage() {
               !emailInUserError && !invalidParamsError && !unexpectedError,
           })}
         >
-          {signupResult?.data}
+          {!success && !submitting && signupResult?.data}
         </div>
         <Form method="post" className={styles.form}>
           <div className={styles.inputs}>
@@ -102,7 +104,7 @@ function SignupPage() {
             <SubmitButton
               caption="Sign Up"
               submitting={submitting}
-              success={false}
+              success={success}
             />
             <LinkButton
               caption="Login"

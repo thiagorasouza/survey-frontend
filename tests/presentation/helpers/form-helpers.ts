@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import { UserEvent } from "@testing-library/user-event/dist/types/setup/setup";
 
 export const getNameInput = (): HTMLInputElement =>
@@ -63,4 +63,8 @@ export const fillPasswordConfirmationInput = async (
   const passwordConfirmationInput = getPasswordConfirmationInput();
   await user.clear(passwordConfirmationInput);
   await user.type(passwordConfirmationInput, value);
+};
+
+export const waitForSuccessState = async (): Promise<void> => {
+  await waitFor(() => expect(getCheckmark()).toBeVisible());
 };

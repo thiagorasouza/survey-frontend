@@ -16,6 +16,7 @@ import {
   fillNameInput,
   fillPasswordConfirmationInput,
   fillPasswordInput,
+  getCheckmark,
   getEmailInput,
   getFailureMessage,
   getLoginButton,
@@ -30,6 +31,7 @@ import { faker } from "@faker-js/faker";
 import { SignupResultType } from "../../../src/presentation/action/SignupResult";
 import { EmailInUseError } from "../../../src/domain/errors/email-in-use-error";
 import { UnexpectedError } from "../../../src/domain/errors/unexpected-error";
+import { mockAccountModel } from "../../data/mocks/mock-account-model";
 
 enableFetchMocks();
 
@@ -56,9 +58,9 @@ interface SutTypes {
   user: UserEvent;
 }
 
-const signupActionStub = jest.fn(async () => {
+const signupActionStub = jest.fn(async (): Promise<any> => {
   await new Promise((resolve) => setTimeout(resolve, 100));
-  return { type: SignupResultType.Success };
+  return { type: SignupResultType.Success, data: mockAccountModel() };
 });
 
 const makeSut = (): SutTypes => {
@@ -267,5 +269,48 @@ describe("Signup Page Test Suite", () => {
     });
 
     testIfEverythingIsEnabled();
+  });
+
+  describe("Success state", () => {
+    beforeEach(async () => {
+      const { sut, user } = makeSut();
+      render(sut);
+      signupActionStub.mockReturnValue(
+        Promise.resolve({
+          type: SignupResultType.Success,
+          data: mockAccountModel(),
+        })
+      );
+      await goToSubmittingState(user);
+    });
+
+    it("should display a checkmark", async () => {
+      await waitFor(() => expect(getCheckmark()).toBeVisible());
+    });
+
+    // it("should keep signup button hidden", async () => {
+    //   await waitForSuccessState();
+    //   expect(getSignupButton()).not.toBeVisible();
+    // });
+
+    // it("should keep email input disabled", async () => {
+    //   await waitForSuccessState();
+    //   expect(getEmailInput()).toBeDisabled();
+    // });
+
+    // it("should keep password input disabled", async () => {
+    //   await waitForSuccessState();
+    //   expect(getPasswordInput()).toBeDisabled();
+    // });
+
+    // it("should not display an error message", async () => {
+    //   await waitForSuccessState();
+    //   expect(getFailureMessage()).toHaveClass("hidden");
+    // });
+
+    // it("should redirect to /surveys", async () => {
+    //   await waitForSuccessState();
+    //   await waitFor(() => expect(screen.getByText(/surveys route/i)));
+    // });
   });
 });
