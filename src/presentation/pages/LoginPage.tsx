@@ -1,33 +1,18 @@
 import React from "react";
-import {
-  Form,
-  useActionData,
-  useNavigate,
-  useNavigation,
-} from "react-router-dom";
-import { LoginResult, LoginResultType } from "../action/LoginResult";
+import { Form, useNavigate } from "react-router-dom";
 import Brand from "../components/Brand";
 import LinkButton from "../components/LinkButton";
 import SubmitButton from "../components/SubmitButton";
+import useAppState from "../hooks/useAppState";
 import styles from "./LoginPage.scss";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const navigation = useNavigation();
-  const loginResult = useActionData() as LoginResult;
+  const appState = useAppState();
 
-  const state =
-    navigation.state === "submitting"
-      ? "processing"
-      : loginResult
-      ? loginResult.type
-      : "initial";
-  const processing = state === "processing";
-  const invalidCredentials = state === LoginResultType.InvalidCredentials;
-  const unexpectedError = state === LoginResultType.UnexpectedError;
-  const success = state === LoginResultType.Success;
+  const disableFields = appState.isSubmitting || appState.isSuccess;
 
-  if (success) {
+  if (appState.isSuccess) {
     setTimeout(() => {
       navigate("/surveys");
     }, 1000);
@@ -37,16 +22,13 @@ function LoginPage() {
     <div className={styles.page}>
       <section className={styles.wrapper}>
         <Brand />
-        <div
-          role="alert"
-          className={`${styles.error} ${
-            !invalidCredentials && !unexpectedError ? styles.hidden : ""
-          }`}
-        >
-          {invalidCredentials
-            ? "Please review your email and password."
-            : "Unexpected server error."}
-        </div>
+        {appState.isError && (
+          <div role="alert" className={styles.error}>
+            {appState.error.name === "InvalidCredentialsError"
+              ? "Please review your email and password."
+              : "UnexpectedError. Please try again later."}
+          </div>
+        )}
         <Form method="post" className={styles.form}>
           <div className={styles.inputs}>
             <input
@@ -55,7 +37,7 @@ function LoginPage() {
               name="email"
               className={styles.inputEmail}
               placeholder="email"
-              disabled={processing || success}
+              disabled={disableFields}
             />
             <input
               required
@@ -64,19 +46,19 @@ function LoginPage() {
               className={styles.inputPassword}
               minLength={6}
               placeholder="password"
-              disabled={processing || success}
+              disabled={disableFields}
             />
           </div>
           <div className={styles.buttons}>
             <SubmitButton
               caption="Login"
-              submitting={processing}
-              success={success}
+              submitting={appState.isSubmitting}
+              success={appState.isSuccess}
             />
             <LinkButton
               caption="Sign Up"
-              submitting={processing}
-              success={success}
+              submitting={appState.isSubmitting}
+              success={appState.isSuccess}
               link="/signup"
             />
           </div>

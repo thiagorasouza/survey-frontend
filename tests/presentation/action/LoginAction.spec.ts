@@ -4,7 +4,6 @@ import { InvalidCredentialsError } from "../../../src/domain/errors/invalid-cred
 import { UnexpectedError } from "../../../src/domain/errors/unexpected-error";
 import { Authentication } from "../../../src/domain/usecases/authentication";
 import { LoginAction } from "../../../src/presentation/action/LoginAction";
-import { LoginResultType } from "../../../src/presentation/action/LoginResult";
 import { mockActionArgs } from "../mocks/mock-action-args";
 import { mockAuthentication } from "../../data/mocks/mock-authentication";
 import { mockSaveAccessToken } from "../../data/mocks/mock-save-access-token";
@@ -39,7 +38,7 @@ describe("LoginAction Test Suite", () => {
     expect(authSpy).toHaveBeenCalledWith(authParams);
   });
 
-  it("should return response of type invalid credentials on InvalidCredentials", async () => {
+  it("should return response of type error on InvalidCredentialsError", async () => {
     const { sut, authenticationStub } = makeSut();
 
     const error = new InvalidCredentialsError();
@@ -49,10 +48,10 @@ describe("LoginAction Test Suite", () => {
 
     const result = await sut.handle(mockActionArgs());
 
-    expect(result).toEqual({ type: LoginResultType.InvalidCredentials });
+    expect(result).toEqual({ status: "error", error });
   });
 
-  it("should return response of type unexpected error on UnexpectedError", async () => {
+  it("should return response of type error on UnexpectedError", async () => {
     const { sut, authenticationStub } = makeSut();
 
     const error = new UnexpectedError();
@@ -62,7 +61,7 @@ describe("LoginAction Test Suite", () => {
 
     const result = await sut.handle(mockActionArgs());
 
-    expect(result).toEqual({ type: LoginResultType.UnexpectedError });
+    expect(result).toEqual({ status: "error", error });
   });
 
   it("should call SaveAccessToken with correct values on success", async () => {
@@ -85,7 +84,7 @@ describe("LoginAction Test Suite", () => {
 
     const result = await sut.handle(mockActionArgs());
 
-    expect(result).toEqual({ type: LoginResultType.UnexpectedError });
+    expect(result).toEqual({ status: "error", error });
   });
 
   it("should return response of type success with account model on success", async () => {
@@ -94,7 +93,7 @@ describe("LoginAction Test Suite", () => {
     const result = await sut.handle(mockActionArgs());
 
     expect(result).toEqual({
-      type: LoginResultType.Success,
+      status: "success",
       data: fakeAccountModel,
     });
   });

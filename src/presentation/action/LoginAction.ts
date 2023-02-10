@@ -3,15 +3,16 @@ import { InvalidCredentialsError } from "../../domain/errors/invalid-credentials
 import { UnexpectedError } from "../../domain/errors/unexpected-error";
 import { Authentication } from "../../domain/usecases/authentication";
 import { SaveAccessToken } from "../../domain/usecases/save-access-token";
-import { LoginResult, LoginResultType } from "./LoginResult";
+import { ActionHandler } from "./ActionHandler";
+import { ActionResult } from "./ActionResult";
 
-export class LoginAction {
+export class LoginAction implements ActionHandler {
   constructor(
     private readonly authentication: Authentication,
     private readonly saveAccessToken: SaveAccessToken
   ) {}
 
-  async handle(args: ActionFunctionArgs): Promise<LoginResult> {
+  async handle(args: ActionFunctionArgs): Promise<ActionResult> {
     const { request } = args;
 
     const formData = await request.formData();
@@ -22,19 +23,20 @@ export class LoginAction {
       const accountModel = await this.authentication.auth({ email, password });
       await this.saveAccessToken.save(accountModel.accessToken);
       return {
-        type: LoginResultType.Success,
+        status: "success",
         data: accountModel,
       };
     } catch (error) {
       switch (error.constructor) {
         case InvalidCredentialsError:
           return {
-            type: LoginResultType.InvalidCredentials,
+            status: "error",
+            error,
           };
-        case UnexpectedError:
         default:
           return {
-            type: LoginResultType.UnexpectedError,
+            status: "error",
+            error: new UnexpectedError(),
           };
       }
     }

@@ -25,13 +25,17 @@ import {
   getPasswordInput,
   getSignupButton,
   getSpinner,
+  queryFailureMessage,
   waitForSuccessState,
 } from "../helpers/form-helpers";
 import { mockRouter } from "../mocks/mock-router";
 import { faker } from "@faker-js/faker";
-import { SignupResultType } from "../../../src/presentation/action/SignupResult";
 import { EmailInUseError } from "../../../src/domain/errors/email-in-use-error";
 import { UnexpectedError } from "../../../src/domain/errors/unexpected-error";
+import { mockSignupAction } from "../mocks/mock-signup-action";
+import { ActionHandler } from "../../../src/presentation/action/ActionHandler";
+import { InvalidParamsError } from "../../../src/domain/errors/invalid-params-error";
+import { ActionResult } from "../../../src/presentation/action/ActionResult";
 import { mockAccountModel } from "../../data/mocks/mock-account-model";
 
 enableFetchMocks();
@@ -57,17 +61,14 @@ const goToSubmittingState = async (user: UserEvent): Promise<void> => {
 interface SutTypes {
   sut: ReactElement;
   user: UserEvent;
+  signupActionStub: ActionHandler;
 }
 
-const signupActionStub = jest.fn(async (): Promise<any> => {
-  await new Promise((resolve) => setTimeout(resolve, 100));
-  return { type: SignupResultType.Success, data: mockAccountModel() };
-});
-
 const makeSut = (): SutTypes => {
+  const signupActionStub = mockSignupAction();
   const sut = mockRouter(<SignupPage />, signupActionStub);
   const user = userEvent.setup();
-  return { sut, user };
+  return { sut, user, signupActionStub };
 };
 
 const testIfEverythingIsEnabled = (): void => {
@@ -104,6 +105,10 @@ describe("Signup Page Test Suite", () => {
     });
 
     testIfEverythingIsEnabled();
+
+    it("should not display an error message", async () => {
+      expect(queryFailureMessage()).not.toBeInTheDocument();
+    });
   });
 
   describe("Validation", () => {
@@ -160,7 +165,14 @@ describe("Signup Page Test Suite", () => {
 
   describe("Submitting state", () => {
     beforeEach(async () => {
-      const { sut, user } = makeSut();
+      const { sut, user, signupActionStub } = makeSut();
+
+      jest
+        .spyOn(signupActionStub, "handle")
+        .mockImplementation(async (): Promise<ActionResult> => {
+          return await new Promise((resolve) => setTimeout(resolve, 100));
+        });
+
       render(sut);
       await goToSubmittingState(user);
     });
@@ -196,29 +208,26 @@ describe("Signup Page Test Suite", () => {
     });
 
     it("should not display an error message", async () => {
-      await waitFor(() => expect(getFailureMessage()).toHaveClass("hidden"));
+      expect(queryFailureMessage()).not.toBeInTheDocument();
     });
   });
 
   describe("Email in use failure", () => {
     beforeEach(async () => {
-      const { sut, user } = makeSut();
+      const { sut, user, signupActionStub } = makeSut();
+
+      const error = new EmailInUseError();
+      jest.spyOn(signupActionStub, "handle").mockResolvedValue({
+        status: "error",
+        error,
+      });
+
       render(sut);
-      signupActionStub.mockReturnValue(
-        Promise.resolve({
-          type: SignupResultType.EmailInUseError,
-          data: new EmailInUseError().message,
-        })
-      );
       await goToSubmittingState(user);
     });
 
     it("should display an error message", async () => {
-      await waitFor(() => {
-        const failureMessage = getFailureMessage();
-        expect(failureMessage).not.toHaveClass("hidden");
-        expect(failureMessage).toHaveTextContent("Email already in use");
-      });
+      await waitFor(() => expect(getFailureMessage()).toBeVisible());
     });
 
     testIfEverythingIsEnabled();
@@ -226,23 +235,20 @@ describe("Signup Page Test Suite", () => {
 
   describe("Invalid param failure", () => {
     beforeEach(async () => {
-      const { sut, user } = makeSut();
+      const { sut, user, signupActionStub } = makeSut();
+
+      const error = new InvalidParamsError("any_message");
+      jest.spyOn(signupActionStub, "handle").mockResolvedValue({
+        status: "error",
+        error,
+      });
+
       render(sut);
-      signupActionStub.mockReturnValue(
-        Promise.resolve({
-          type: SignupResultType.InvalidParamsError,
-          data: "any_message",
-        })
-      );
       await goToSubmittingState(user);
     });
 
     it("should display an error message", async () => {
-      await waitFor(() => {
-        const failureMessage = getFailureMessage();
-        expect(failureMessage).not.toHaveClass("hidden");
-        expect(failureMessage).toHaveTextContent("any_message");
-      });
+      await waitFor(() => expect(getFailureMessage()).toBeVisible());
     });
 
     testIfEverythingIsEnabled();
@@ -250,23 +256,20 @@ describe("Signup Page Test Suite", () => {
 
   describe("Unexpected error failure", () => {
     beforeEach(async () => {
-      const { sut, user } = makeSut();
+      const { sut, user, signupActionStub } = makeSut();
+
+      const error = new UnexpectedError();
+      jest.spyOn(signupActionStub, "handle").mockResolvedValue({
+        status: "error",
+        error,
+      });
+
       render(sut);
-      signupActionStub.mockReturnValue(
-        Promise.resolve({
-          type: SignupResultType.UnexpectedError,
-          data: new UnexpectedError().message,
-        })
-      );
       await goToSubmittingState(user);
     });
 
     it("should display an error message", async () => {
-      await waitFor(() => {
-        const failureMessage = getFailureMessage();
-        expect(failureMessage).not.toHaveClass("hidden");
-        expect(failureMessage).toHaveTextContent("Unexpected error");
-      });
+      await waitFor(() => expect(getFailureMessage()).toBeVisible());
     });
 
     testIfEverythingIsEnabled();
@@ -276,12 +279,6 @@ describe("Signup Page Test Suite", () => {
     beforeEach(async () => {
       const { sut, user } = makeSut();
       render(sut);
-      signupActionStub.mockReturnValue(
-        Promise.resolve({
-          type: SignupResultType.Success,
-          data: mockAccountModel(),
-        })
-      );
       await goToSubmittingState(user);
     });
 
@@ -312,7 +309,7 @@ describe("Signup Page Test Suite", () => {
 
     it("should not display an error message", async () => {
       await waitForSuccessState();
-      expect(getFailureMessage()).toHaveClass("hidden");
+      expect(queryFailureMessage()).not.toBeInTheDocument();
     });
 
     it("should redirect to /surveys", async () => {

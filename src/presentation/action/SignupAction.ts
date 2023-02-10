@@ -4,14 +4,14 @@ import { InvalidParamsError } from "../../domain/errors/invalid-params-error";
 import { UnexpectedError } from "../../domain/errors/unexpected-error";
 import { AddAccount } from "../../domain/usecases/add-account";
 import { SaveAccessToken } from "../../domain/usecases/save-access-token";
-import { SignupResult, SignupResultType } from "./SignupResult";
+import { ActionResult } from "./ActionResult";
 
 export class SignupAction {
   constructor(
     private readonly addAccount: AddAccount,
     private readonly saveAccessToken: SaveAccessToken
   ) {}
-  async handle(args: ActionFunctionArgs): Promise<SignupResult> {
+  async handle(args: ActionFunctionArgs): Promise<ActionResult> {
     const { request } = args;
 
     const formData = await request.formData();
@@ -29,26 +29,21 @@ export class SignupAction {
       });
       await this.saveAccessToken.save(accountModel.accessToken);
       return {
-        type: SignupResultType.Success,
+        status: "success",
         data: accountModel,
       };
     } catch (error) {
       switch (error.constructor) {
         case EmailInUseError:
-          return {
-            type: SignupResultType.EmailInUseError,
-            data: error.message,
-          };
         case InvalidParamsError:
           return {
-            type: SignupResultType.InvalidParamsError,
-            data: error.message,
+            status: "error",
+            error,
           };
-        case UnexpectedError:
         default:
           return {
-            type: SignupResultType.UnexpectedError,
-            data: "Unexpected error. Please try again later.",
+            status: "error",
+            error: new UnexpectedError(),
           };
       }
     }

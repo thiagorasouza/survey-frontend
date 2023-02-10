@@ -4,16 +4,14 @@
 
 import React, { ReactElement } from "react";
 
-import { render, screen, waitFor } from "@testing-library/react";
+import { queryByRole, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { UserEvent } from "@testing-library/user-event/dist/types/setup/setup";
 
 import LoginPage from "../../../src/presentation/pages/LoginPage";
-import { faker } from "@faker-js/faker";
 
 import { enableFetchMocks } from "jest-fetch-mock";
-import { LoginResultType } from "../../../src/presentation/action/LoginResult";
 import {
   fillEmailInput,
   fillPasswordInput,
@@ -24,13 +22,19 @@ import {
   getPasswordInput,
   getSignupButton,
   getSpinner,
+  queryFailureMessage,
 } from "../helpers/form-helpers";
 import { mockRouter } from "../mocks/mock-router";
+import { InvalidCredentialsError } from "../../../src/domain/errors/invalid-credentials-error";
+import { UnexpectedError } from "../../../src/domain/errors/unexpected-error";
+import { mockLoginAction } from "../mocks/mock-login-action";
+import { ActionHandler } from "../../../src/presentation/action/ActionHandler";
 enableFetchMocks();
 
 interface SutTypes {
   sut: ReactElement;
   user: UserEvent;
+  loginActionStub: ActionHandler;
 }
 
 const fillLoginForm = async (user: UserEvent): Promise<void> => {
@@ -52,12 +56,11 @@ const waitForSuccessState = async (): Promise<void> => {
   await waitFor(() => expect(getCheckmark()).toBeVisible());
 };
 
-const loginActionStub = jest.fn(() => ({ type: LoginResultType.Success }));
-
 const makeSut = (): SutTypes => {
+  const loginActionStub = mockLoginAction();
   const sut = mockRouter(<LoginPage />, loginActionStub);
   const user = userEvent.setup();
-  return { sut, user };
+  return { sut, user, loginActionStub };
 };
 
 describe("Login Page Test Suite", () => {
@@ -84,7 +87,7 @@ describe("Login Page Test Suite", () => {
     });
 
     it("should not display an error message", async () => {
-      await waitFor(() => expect(getFailureMessage()).toHaveClass("hidden"));
+      expect(queryFailureMessage()).not.toBeInTheDocument();
     });
   });
 
@@ -132,7 +135,73 @@ describe("Login Page Test Suite", () => {
     });
 
     it("should not display an error message", async () => {
-      await waitFor(() => expect(getFailureMessage()).toHaveClass("hidden"));
+      expect(queryFailureMessage()).not.toBeInTheDocument();
+    });
+  });
+
+  describe("Invalid credentials failure", () => {
+    beforeEach(async () => {
+      const { sut, user, loginActionStub } = makeSut();
+      jest.spyOn(loginActionStub, "handle").mockResolvedValue({
+        status: "error",
+        error: new InvalidCredentialsError(),
+      });
+
+      render(sut);
+      await goToSubmittingState(user);
+    });
+
+    it("should display an error message", async () => {
+      await waitFor(() => expect(getFailureMessage()).toBeVisible());
+    });
+
+    it("should have an enabled email input", () => {
+      expect(getEmailInput()).not.toBeDisabled();
+    });
+
+    it("should have an enabled password input", () => {
+      expect(getPasswordInput()).not.toBeDisabled();
+    });
+
+    it("should have an enabled login button", () => {
+      expect(getLoginButton()).not.toBeDisabled();
+    });
+
+    it("should have an enabled signup button", () => {
+      expect(getSignupButton()).not.toBeDisabled();
+    });
+  });
+
+  describe("Unexpected server error failure", () => {
+    beforeEach(async () => {
+      const { sut, user, loginActionStub } = makeSut();
+      jest.spyOn(loginActionStub, "handle").mockResolvedValue({
+        status: "error",
+        error: new UnexpectedError(),
+      });
+
+      render(sut);
+      await goToSubmittingState(user);
+    });
+
+    it("should display an error message", async () => {
+      await waitFor(() => expect(getFailureMessage()).toBeVisible());
+    });
+
+    it("should have an enabled email input", () => {
+      expect(getEmailInput()).not.toBeDisabled();
+    });
+
+    it("should have an enabled password input", () => {
+      expect(getPasswordInput()).not.toBeDisabled();
+    });
+
+    it("should have an enabled login button", () => {
+      expect(getLoginButton()).not.toBeDisabled();
+    });
+
+    it("should have an enabled signup button", () => {
+      expect(getSignupButton()).not.toBeDisabled();
     });
   });
 
@@ -162,80 +231,14 @@ describe("Login Page Test Suite", () => {
       expect(getPasswordInput()).toBeDisabled();
     });
 
-    it("should not display an error message", async () => {
-      await waitForSuccessState();
-      expect(getFailureMessage()).toHaveClass("hidden");
-    });
-
     it("should redirect to /surveys", async () => {
       await waitForSuccessState();
       await waitFor(() => expect(screen.getByText(/surveys route/i)));
     });
-  });
 
-  describe("Invalid credentials failure", () => {
-    beforeEach(async () => {
-      const { sut, user } = makeSut();
-      render(sut);
-      loginActionStub.mockReturnValue({
-        type: LoginResultType.InvalidCredentials,
-      });
-      await goToSubmittingState(user);
-    });
-
-    it("should display an error message", async () => {
-      await waitFor(() =>
-        expect(getFailureMessage()).not.toHaveClass("hidden")
-      );
-    });
-
-    it("should have an enabled email input", () => {
-      expect(getEmailInput()).not.toBeDisabled();
-    });
-
-    it("should have an enabled password input", () => {
-      expect(getPasswordInput()).not.toBeDisabled();
-    });
-
-    it("should have an enabled login button", () => {
-      expect(getLoginButton()).not.toBeDisabled();
-    });
-
-    it("should have an enabled signup button", () => {
-      expect(getSignupButton()).not.toBeDisabled();
-    });
-  });
-
-  describe("Unexpected server error failure", () => {
-    beforeEach(async () => {
-      const { sut, user } = makeSut();
-      render(sut);
-      loginActionStub.mockReturnValue({
-        type: LoginResultType.UnexpectedError,
-      });
-      await goToSubmittingState(user);
-    });
-
-    it("should display an error message", async () => {
-      await waitFor(() =>
-        expect(getFailureMessage()).not.toHaveClass("hidden")
-      );
-    });
-
-    it("should have an enabled email input", () => {
-      expect(getEmailInput()).not.toBeDisabled();
-    });
-
-    it("should have an enabled password input", () => {
-      expect(getPasswordInput()).not.toBeDisabled();
-    });
-
-    it("should have an enabled login button", () => {
-      expect(getLoginButton()).not.toBeDisabled();
-    });
-
-    it("should have an enabled signup button", () => {
-      expect(getSignupButton()).not.toBeDisabled();
+    it("should not display an error message", async () => {
+      await waitForSuccessState();
+      expect(queryFailureMessage()).not.toBeInTheDocument();
     });
   });
 });

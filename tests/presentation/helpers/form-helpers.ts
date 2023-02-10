@@ -29,6 +29,9 @@ export const getCheckmark = (): HTMLOrSVGElement =>
 export const getFailureMessage = (): HTMLDivElement =>
   screen.getByRole("alert");
 
+export const queryFailureMessage = (): HTMLDivElement =>
+  screen.queryByRole("alert");
+
 export const fillNameInput = async (
   user: UserEvent,
   value: string = faker.name.fullName()

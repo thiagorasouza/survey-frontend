@@ -44,7 +44,7 @@ describe("Signup Action Test Suite", () => {
     expect(addSpy).toHaveBeenCalledWith(addParams);
   });
 
-  it("should return response of type EmailInUseError if email is already in use", async () => {
+  it("should return response of type error on EmailInUseError", async () => {
     const { sut, addAccountStub } = makeSut();
 
     const error = new EmailInUseError();
@@ -55,12 +55,12 @@ describe("Signup Action Test Suite", () => {
     const result = await sut.handle(mockSignupActionArgs());
 
     expect(result).toEqual({
-      type: SignupResultType.EmailInUseError,
-      data: error.message,
+      status: "error",
+      error,
     });
   });
 
-  it("should return response of type InvalidParamsError if params are invalid", async () => {
+  it("should return response of type error on InvalidParamsError", async () => {
     const { sut, addAccountStub } = makeSut();
 
     const error = new InvalidParamsError("any_message");
@@ -71,12 +71,12 @@ describe("Signup Action Test Suite", () => {
     const result = await sut.handle(mockSignupActionArgs());
 
     expect(result).toEqual({
-      type: SignupResultType.InvalidParamsError,
-      data: error.message,
+      status: "error",
+      error,
     });
   });
 
-  it("should return response of type UnexpectedError on unexpected error", async () => {
+  it("should return response of type error UnexpectedError", async () => {
     const { sut, addAccountStub } = makeSut();
 
     const error = new UnexpectedError();
@@ -87,8 +87,8 @@ describe("Signup Action Test Suite", () => {
     const result = await sut.handle(mockSignupActionArgs());
 
     expect(result).toEqual({
-      type: SignupResultType.UnexpectedError,
-      data: "Unexpected error. Please try again later.",
+      status: "error",
+      error,
     });
   });
 
@@ -113,8 +113,8 @@ describe("Signup Action Test Suite", () => {
     const result = await sut.handle(mockSignupActionArgs());
 
     expect(result).toEqual({
-      type: SignupResultType.UnexpectedError,
-      data: "Unexpected error. Please try again later.",
+      status: "error",
+      error,
     });
   });
 
@@ -124,7 +124,7 @@ describe("Signup Action Test Suite", () => {
     const result = await sut.handle(mockSignupActionArgs());
 
     expect(result).toEqual({
-      type: SignupResultType.Success,
+      status: "success",
       data: fakeAccountModel,
     });
   });

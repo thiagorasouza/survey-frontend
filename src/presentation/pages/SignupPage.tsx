@@ -1,55 +1,27 @@
-import classNames from "classnames";
-import React, { useEffect, useRef, useState } from "react";
-import {
-  Form,
-  useActionData,
-  useNavigate,
-  useNavigation,
-} from "react-router-dom";
-import { SignupResult, SignupResultType } from "../action/SignupResult";
+import React from "react";
+import { Form, useNavigate } from "react-router-dom";
 import Brand from "../components/Brand";
 import LinkButton from "../components/LinkButton";
 import SubmitButton from "../components/SubmitButton";
+import useAppState from "../hooks/useAppState";
+import usePasswordValidation from "../hooks/usePasswordValidation";
 
 import styles from "./SignupPage.scss";
 
 function SignupPage() {
   const navigate = useNavigate();
-  const [password, setPassword] = useState("abc123");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("abc123");
-  const passwordRef = useRef(null);
-  const passwordConfirmationRef = useRef(null);
-  const navigation = useNavigation();
-  const signupResult = useActionData() as SignupResult;
+  const appState = useAppState();
 
-  const submitting = navigation.state === "submitting";
+  const {
+    setPassword,
+    setPasswordConfirmation,
+    passwordRef,
+    passwordConfirmationRef,
+  } = usePasswordValidation();
 
-  const emailInUserError =
-    signupResult && signupResult.type === SignupResultType.EmailInUseError;
-  const invalidParamsError =
-    signupResult && signupResult.type === SignupResultType.InvalidParamsError;
-  const unexpectedError =
-    signupResult && signupResult.type === SignupResultType.UnexpectedError;
-  const success =
-    signupResult && signupResult.type === SignupResultType.Success;
+  const disableFields = appState.isSubmitting || appState.isSuccess;
 
-  const isPasswordValid = !!(
-    password &&
-    passwordConfirmation &&
-    password === passwordConfirmation
-  );
-  const errorMessage = !isPasswordValid
-    ? "Please type the same password twice."
-    : "";
-
-  useEffect(() => {
-    if (passwordRef.current && passwordConfirmationRef.current) {
-      passwordRef.current.setCustomValidity(errorMessage);
-      passwordConfirmationRef.current.setCustomValidity(errorMessage);
-    }
-  }, [password, passwordConfirmation]);
-
-  if (success) {
+  if (appState.isSuccess) {
     setTimeout(() => {
       navigate("/surveys");
     }, 1000);
@@ -59,17 +31,11 @@ function SignupPage() {
     <div className={styles.page}>
       <section className={styles.wrapper}>
         <Brand />
-        <div
-          role="alert"
-          className={classNames({
-            [styles.error]: true,
-            [styles.hidden]:
-              success ||
-              (!emailInUserError && !invalidParamsError && !unexpectedError),
-          })}
-        >
-          {!success && !submitting && signupResult?.data}
-        </div>
+        {appState.isError && (
+          <div role="alert" className={styles.error}>
+            {appState.error.message}
+          </div>
+        )}
         <Form method="post" className={styles.form}>
           <div className={styles.inputs}>
             <input
@@ -78,7 +44,7 @@ function SignupPage() {
               name="name"
               className={styles.inputName}
               placeholder="name"
-              disabled={submitting || success}
+              disabled={disableFields}
               defaultValue="John Doe"
             />
             <input
@@ -87,7 +53,7 @@ function SignupPage() {
               name="email"
               className={styles.inputEmail}
               placeholder="email"
-              disabled={submitting || success}
+              disabled={disableFields}
               defaultValue="johndoe@email.com"
             />
             <input
@@ -98,7 +64,7 @@ function SignupPage() {
               className={styles.inputPassword}
               placeholder="password"
               onChange={(e) => setPassword(e.target.value)}
-              disabled={submitting || success}
+              disabled={disableFields}
               defaultValue="abc123"
             />
             <input
@@ -109,20 +75,20 @@ function SignupPage() {
               className={styles.inputPasswordConfirmation}
               placeholder="password confirmation"
               onChange={(e) => setPasswordConfirmation(e.target.value)}
-              disabled={submitting || success}
+              disabled={disableFields}
               defaultValue="abc123"
             />
           </div>
           <div className={styles.buttons}>
             <SubmitButton
               caption="Sign Up"
-              submitting={submitting}
-              success={success}
+              submitting={appState.isSubmitting}
+              success={appState.isSuccess}
             />
             <LinkButton
               caption="Login"
-              submitting={submitting}
-              success={success}
+              submitting={appState.isSubmitting}
+              success={appState.isSuccess}
               link="/login"
             />
           </div>
