@@ -16,7 +16,7 @@ function SurveysPage() {
   };
 
   const openSurvey = (surveyId: string): void => {
-    navigate(`/surveys/${surveyId}/result`);
+    navigate(`/surveys/${surveyId}/results`);
   };
 
   return (
