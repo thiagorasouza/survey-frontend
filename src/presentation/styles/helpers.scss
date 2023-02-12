@@ -2,6 +2,14 @@
   box-shadow: 0 3px 8px $color;
 }
 
+@mixin scale-on-hover($proportion: 1.02) {
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale($proportion);
+  }
+}
+
 @mixin vertical-centering-container {
   display: flex;
   flex-direction: column;

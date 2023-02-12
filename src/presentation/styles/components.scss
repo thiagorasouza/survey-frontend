@@ -14,7 +14,7 @@
 @mixin text-input {
   @include boilerplate-block();
   @include light-box-shadow(rgba(0, 0, 0, 0.08));
-  color: $darkGray;
+  color: $darkGrey;
   font-size: $mediumFontSize;
   font-weight: $semiboldWeight;
   background-color: $white;
@@ -28,7 +28,7 @@
   }
 
   &::placeholder {
-    color: $mediumGray;
+    color: $mediumGrey;
   }
 
   &:invalid,
@@ -43,7 +43,7 @@
 
   &:disabled {
     cursor: default;
-    background-color: $lightGray;
+    background-color: $lightGrey;
   }
 }
 
