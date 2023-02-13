@@ -10,7 +10,6 @@ function SurveyResultPage() {
   const loaderData = useLoaderData() as LoaderResult;
   const survey = loaderData.data;
   const didAnswer = survey.didAnswer;
-  console.log("🚀 ~ survey", survey);
 
   useEffect(() => {
     if (didAnswer) {
@@ -72,7 +71,7 @@ function SurveyResultPage() {
             <div className={styles.cardSecondShadow}></div>
           </div>
           <div className={styles.controls}>
-            <button type="button" className={styles.btnSubmit}>
+            <button type="submit" className={styles.btnSubmit}>
               Save Answer
             </button>
           </div>
