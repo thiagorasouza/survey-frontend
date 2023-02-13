@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, useLoaderData } from "react-router-dom";
+import { Form, useLoaderData, useNavigate } from "react-router-dom";
 import CloseIcon from "../components/CloseIcon";
 import { LoaderResult } from "../loaders/LoaderResult";
 
@@ -8,8 +8,12 @@ import styles from "./SurveyResultPage.scss";
 function SurveyResultPage() {
   const [animate, setAnimate] = useState(false);
   const loaderData = useLoaderData() as LoaderResult;
+  const navigate = useNavigate();
+
   const survey = loaderData.data;
   const didAnswer = survey.didAnswer;
+
+  const toSurveyList = () => navigate("/surveys");
 
   useEffect(() => {
     if (didAnswer) {
@@ -22,7 +26,11 @@ function SurveyResultPage() {
       <div className={styles.wrapper}>
         <div className={styles.header}>
           <div className={styles.close}>
-            <button type="button" className={styles.btnClose}>
+            <button
+              type="button"
+              className={styles.btnClose}
+              onClick={toSurveyList}
+            >
               <CloseIcon />
             </button>
           </div>
