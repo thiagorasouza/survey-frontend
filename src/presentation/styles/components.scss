@@ -53,6 +53,7 @@
   background-color: $backgroundColor;
   font-size: $mediumFontSize;
   font-weight: $semiboldWeight;
+  font-family: $fontFamily;
   cursor: pointer;
 
   transition: all 0.3s ease-in-out;
@@ -65,5 +66,22 @@
 
   &:disabled {
     cursor: default;
+  }
+}
+
+@mixin icon-button {
+  @include scale-on-hover(1.08);
+
+  color: #fff;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  vertical-align: middle;
+  background-color: transparent;
+
+  svg {
+    vertical-align: middle;
   }
 }

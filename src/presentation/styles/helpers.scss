@@ -17,6 +17,13 @@
   min-height: 100vh;
 }
 
+@mixin horizontal-centering-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
 @mixin centering-container {
   display: flex;
   justify-content: center;

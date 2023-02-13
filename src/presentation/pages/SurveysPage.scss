@@ -5,10 +5,7 @@
 @use "../styles/components.scss" as *;
 
 .page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
+  @include horizontal-centering-container;
 }
 
 .header {
@@ -21,24 +18,11 @@
 }
 
 .logout {
-  @include scale-on-hover(1.08);
-
   margin-left: auto;
 }
 
 .btnLogout {
-  color: #fff;
-  cursor: pointer;
-  margin: 0;
-  padding: 0;
-  border: none;
-  outline: none;
-  vertical-align: middle;
-  background-color: transparent;
-
-  svg {
-    vertical-align: middle;
-  }
+  @include icon-button;
 }
 
 .content {
