@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from "react";
-import classNames from "classnames";
+import React, { useEffect, useState } from "react";
 import { Form, useLoaderData } from "react-router-dom";
 import CloseIcon from "../components/CloseIcon";
 import { LoaderResult } from "../loaders/LoaderResult";
@@ -7,8 +6,17 @@ import { LoaderResult } from "../loaders/LoaderResult";
 import styles from "./SurveyResultPage.scss";
 
 function SurveyResultPage() {
+  const [animate, setAnimate] = useState(false);
   const loaderData = useLoaderData() as LoaderResult;
-  console.log("🚀 ~ loaderData", loaderData);
+  const survey = loaderData.data;
+  const didAnswer = survey.didAnswer;
+  console.log("🚀 ~ survey", survey);
+
+  useEffect(() => {
+    if (didAnswer) {
+      setAnimate(true);
+    }
+  }, []);
 
   return (
     <div className={styles.page}>
@@ -20,13 +28,13 @@ function SurveyResultPage() {
             </button>
           </div>
           <div className={styles.title}>
-            <h2>{loaderData.data.question}</h2>
+            <h2>{survey.question}</h2>
           </div>
         </div>
         <Form method="post">
           <div className={styles.card}>
             <div className={styles.options}>
-              {loaderData.data.answers.map((answer, index) => {
+              {survey.answers.map((answer, index) => {
                 return (
                   <>
                     <input
@@ -35,15 +43,24 @@ function SurveyResultPage() {
                       id={`answer-${index}`}
                       key={index}
                       value={answer.answer}
+                      defaultChecked={answer.isCurrentAccountAnswer}
                     />
                     <label
                       htmlFor={`answer-${index}`}
-                      className={classNames(styles.option, {
-                        [styles.selected]: answer.isCurrentAccountAnswer,
-                      })}
+                      className={styles.option}
                     >
-                      {answer.answer}
-                      <span className={styles.count}>{answer.count}</span>
+                      <div
+                        className={styles.percent}
+                        style={{
+                          width: animate ? `${Number(answer.percent)}%` : null,
+                        }}
+                      ></div>
+                      <div className={styles.text}>
+                        {answer.answer}
+                        <span className={styles.count} hidden={!didAnswer}>
+                          {answer.count}
+                        </span>
+                      </div>
                     </label>
                   </>
                 );
@@ -56,7 +73,7 @@ function SurveyResultPage() {
           </div>
           <div className={styles.controls}>
             <button type="button" className={styles.btnSubmit}>
-              Confirm
+              Save Answer
             </button>
           </div>
         </Form>
