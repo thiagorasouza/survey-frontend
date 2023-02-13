@@ -1,5 +1,6 @@
 import React from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
+import { LocalStorageAdapter } from "../../infra/cache/local-storage-adapter";
 import LogoutIcon from "../components/LogoutIcon";
 import { LoaderResult } from "../loaders/LoaderResult";
 
@@ -11,8 +12,10 @@ function SurveysPage() {
   const loaderData = useLoaderData() as LoaderResult;
   console.log("🚀 ~ loaderData", loaderData);
 
-  const logout = (): void => {
-    navigate("/logout");
+  const logout = async (): Promise<void> => {
+    const localStorage = new LocalStorageAdapter();
+    await localStorage.set("accessToken", "");
+    navigate("/login");
   };
 
   const openSurvey = (surveyId: string): void => {
