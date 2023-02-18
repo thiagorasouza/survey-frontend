@@ -9,7 +9,6 @@ import styles from "./SurveyResultPage.scss";
 function SurveyResultPage() {
   const [animate, setAnimate] = useState(false);
   const appState = useAppState();
-  console.log("🚀 ~ appState", appState);
   const navigate = useNavigate();
   const { logout } = useSession();
 

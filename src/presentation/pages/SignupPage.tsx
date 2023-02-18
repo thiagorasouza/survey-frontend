@@ -12,7 +12,6 @@ import styles from "./SignupPage.scss";
 function SignupPage() {
   const navigate = useNavigate();
   const appState = useAppState();
-  // console.log("🚀 ~ appState", appState);
   const { getUserToken } = useSession();
 
   const {
@@ -22,7 +21,8 @@ function SignupPage() {
     passwordConfirmationRef,
   } = usePasswordValidation();
 
-  const disableFields = appState.isSubmitting || appState.isSuccess;
+  const disableFields =
+    appState.isSubmitting || appState.isLoading || appState.isSuccess;
 
   if (appState.isSuccess) {
     setTimeout(() => {
@@ -99,12 +99,12 @@ function SignupPage() {
             <SubmitButton
               caption="Sign Up"
               submitting={appState.isSubmitting}
-              success={appState.isSuccess}
+              success={appState.isLoading || appState.isSuccess}
             />
             <LinkButton
               caption="Login"
               submitting={appState.isSubmitting}
-              success={appState.isSuccess}
+              success={appState.isLoading || appState.isSuccess}
               link="/login"
             />
           </div>

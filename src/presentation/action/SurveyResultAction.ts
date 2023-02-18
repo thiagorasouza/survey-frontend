@@ -21,7 +21,6 @@ export class SurveyResultAction implements ActionHandler {
 
     try {
       const accessToken = await this.getAccessToken.get();
-      console.log("🚀 ~ accessToken", accessToken);
       const surveys = await this.saveSurveyResult.save(
         surveyId,
         answer,

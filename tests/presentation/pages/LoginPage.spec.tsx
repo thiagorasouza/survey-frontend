@@ -38,8 +38,8 @@ interface SutTypes {
 }
 
 const fillLoginForm = async (user: UserEvent): Promise<void> => {
-  await fillEmailInput(user);
-  await fillPasswordInput(user);
+  await fillEmailInput(user, "valid@email.com");
+  await fillPasswordInput(user, "12345678a");
 };
 
 const clickLoginButton = async (user: UserEvent): Promise<void> => {
@@ -95,6 +95,7 @@ describe("Login Page Test Suite", () => {
     it("should indicate that email is invalid if empty", async () => {
       const { sut, user } = makeSut();
       render(sut);
+      await user.clear(getEmailInput());
       await clickLoginButton(user);
       expect(getEmailInput()).toBeInvalid();
     });
@@ -102,6 +103,7 @@ describe("Login Page Test Suite", () => {
     it("should indicate that password is invalid if empty", async () => {
       const { sut, user } = makeSut();
       render(sut);
+      await user.clear(getPasswordInput());
       await clickLoginButton(user);
       expect(getPasswordInput()).toBeInvalid();
     });

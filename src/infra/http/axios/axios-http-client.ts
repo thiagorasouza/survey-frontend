@@ -52,7 +52,6 @@ export class AxiosHttpClient
   }
 
   async put(params: HttpPutParams<any>): Promise<HttpResponse<any>> {
-    console.log("🚀 ~ params", params);
     let response;
     try {
       response = await axios.put(params.url, params.body, {

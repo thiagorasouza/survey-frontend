@@ -12,7 +12,8 @@ function LoginPage() {
   const appState = useAppState();
   const { getUserToken } = useSession();
 
-  const disableFields = appState.isSubmitting || appState.isSuccess;
+  const disableFields =
+    appState.isSubmitting || appState.isLoading || appState.isSuccess;
 
   if (appState.isSuccess) {
     setTimeout(() => {
@@ -48,6 +49,7 @@ function LoginPage() {
               className={styles.inputEmail}
               placeholder="email"
               disabled={disableFields}
+              defaultValue="testaccount@email.com"
             />
             <input
               required
@@ -57,18 +59,19 @@ function LoginPage() {
               minLength={6}
               placeholder="password"
               disabled={disableFields}
+              defaultValue="testaccount123"
             />
           </div>
           <div className={styles.buttons}>
             <SubmitButton
               caption="Login"
               submitting={appState.isSubmitting}
-              success={appState.isSuccess}
+              success={appState.isLoading || appState.isSuccess}
             />
             <LinkButton
               caption="Sign Up"
               submitting={appState.isSubmitting}
-              success={appState.isSuccess}
+              success={appState.isLoading || appState.isSuccess}
               link="/signup"
             />
           </div>
