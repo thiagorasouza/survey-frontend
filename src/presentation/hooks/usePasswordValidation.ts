@@ -21,10 +21,8 @@ function usePasswordValidation() {
 
   if (inputsAreReady) {
     if (isPasswordValid) {
-      passwordInput.setCustomValidity("");
       passwordConfirmationInput.setCustomValidity("");
     } else {
-      passwordInput.setCustomValidity(ERROR_MESSAGE);
       passwordConfirmationInput.setCustomValidity(ERROR_MESSAGE);
     }
   }
