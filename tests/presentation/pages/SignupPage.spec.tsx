@@ -29,14 +29,12 @@ import {
   waitForSuccessState,
 } from "../helpers/form-helpers";
 import { mockRouter } from "../mocks/mock-router";
-import { faker } from "@faker-js/faker";
 import { EmailInUseError } from "../../../src/domain/errors/email-in-use-error";
 import { UnexpectedError } from "../../../src/domain/errors/unexpected-error";
 import { mockSignupAction } from "../mocks/mock-signup-action";
 import { ActionHandler } from "../../../src/presentation/action/ActionHandler";
 import { InvalidParamsError } from "../../../src/domain/errors/invalid-params-error";
 import { ActionResult } from "../../../src/presentation/action/ActionResult";
-import { mockAccountModel } from "../../data/mocks/mock-account-model";
 
 enableFetchMocks();
 
@@ -46,9 +44,9 @@ const clickSignupButton = async (user: UserEvent): Promise<void> => {
 };
 
 const fillSignupForm = async (user: UserEvent): Promise<void> => {
-  await fillNameInput(user);
-  await fillEmailInput(user);
-  const fakePassword = faker.internet.password();
+  await fillNameInput(user, "valid name");
+  await fillEmailInput(user, "valid@email.com");
+  const fakePassword = "12345678a";
   await fillPasswordInput(user, fakePassword);
   await fillPasswordConfirmationInput(user, fakePassword);
 };

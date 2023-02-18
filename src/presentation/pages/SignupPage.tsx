@@ -12,6 +12,7 @@ import styles from "./SignupPage.scss";
 function SignupPage() {
   const navigate = useNavigate();
   const appState = useAppState();
+  // console.log("🚀 ~ appState", appState);
   const { getUserToken } = useSession();
 
   const {
@@ -52,10 +53,13 @@ function SignupPage() {
               required
               type="text"
               name="name"
+              pattern="[A-zÀ-ú]{2,} ?[A-zÀ-ú ]*"
+              minLength={2}
+              maxLength={64}
+              title="Names should only contain letters and spaces (2 to 64 characters long)"
               className={styles.inputName}
               placeholder="name"
               disabled={disableFields}
-              defaultValue="John Doe"
             />
             <input
               required
@@ -64,29 +68,31 @@ function SignupPage() {
               className={styles.inputEmail}
               placeholder="email"
               disabled={disableFields}
-              defaultValue="johndoe@email.com"
             />
             <input
               required
               ref={passwordRef}
               type="password"
               name="password"
+              pattern="(?=.*[A-Za-z])(?=.*\d).*"
+              minLength={8}
+              maxLength={64}
+              title="Password should contain at least one letter and one number (8 to 64 characters long)"
               className={styles.inputPassword}
               placeholder="password"
               onChange={(e) => setPassword(e.target.value)}
               disabled={disableFields}
-              defaultValue="abc123"
             />
             <input
               required
               ref={passwordConfirmationRef}
               type="password"
               name="passwordConfirmation"
+              title="Password confirmation should be match password"
               className={styles.inputPasswordConfirmation}
               placeholder="password confirmation"
               onChange={(e) => setPasswordConfirmation(e.target.value)}
               disabled={disableFields}
-              defaultValue="abc123"
             />
           </div>
           <div className={styles.buttons}>
