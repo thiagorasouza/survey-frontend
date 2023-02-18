@@ -1,5 +1,6 @@
 import { ActionFunctionArgs } from "react-router-dom";
 import { InvalidCredentialsError } from "../../domain/errors/invalid-credentials-error";
+import { InvalidParamsError } from "../../domain/errors/invalid-params-error";
 import { UnexpectedError } from "../../domain/errors/unexpected-error";
 import { Authentication } from "../../domain/usecases/authentication";
 import { SaveAccessToken } from "../../domain/usecases/save-access-token";

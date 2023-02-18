@@ -1,10 +1,12 @@
 import { InvalidCredentialsError } from "../../domain/errors/invalid-credentials-error";
+import { InvalidParamsError } from "../../domain/errors/invalid-params-error";
 import { UnexpectedError } from "../../domain/errors/unexpected-error";
 import { AccountModel } from "../../domain/models/account-model";
 import {
   Authentication,
   AuthenticationParams,
 } from "../../domain/usecases/authentication";
+import { ErrorResponseBody } from "../protocols/error/error-response-body";
 import { HttpPostClient } from "../protocols/http/http-post-client";
 import { HttpStatusCode } from "../protocols/http/http-response";
 
@@ -25,10 +27,10 @@ export class RemoteAuthentication implements Authentication {
 
     switch (httpResponse.statusCode) {
       case HttpStatusCode.ok:
-        return httpResponse.body;
+        return httpResponse.body as AccountModel;
+      case HttpStatusCode.badRequest:
       case HttpStatusCode.unauthorized:
         throw new InvalidCredentialsError();
-      case HttpStatusCode.badRequest:
       case HttpStatusCode.notFound:
       case HttpStatusCode.serverError:
         throw new UnexpectedError();

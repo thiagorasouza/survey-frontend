@@ -54,7 +54,7 @@ describe("Remote Authentication", () => {
     await expect(promise).rejects.toThrow(new InvalidCredentialsError());
   });
 
-  it("should throw UnexpectedError if HttpPostClient returns 400", async () => {
+  it("should throw InvalidCredentialsError if HttpPostClient returns 400", async () => {
     const url = faker.internet.url();
     const { sut, httpPostClientStub } = makeSut(url);
 
@@ -67,7 +67,7 @@ describe("Remote Authentication", () => {
     const authParams = mockAuthenticationParams();
     const promise = sut.auth(authParams);
 
-    await expect(promise).rejects.toThrow(new UnexpectedError());
+    await expect(promise).rejects.toThrow(new InvalidCredentialsError());
   });
 
   it("should throw UnexpectedError if HttpPostClient returns 404", async () => {
