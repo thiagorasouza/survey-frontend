@@ -1,5 +1,4 @@
-import { useActionData, useNavigation } from "react-router-dom";
-import { ActionResult } from "../action/ActionResult";
+import { useActionData, useLoaderData, useNavigation } from "react-router-dom";
 
 export interface AppState {
   status: "initial" | "submitting" | "loading" | "success" | "error";
@@ -12,9 +11,10 @@ export interface AppState {
   isError: boolean;
 }
 
-function useAppState<T extends ActionResult>(): AppState {
+function useAppState(): AppState {
   const navigation = useNavigation();
-  const actionResult = useActionData() as T;
+  const actionResult = useActionData() as any;
+  const loaderResult = useLoaderData() as any;
 
   const generateFlags = (status) => ({
     isInitial: status === "initial",
@@ -35,6 +35,11 @@ function useAppState<T extends ActionResult>(): AppState {
     return {
       ...actionResult,
       ...generateFlags(actionResult.status),
+    };
+  } else if (loaderResult) {
+    return {
+      ...loaderResult,
+      ...generateFlags(loaderResult.status),
     };
   }
 

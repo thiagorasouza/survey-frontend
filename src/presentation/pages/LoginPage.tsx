@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, useNavigate } from "react-router-dom";
 import Brand from "../components/Brand";
 import LinkButton from "../components/LinkButton";
 import SubmitButton from "../components/SubmitButton";
 import useAppState from "../hooks/useAppState";
+import useSession from "../hooks/useSession";
 import styles from "./LoginPage.scss";
 
 function LoginPage() {
   const navigate = useNavigate();
   const appState = useAppState();
+  const { getUserToken } = useSession();
 
   const disableFields = appState.isSubmitting || appState.isSuccess;
 
@@ -17,6 +19,14 @@ function LoginPage() {
       navigate("/surveys");
     }, 1000);
   }
+
+  useEffect(() => {
+    getUserToken().then((accessToken) => {
+      if (accessToken) {
+        navigate("/surveys");
+      }
+    });
+  }, []);
 
   return (
     <div className={styles.page}>

@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, useNavigate } from "react-router-dom";
 import Brand from "../components/Brand";
 import LinkButton from "../components/LinkButton";
 import SubmitButton from "../components/SubmitButton";
 import useAppState from "../hooks/useAppState";
 import usePasswordValidation from "../hooks/usePasswordValidation";
+import useSession from "../hooks/useSession";
 
 import styles from "./SignupPage.scss";
 
 function SignupPage() {
   const navigate = useNavigate();
   const appState = useAppState();
+  const { getUserToken } = useSession();
 
   const {
     setPassword,
@@ -26,6 +28,14 @@ function SignupPage() {
       navigate("/surveys");
     }, 1000);
   }
+
+  useEffect(() => {
+    getUserToken().then((accessToken) => {
+      if (accessToken) {
+        navigate("/surveys");
+      }
+    });
+  }, []);
 
   return (
     <div className={styles.page}>
