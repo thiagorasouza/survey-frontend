@@ -1,11 +1,6 @@
-const { DefinePlugin } = require("webpack");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-
 const path = require("node:path");
 
 module.exports = {
-  mode: "development",
-  cache: false,
   entry: "./src/main/index.tsx",
   output: {
     path: path.join(__dirname, "public", "js"),
@@ -27,6 +22,7 @@ module.exports = {
             loader: "css-loader",
             options: {
               modules: true,
+              url: false,
             },
           },
           "sass-loader",
@@ -41,16 +37,4 @@ module.exports = {
     react: "React",
     "react-dom/client": "ReactDOM",
   },
-  devServer: {
-    historyApiFallback: true,
-    devMiddleware: {
-      writeToDisk: true,
-    },
-  },
-  plugins: [
-    new CleanWebpackPlugin(),
-    new DefinePlugin({
-      "process.env.API_URL": '"http://localhost:5000/api"',
-    }),
-  ],
 };
