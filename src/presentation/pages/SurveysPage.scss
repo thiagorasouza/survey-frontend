@@ -41,10 +41,22 @@
 
 .banner {
   background-color: $lightPurple;
-  width: 15rem;
+  display: flex;
+  align-items: center;
+  text-align: center;
   height: 10rem;
   border-radius: 1rem;
   margin-bottom: 2rem;
+  padding: 1rem 1.5rem;
+  color: $white;
+  font-size: 1.4rem;
+  font-weight: $boldWeight;
+
+  svg {
+    width: 3.6rem;
+    height: 3.6rem;
+    margin-right: 0.5rem;
+  }
 }
 
 .surveys {

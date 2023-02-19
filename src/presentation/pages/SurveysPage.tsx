@@ -1,15 +1,19 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import CheckIcon from "../components/CheckIcon";
+import LampIcon from "../components/LampIcon";
 import LogoutIcon from "../components/LogoutIcon";
 import useAppState from "../hooks/useAppState";
 import useSession from "../hooks/useSession";
 
 import styles from "./SurveysPage.scss";
+import ShareIcon from "../components/ShareIcon";
 
 function SurveysPage() {
   const navigate = useNavigate();
   const { logout } = useSession();
   const appState = useAppState();
+  console.log("🚀 ~ appState", appState);
 
   const logoutAndRedirect = () => {
     logout();
@@ -35,7 +39,8 @@ function SurveysPage() {
     <div className={styles.page}>
       <div className={styles.header}>
         <div className={styles.greeting}>
-          <h2>Hello, John</h2>
+          <h2>Hello,</h2>
+          <p>We want to know your opinion</p>
         </div>
         <div className={styles.logout}>
           <button
@@ -49,9 +54,18 @@ function SurveysPage() {
       </div>
       <div className={styles.content}>
         <div className={styles.banners}>
-          <div className={styles.banner}></div>
-          <div className={styles.banner}></div>
-          <div className={styles.banner}></div>
+          <div className={styles.banner}>
+            <CheckIcon />
+            Answer a survey
+          </div>
+          <div className={styles.banner}>
+            <LampIcon />
+            See what others are thinking
+          </div>
+          <div className={styles.banner}>
+            <ShareIcon />
+            Invite your friends to answer
+          </div>
         </div>
         <div className={styles.surveys}>
           {surveys
