@@ -43,9 +43,9 @@ Other links:
 
 ## :computer: Screenshots
 
-![Login page](/docs/login.png?raw=true "Login page")
-![Surveys page](/docs/surveys.png?raw=true "Login page")
-![Survey question page](/docs/survey-question.png?raw=true "Login page")
+<img src="docs/login.png?raw=true" width="260"  alt=" Login page" />
+<img src="docs/surveys.png?raw=true" width="260" alt=" Surveys page" />
+<img src="docs/survey-question.png?raw=true" width="260" alt="Survey question page" />
 
 ## :wrench: Credits
 
