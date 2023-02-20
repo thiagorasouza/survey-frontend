@@ -113,6 +113,10 @@
   background-color: $lightGrey;
 }
 
+.surveyProgressBarComplete {
+  background-color: $orange;
+}
+
 .surveyOptions {
   grid-area: options;
 }

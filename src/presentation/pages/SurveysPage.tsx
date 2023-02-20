@@ -9,6 +9,7 @@ import useSession from "../hooks/useSession";
 import styles from "./SurveysPage.scss";
 import ShareIcon from "../components/ShareIcon";
 import Loader from "../components/Loader";
+import classNames from "classnames";
 
 function SurveysPage() {
   const navigate = useNavigate();
@@ -89,7 +90,13 @@ function SurveysPage() {
                       </div>
                       <div className={styles.surveyDate}>{date}</div>
                       <div className={styles.surveyProgress}>
-                        <div className={styles.surveyProgressBar}></div>
+                        <div
+                          className={classNames({
+                            [styles.surveyProgressBar]: true,
+                            [styles.surveyProgressBarComplete]:
+                              survey.didAnswer,
+                          })}
+                        ></div>
                         <div className={styles.surveyOptions}>
                           {survey.answers.length} options
                         </div>
