@@ -15,6 +15,7 @@
   @include boilerplate-block();
   @include light-box-shadow(rgba(0, 0, 0, 0.08));
   color: $darkGrey;
+  font-family: $fontFamily;
   font-size: $mediumFontSize;
   font-weight: $semiboldWeight;
   background-color: $white;
