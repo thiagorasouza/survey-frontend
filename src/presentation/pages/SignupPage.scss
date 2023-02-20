@@ -1,1 +1,8 @@
 @use "./LoginPage.scss" as *;
+@use "../styles/variables.scss" as *;
+
+.passwordCaption {
+  margin: 0 0.5rem 1rem;
+  color: $darkGrey;
+  font-size: 1rem;
+}

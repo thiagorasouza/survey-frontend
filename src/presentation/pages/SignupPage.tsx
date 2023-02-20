@@ -87,6 +87,9 @@ function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={disableFields}
               />
+              <div className={styles.passwordCaption}>
+                At least 8 chars, one letter and one number
+              </div>
               <input
                 required
                 ref={passwordConfirmationRef}
