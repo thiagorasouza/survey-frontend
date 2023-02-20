@@ -3,18 +3,22 @@ import useAppState from "../hooks/useAppState";
 import styles from "./Loader.scss";
 
 interface LoaderProps {
+  tolerance?: number;
   children?: React.ReactElement;
 }
 
-function Loader({ children }: LoaderProps) {
+function Loader({ children, tolerance = 0 }: LoaderProps) {
   const appState = useAppState();
   const [loading, setLoading] = useState(false);
-  const tolerance = 500;
 
   useEffect(() => {
     if (appState.isLoading) {
-      const timeoutId = setTimeout(() => setLoading(true), tolerance);
-      return () => clearTimeout(timeoutId);
+      if (tolerance > 0) {
+        const timeoutId = setTimeout(() => setLoading(true), tolerance);
+        return () => clearTimeout(timeoutId);
+      } else {
+        setLoading(true);
+      }
     } else {
       setLoading(false);
     }

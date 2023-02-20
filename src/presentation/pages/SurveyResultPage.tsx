@@ -47,7 +47,7 @@ function SurveyResultPage() {
   }, []);
 
   return (
-    <Loader>
+    <Loader tolerance={2000}>
       <div className={styles.page}>
         <div className={styles.wrapper}>
           <div className={styles.header}>

@@ -42,7 +42,7 @@ function SignupPage() {
   }, []);
 
   return (
-    <Loader>
+    <Loader tolerance={1000}>
       <div className={styles.page}>
         <section className={styles.wrapper}>
           <Brand />
