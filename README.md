@@ -43,9 +43,9 @@ Other links:
 
 ## :computer: Screenshots
 
-<img src="docs/login.png?raw=true" width="260"  alt=" Login page" />
-<img src="docs/surveys.png?raw=true" width="260" alt=" Surveys page" />
-<img src="docs/survey-question.png?raw=true" width="260" alt="Survey question page" />
+[<img src="docs/login.png?raw=true" width="260"  alt=" Login page" />](https://github.com/thiagorasouza/survey-frontend/blob/main/docs/login.png?raw=true)
+[<img src="docs/surveys.png?raw=true" width="260" alt=" Surveys page" />](https://github.com/thiagorasouza/survey-frontend/blob/main/docs/surveys.png?raw=true)
+[<img src="docs/survey-question.png?raw=true" width="260" alt="Survey question page" />](https://github.com/thiagorasouza/survey-frontend/blob/main/docs/survey-question.png?raw=true)
 
 ## :wrench: Credits
 
