@@ -47,7 +47,7 @@
 
 .card {
   position: relative;
-  min-height: 60vh;
+  // min-height: 60vh;
   padding: 1.5rem;
   border-radius: 1rem;
   background-color: $washedWhite;
@@ -59,11 +59,11 @@
 .cardFirstShadow,
 .cardFirstShadowBackground {
   @extend .card;
-
+  height: 100%;
   position: absolute;
   left: 4%;
   right: 4%;
-  top: 3%;
+  top: 1.25rem;
   bottom: 0;
   opacity: 100%;
   transform: translateZ(-10px);
@@ -79,11 +79,11 @@
 
 .cardSecondShadow {
   @extend .card;
-
+  height: 100%;
   position: absolute;
   left: 8%;
   right: 8%;
-  top: 5.8%;
+  top: 2.5rem;
   bottom: 0;
   opacity: 30%;
   transform: translateZ(-20px);
@@ -111,19 +111,6 @@ input[type="radio"]:checked + label {
     background-color: white;
   }
 }
-
-// .progress {
-//   // @extend .option;
-//   padding: 1em 1.5em 1em 1.75em;
-//   position: relative;
-//   border-radius: 2em;
-//   border-top-right-radius: 0;
-//   border-bottom-right-radius: 0;
-// }
-
-// .progress::before {
-//   content: "\00a0";
-// }
 
 .option {
   position: relative;
@@ -163,7 +150,6 @@ input[type="radio"]:checked + label {
 }
 
 .text {
-  mix-blend-mode: multiply;
   position: relative;
   z-index: 2;
   width: 100%;
