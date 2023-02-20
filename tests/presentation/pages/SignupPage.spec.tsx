@@ -35,6 +35,7 @@ import { mockSignupAction } from "../mocks/mock-signup-action";
 import { ActionHandler } from "../../../src/presentation/action/ActionHandler";
 import { InvalidParamsError } from "../../../src/domain/errors/invalid-params-error";
 import { ActionResult } from "../../../src/presentation/action/ActionResult";
+import * as router from "react-router";
 
 enableFetchMocks();
 
@@ -274,8 +275,10 @@ describe("Signup Page Test Suite", () => {
   });
 
   describe("Success state", () => {
+    const navigate = jest.fn();
     beforeEach(async () => {
       const { sut, user } = makeSut();
+      jest.spyOn(router, "useNavigate").mockImplementation(() => navigate);
       render(sut);
       await goToSubmittingState(user);
     });
@@ -312,7 +315,7 @@ describe("Signup Page Test Suite", () => {
 
     it("should redirect to /surveys", async () => {
       await waitForSuccessState();
-      await waitFor(() => expect(screen.getByText(/surveys route/i)));
+      expect(navigate).toHaveBeenCalledWith("/surveys");
     });
   });
 });

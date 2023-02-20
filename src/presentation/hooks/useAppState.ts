@@ -24,6 +24,15 @@ function useAppState(): AppState {
     isError: status === "error",
   });
 
+  if (navigation.state === "submitting" || navigation.state === "loading") {
+    return {
+      status: navigation.state,
+      data: actionResult?.data || loaderResult?.data,
+      error: actionResult?.error || loaderResult?.error,
+      ...generateFlags(navigation.state),
+    };
+  }
+
   if (actionResult) {
     return {
       ...actionResult,
@@ -33,13 +42,6 @@ function useAppState(): AppState {
     return {
       ...loaderResult,
       ...generateFlags(loaderResult.status),
-    };
-  }
-
-  if (navigation.state === "submitting" || navigation.state === "loading") {
-    return {
-      status: navigation.state,
-      ...generateFlags(navigation.state),
     };
   }
 

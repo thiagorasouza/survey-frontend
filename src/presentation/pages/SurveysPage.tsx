@@ -8,12 +8,12 @@ import useSession from "../hooks/useSession";
 
 import styles from "./SurveysPage.scss";
 import ShareIcon from "../components/ShareIcon";
+import Loader from "../components/Loader";
 
 function SurveysPage() {
   const navigate = useNavigate();
   const { logout } = useSession();
   const appState = useAppState();
-  console.log("🚀 ~ appState", appState);
 
   const logoutAndRedirect = () => {
     logout();
@@ -26,79 +26,85 @@ function SurveysPage() {
 
   useEffect(() => {
     if (appState.isError) {
-      switch (appState.error.name) {
-        case "UnauthorizedError":
-          logoutAndRedirect();
+      if (appState.error.name === "UnauthorizedError") {
+        logoutAndRedirect();
       }
     }
-  }, []);
+  }, [appState]);
 
   const surveys = appState?.data;
 
   return (
-    <div className={styles.page}>
-      <div className={styles.header}>
-        <div className={styles.greeting}>
-          <h2>Hello,</h2>
-          <p>We want to know your opinion</p>
-        </div>
-        <div className={styles.logout}>
-          <button
-            className={styles.btnLogout}
-            type="button"
-            onClick={logoutAndRedirect}
-          >
-            <LogoutIcon />
-          </button>
-        </div>
-      </div>
-      <div className={styles.content}>
-        <div className={styles.banners}>
-          <div className={styles.banner}>
-            <CheckIcon />
-            Answer a survey
+    <Loader>
+      <div className={styles.page}>
+        <div className={styles.header}>
+          <div className={styles.greeting}>
+            <h2>Hello,</h2>
+            <p>We want to know your opinion</p>
           </div>
-          <div className={styles.banner}>
-            <LampIcon />
-            See what others are thinking
-          </div>
-          <div className={styles.banner}>
-            <ShareIcon />
-            Invite your friends to answer
+          <div className={styles.logout}>
+            <button
+              className={styles.btnLogout}
+              type="button"
+              onClick={logoutAndRedirect}
+            >
+              <LogoutIcon />
+            </button>
           </div>
         </div>
-        <div className={styles.surveys}>
-          {surveys
-            ? surveys.map((survey) => {
-                const date = new Date(survey.date).toLocaleDateString("en-us", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                });
-                return (
-                  <div
-                    key={survey.id}
-                    className={styles.survey}
-                    onClick={() => openSurvey(survey.id)}
-                  >
-                    <div className={styles.surveyTitle}>{survey.question}</div>
-                    <div className={styles.surveyDate}>{date}</div>
-                    <div className={styles.surveyProgress}>
-                      <div className={styles.surveyProgressBar}></div>
-                      <div className={styles.surveyOptions}>
-                        {survey.answers.length} options
+        <div className={styles.content}>
+          <div className={styles.banners}>
+            <div className={styles.banner}>
+              <CheckIcon />
+              Answer a survey
+            </div>
+            <div className={styles.banner}>
+              <LampIcon />
+              See what others are thinking
+            </div>
+            <div className={styles.banner}>
+              <ShareIcon />
+              Invite your friends to answer
+            </div>
+          </div>
+          <div className={styles.surveys}>
+            {surveys
+              ? surveys.map((survey) => {
+                  const date = new Date(survey.date).toLocaleDateString(
+                    "en-us",
+                    {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }
+                  );
+                  return (
+                    <div
+                      key={survey.id}
+                      className={styles.survey}
+                      onClick={() => openSurvey(survey.id)}
+                    >
+                      <div className={styles.surveyTitle}>
+                        {survey.question}
                       </div>
-                      <div className={styles.surveyStatus}>
-                        {survey.didAnswer ? "Complete" : "Not answered"}
+                      <div className={styles.surveyDate}>{date}</div>
+                      <div className={styles.surveyProgress}>
+                        <div className={styles.surveyProgressBar}></div>
+                        <div className={styles.surveyOptions}>
+                          {survey.answers.length} options
+                        </div>
+                        <div className={styles.surveyStatus}>
+                          {survey.didAnswer ? "Complete" : "Not answered"}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })
-            : "No surveys found."}
+                  );
+                })
+              : "No surveys found."}
+          </div>
         </div>
       </div>
-    </div>
+    </Loader>
   );
 }
 

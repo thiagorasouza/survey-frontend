@@ -14,7 +14,7 @@
 .wrapper {
   width: 100%;
   max-width: 55rem;
-  padding: 3rem 2rem 2rem;
+  padding: 2rem 2rem;
 }
 
 .header {
@@ -52,7 +52,7 @@
   border-radius: 1rem;
   background-color: $washedWhite;
   box-shadow: 0 0 11px rgba($black, 0.1);
-  margin-bottom: calc(8% + 2rem);
+  margin-bottom: calc(8% + 1rem);
   transform-style: preserve-3d;
   // mix-blend-mode: multiply;
 }
@@ -186,6 +186,6 @@ input[type="radio"]:checked + label {
   margin-left: auto;
 }
 
-.btnSubmit {
-  @include block-button($orange, $white);
+.controls {
+  text-align: center;
 }

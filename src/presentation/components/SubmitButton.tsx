@@ -6,14 +6,21 @@ interface SubmitButtonProps {
   caption: string;
   submitting: boolean;
   success: boolean;
+  noShadow?: boolean;
   children?: React.ReactNode;
 }
 
-function SubmitButton({ caption, submitting, success }: SubmitButtonProps) {
+function SubmitButton({
+  caption,
+  submitting,
+  success,
+  noShadow = false,
+}: SubmitButtonProps) {
   const classesText = classNames({
     [styles.btnSubmit]: true,
     [styles.btnSubmitting]: submitting,
     [styles.btnSuccess]: success,
+    [styles.btnShadow]: !noShadow,
   });
 
   const spinnerAnimation = (

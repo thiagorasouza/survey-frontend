@@ -29,6 +29,8 @@ import { InvalidCredentialsError } from "../../../src/domain/errors/invalid-cred
 import { UnexpectedError } from "../../../src/domain/errors/unexpected-error";
 import { mockLoginAction } from "../mocks/mock-login-action";
 import { ActionHandler } from "../../../src/presentation/action/ActionHandler";
+import * as router from "react-router";
+
 enableFetchMocks();
 
 interface SutTypes {
@@ -208,8 +210,10 @@ describe("Login Page Test Suite", () => {
   });
 
   describe("Success state", () => {
+    const navigate = jest.fn();
     beforeEach(async () => {
       const { sut, user } = makeSut();
+      jest.spyOn(router, "useNavigate").mockImplementation(() => navigate);
       render(sut);
       await goToSubmittingState(user);
     });
@@ -235,7 +239,7 @@ describe("Login Page Test Suite", () => {
 
     it("should redirect to /surveys", async () => {
       await waitForSuccessState();
-      await waitFor(() => expect(screen.getByText(/surveys route/i)));
+      expect(navigate).toHaveBeenCalledWith("/surveys");
     });
 
     it("should not display an error message", async () => {

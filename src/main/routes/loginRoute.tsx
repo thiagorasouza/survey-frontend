@@ -5,7 +5,7 @@ import { makeLoginAction } from "../factories/loginActionFactory";
 const loginAction = makeLoginAction();
 
 export const loginRoute = {
-  path: "/login",
+  path: "login",
   element: <LoginPage />,
   action: loginAction.handle.bind(loginAction),
 };
