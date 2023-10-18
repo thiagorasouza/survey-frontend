@@ -6,7 +6,7 @@ module.exports = merge(common, {
   mode: "production",
   plugins: [
     new DefinePlugin({
-      "process.env.API_URL": '"https://the-survey-app-api.up.railway.app/api"',
+      "process.env.API_URL": '"https://the-survey-app-backend.cyclic.app/api"',
     }),
   ],
 });
