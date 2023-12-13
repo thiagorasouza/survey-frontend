@@ -47,15 +47,17 @@ function LoginPage() {
           <Form method="post" className={styles.form}>
             <div className={styles.inputs}>
               <input
+                aria-label="email"
                 required
                 type="email"
                 name="email"
                 className={styles.inputEmail}
                 placeholder="email"
                 disabled={disableFields}
-                defaultValue="testaccount@email.com"
+                defaultValue="surveytest@email.com"
               />
               <input
+                aria-label="password"
                 required
                 type="password"
                 name="password"
@@ -63,7 +65,7 @@ function LoginPage() {
                 minLength={6}
                 placeholder="password"
                 disabled={disableFields}
-                defaultValue="testaccount123"
+                defaultValue="surveytest123#"
               />
             </div>
             <div className={styles.buttons}>
