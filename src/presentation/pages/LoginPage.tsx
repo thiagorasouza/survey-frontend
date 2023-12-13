@@ -35,7 +35,7 @@ function LoginPage() {
   return (
     <Loader tolerance={1000}>
       <div className={styles.page}>
-        <section className={styles.wrapper}>
+        <section className={styles.formWrapper}>
           <Brand />
           {appState.isError && (
             <div role="alert" className={styles.error}>
