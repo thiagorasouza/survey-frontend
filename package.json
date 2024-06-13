@@ -68,6 +68,6 @@
     "react-router-dom": "^6.8.1"
   },
   "engines": {
-    "node": "18.12.1"
+    "node": "20.x"
   }
 }
