@@ -33,8 +33,8 @@ A beautiful and responsive survey app, featuring a robust architecture with over
 
 Other links:
 
-- :book: API Docs: [https://the-survey-app-backend.cyclic.app/api-docs](https://survey-backend-w3vy.onrender.com/api-docs)
-- :gear: Backend: [https://the-survey-app-backend.cyclic.app/](https://survey-backend-w3vy.onrender.com/)
+- :book: API Docs: [https://survey-backend-w3vy.onrender.com/api-docs](https://survey-backend-w3vy.onrender.com/api-docs)
+- :gear: Backend: [https://survey-backend-w3vy.onrender.com/](https://survey-backend-w3vy.onrender.com/)
 
 ## :card_file_box: Repos
 
